@@ -1,0 +1,7 @@
+test.bat
+
+json
+xml
+
+__pycache__
+**/*/__pycache__

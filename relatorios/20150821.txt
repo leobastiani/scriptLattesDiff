@@ -1,0 +1,28 @@
+- Apenas exibi na tela as diferenças de duas datas. Por enquanto, só é possível exibir a diferença de duas datas consecutivas.
+
+- O campo colaboradores possui uma diferença mesmo quando o dono do CV não o altera.
+	Devo ignorar as diferenças de colaboradoes?
+
+- O scriptLattes trouxe autores diferentes para o mesmo item, isso fez com que o scriptLattesDiff interpretasse como se fossem itens diferentes.
+
+
+
+
+Dificuldades
+============
+
+Qual o próximo passo que eu devo implementar?
+
+
+
+
+Conclusões
+==========
+
+Implementar um filtro para as pesquisas
+
+Analisar a string "doi", ela pode ser a chave para se um item realmente mudou
+
+Fazer um arquivo de configuração que englobe todo o ICMC
+
+Implementarei ainda uma função que o scriptLattesDiff gere um arquivo de configuração e chame o scriptLattes

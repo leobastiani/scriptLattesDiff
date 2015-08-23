@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="../css/style.css">
+
+
+
+	<!-- Jquery é a primeira biblioteca que deve ser carregada -->
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<!-- arquivo com a Classe idLattes -->
+	<script type="text/javascript" src="../js/idLattes.js"></script>
+	<!-- Em seguida, carrega-se todos os jsons adquiridos do scriptLattesDiff -->
+	<script type="text/javascript" src="../js/importJsons.js"></script>
+	<!-- Documento com a função que é executada assim que se carrega todos os idLattes -->
+	<script type="text/javascript" src="../js/documentReady.js"></script>
+
+
+</head>
+<body>
+
+
+	<!-- Campo de navegação no topo da tela -->
+	<header>
+		<h2 id="nomeDoGrupo">nomeDoGrupo</h2>
+
+		<!-- Lista de páginas possíveis para se navegar -->
+		<nav>
+			<!-- Todos os links vão aqui -->        [
+			<a href="#">Membros</a>                 |
+			<a href="#">Produção bibliográfica</a>  |
+			<a href="#">Produção técnica</a>        |
+			<a href="#">Produção artística</a>      |
+			<a href="#">Orientações</a>             |
+			<a href="#">Projetos</a>                |
+			<a href="#">Prêmios</a>                 |
+			<a href="#">Eventos</a>                 ]
+		</nav>
+
+	</header>
+
+
+	<section id="principaisAlteracoes">
+
+
+		<h1>Lista com principais alterações</h1>
+
+
+
+		<div id="principaisAlteracoesContent">
+
+			<!-- Um exemplo de um membro -->
+			<div class="membro">
+				<div class="nomeLattes">
+
+					<h3 class="nome">Nome</h3>
+
+					<h3 class="idLattes" style="text-align: right;">Lattes</h3>
+
+				</div>
+
+
+				<!-- alterações vão aqui -->
+				<div class="removidos tabelaAlterados">
+					<span>Removido desde então</span>
+
+
+					<!-- A tabela dos alterados tem
+					uma chave com o que foi alterado
+					e suas alterações -->
+					<div class="campoAlterado clearfix">
+						<div class="alteradoChave">exemplo</div>
+						<div class="alteradoValor">Valor 1 <br> Valor 2</div>
+					</div>
+
+				</div>
+
+
+				<div class="acrescidos tabelaAlterados">
+					<span>Acrescidos desde então</span>
+					
+					<!-- A tabela dos alterados tem
+					uma chave com o que foi alterado
+					e suas alterações -->
+					<div class="campoAlterado clearfix">
+						<div class="alteradoChave">exemplo</div>
+						<div class="alteradoValor">Valor 1 <br> Valor 2</div>
+					</div>
+
+
+				</div>
+
+
+			</div>
+
+
+
+		</div>
+
+
+		<div style="clear: both;"></div>
+	</section>
+	
+
+	<div id="datasProcessamento">
+		Datas de processamento do scriptLattes:
+		<ul>
+		<!-- Lista com todos as datas de processamento do scriptLattes -->
+		</ul>
+	</div>
+
+</body>
+
+
+</html>

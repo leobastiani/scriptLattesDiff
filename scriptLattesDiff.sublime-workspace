@@ -1,0 +1,1844 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"isem",
+				"isEmptyObject	(documentReady.js)"
+			],
+			[
+				"foreach",
+				"foreach	forEach(index, elem)"
+			],
+			[
+				"res",
+				"result"
+			],
+			[
+				"isemp",
+				"isEmptyObject"
+			],
+			[
+				"scrip",
+				"scriptLattesDiff"
+			],
+			[
+				"scrit",
+				"scriptLattes	(scriptLattesDiff.py)"
+			],
+			[
+				"for",
+				"for	for"
+			],
+			[
+				"line",
+				"line-height"
+			],
+			[
+				"appe",
+				"appendTo	.appendTo()"
+			],
+			[
+				"foreac",
+				"foreach	forEach(index, elem)"
+			],
+			[
+				"wid",
+				"width"
+			],
+			[
+				"style",
+				"style	Attr"
+			],
+			[
+				"sectio",
+				"section	Tag"
+			],
+			[
+				"Sectio",
+				"Section-->	Section-->"
+			],
+			[
+				"Sec",
+				"Section-->	Section-->"
+			],
+			[
+				"a",
+				"a	<a>"
+			],
+			[
+				"li",
+				"li	Tag"
+			],
+			[
+				"hea",
+				"header	<header>"
+			],
+			[
+				"script",
+				"script	<script>"
+			],
+			[
+				"scir",
+				"scriptLattesDiff"
+			],
+			[
+				"scri",
+				"scriptLattesDiff"
+			],
+			[
+				"campo",
+				"campoAtual	statement"
+			],
+			[
+				"idio",
+				"identificacao"
+			],
+			[
+				"congresso",
+				"resumo_expandido_congresso"
+			],
+			[
+				"congreso",
+				"trabalho_completo_congresso"
+			],
+			[
+				"confi",
+				"configFiles	statement"
+			],
+			[
+				"manter",
+				"manterNovosDados"
+			],
+			[
+				"print",
+				"print	print …"
+			],
+			[
+				"if",
+				"ife	if … else"
+			],
+			[
+				"e",
+				"eq	.eq()"
+			],
+			[
+				"outpf",
+				"outputFolder"
+			],
+			[
+				"configfi",
+				"ConfigFile	class"
+			],
+			[
+				"m",
+				"mkdir	function"
+			],
+			[
+				"child",
+				"child	forstmt"
+			],
+			[
+				"ista",
+				"isinstance	function"
+			],
+			[
+				"parent",
+				"parents	function"
+			],
+			[
+				"getf",
+				"getXmlFilePath"
+			],
+			[
+				"an",
+				"anchor	function"
+			],
+			[
+				"param",
+				"paramName	param"
+			],
+			[
+				"configura",
+				"configuração"
+			],
+			[
+				"Error",
+				"EOFError	class"
+			],
+			[
+				"jsonpor",
+				"jsonDataToPesquisador"
+			],
+			[
+				"Elem",
+				"ElementTree	module"
+			],
+			[
+				"len",
+				"__len__	function"
+			],
+			[
+				"get",
+				"getroot	function"
+			],
+			[
+				"xmlfil",
+				"xmlFilesPath	statement"
+			],
+			[
+				"pathlib",
+				"pathlib	module"
+			],
+			[
+				"grupo",
+				"grupos	statement"
+			],
+			[
+				"getEle",
+				"getElementsByTagName"
+			],
+			[
+				"frien",
+				"friendSex"
+			],
+			[
+				"ready",
+				"ready	$(document).ready"
+			],
+			[
+				"prin",
+				"print"
+			],
+			[
+				"ap",
+				"append"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "scriptLattesDiff.py",
+			"settings":
+			{
+				"buffer_size": 15010,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "html/index.htm",
+			"settings":
+			{
+				"buffer_size": 2661,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "css/style.css",
+			"settings":
+			{
+				"buffer_size": 1418,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 772 files for \"jsons\"\n\nD:\\Facul\\IC\\scriptLattesDiff\\scriptLattesDiff.py:\n  155          return time.strptime(str, '%d/%m/%Y %H:%M:%S')\n  156  \n  157:     def analisarJsons(configFiles):\n  158          '''\n  159          Compara várias instancias de ConfigFile e retorna um json analisado com a data de cada configFile\n  ...\n  184  \n  185  \n  186:         # os demais jsons devem comparar os resultados com os campos processados nas linhas acimas\n  187          def diff(a, b):\n  188              '''Diz a diferença de A - B'''\n  ...\n  224      def saveJsonAnalisado(jsonAnalisado):\n  225          '''Salva a variável com jsonAnalisado analisados\n  226:             Atribua o valor de ConfigFile.analisarJsons a uma variável antes'''\n  227  \n  228          section('Salvando todos os arquivos e idLattes')\n  ...\n  238          tryMakeDir(outputFolder)\n  239  \n  240:         # salvando jsonAnalisado, na pasta jsons\n  241          tryMakeDir(outputFolder / 'json')\n  242          # salvando arquivo scriptLattesDiff.js\n  ...\n  275      # cria as classes com os arquivos de configuração\n  276      configFiles = [ConfigFile(x) for x in configFilesPath]\n  277:     jsonAnalisado = ConfigFile.analisarJsons(configFiles)\n  278      ConfigFile.saveJsonAnalisado(jsonAnalisado)\n  279  \n\nD:\\Facul\\IC\\scriptLattesDiff\\html\\index.htm:\n   15  	<!-- arquivo com a Classe idLattes -->\n   16  	<script type=\"text/javascript\" src=\"../js/idLattes.js\"></script>\n   17: 	<!-- Em seguida, carrega-se todos os jsons adquiridos do scriptLattesDiff -->\n   18: 	<script type=\"text/javascript\" src=\"../js/importJsons.js\"></script>\n   19  	<!-- Documento com a função que é executada assim que se carrega todos os idLattes -->\n   20  	<script type=\"text/javascript\" src=\"../js/documentReady.js\"></script>\n\nD:\\Facul\\IC\\scriptLattesDiff\\js\\documentReady.js:\n    1  /**\n    2   * função que deve ser chamada no lugar de $(document).ready,\n    3:  * pois ela será chamada assim que todos os jsons forem carregados\n    4   * @param  {event} e\n    5   */\n\nD:\\Facul\\IC\\scriptLattesDiff\\js\\importJsons.js:\n   44  /**\n   45   * função que deve ser chamada no lugar de $(document).ready,\n   46:  * pois ela será chamada assim que todos os jsons forem carregados\n   47   * @param  {event} e\n   48   */\n   ..\n   54  \n   55  \n   56: 	// carregará todos os arquivos jsons e em seguida chamará a função documentReady\n   57  	/**\n   58  	 * função que é chamada toda vez que um arquivo for carregado em loadJs\n   ..\n   87  		scriptLattesDiff.allIdLattes.forEach(function (elem, index) {\n   88  			// carrega arquivo por arquivo dos pesquisadores\n   89: 			loadJs('../jsons/idLattes/'+elem+'.js', onJsLoad);\n   90  		});\n   91  	}\n   ..\n   93  \n   94  \n   95: 	loadJs('../jsons/scriptLattesDiff.js', onLoadAllIdLattes);\n   96  \n   97  	\n\n12 matches across 4 files\n",
+			"settings":
+			{
+				"buffer_size": 2832,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "js/documentReady.js",
+			"settings":
+			{
+				"buffer_size": 2511,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/importJsons.js",
+			"settings":
+			{
+				"buffer_size": 2594,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/idLattes.js",
+			"settings":
+			{
+				"buffer_size": 2249,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "py/misc.py",
+			"settings":
+			{
+				"buffer_size": 866,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Facul/IC/scriptLattesV8.10c/scriptLattes/membro.py",
+			"settings":
+			{
+				"buffer_size": 25639,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Test",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Anaconda Python Builder",
+					""
+				],
+				[
+					"Test",
+					""
+				],
+				[
+					"Packages/User/Python Leo/Python.sublime-build",
+					""
+				]
+			],
+			[
+				"Test",
+				""
+			]
+		],
+		[
+			[
+				[
+					"List",
+					""
+				],
+				[
+					"Packages/User/Python Leo/Python.sublime-build",
+					""
+				]
+			],
+			[
+				"List",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Test",
+					""
+				],
+				[
+					"Packages/User/Python Leo/Python.sublime-build",
+					""
+				]
+			],
+			[
+				"Test",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 357.0,
+		"last_filter": "enable",
+		"selected_items":
+		[
+			[
+				"enable",
+				"Package Control: Enable Package"
+			],
+			[
+				"css",
+				"Set Syntax: CSS"
+			],
+			[
+				"sort",
+				"Sort Lines"
+			],
+			[
+				"close",
+				"Project: Close"
+			],
+			[
+				"snippet wh",
+				"Snippet: While Loop"
+			],
+			[
+				"set javasc",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"disable",
+				"Package Control: Disable Package"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"set bat",
+				"Set Syntax: Batch File"
+			],
+			[
+				"javasc",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"set c",
+				"Set Syntax: C"
+			],
+			[
+				"remove ",
+				"Package Control: Remove Package"
+			],
+			[
+				"snippet",
+				"Snippet: jQuery AJAX call"
+			],
+			[
+				"set html",
+				"Set Syntax: HTML"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"upgrade",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"build",
+				"Build: New Build System"
+			],
+			[
+				"set json",
+				"Set Syntax: JSON"
+			],
+			[
+				"set javas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"instlal",
+				"Package Control: Install Package"
+			],
+			[
+				"removepac",
+				"Package Control: Remove Package"
+			],
+			[
+				"set pyt",
+				"Set Syntax: Python"
+			],
+			[
+				"pla",
+				"Set Syntax: Plain Text"
+			],
+			[
+				"pack",
+				"Preferences: Browse Packages"
+			]
+		],
+		"width": 528.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Facul/IC/scriptLattesV8.10c"
+	],
+	"file_history":
+	[
+		"/D/Facul/IC/ICMC/28072015/get-ssc/teste-01-database.xml",
+		"/D/Facul/IC/ICMC/11072015/get-ssc/teste-01-database.xml",
+		"/D/Facul/IC/scriptLattesDiff/idLattes/11072015/3030047284254233.xml",
+		"/D/Facul/IC/scriptLattesDiff/js/idLattes.js",
+		"/D/Facul/IC/scriptLattesDiff/idLattes/28072015/3030047284254233.xml",
+		"/D/Facul/IC/scriptLattesV8.10c/scriptLattes/grupo.py",
+		"/D/Facul/IC/scriptLattesV8.10c/scriptLattes.py",
+		"/D/Facul/IC/scriptLattesDiff/jsons/idLattes/9836776931160228.js",
+		"/D/Facul/IC/scriptLattesDiff/js/jquery.js",
+		"/D/Facul/IC/scriptLattesDiff/css/style.css",
+		"/D/Facul/IC/scriptLattesDiff/js/js.js",
+		"/D/Facul/IC/scriptLattesDiff/py/misc.py",
+		"/D/Facul/IC/ICMC/10072015/get-ssc.config",
+		"/D/Facul/IC/scriptLattesDiff/scriptLattesDiff.sublime-project",
+		"/D/Facul/IC/scriptLattesDiff/jsons/scriptLattesDiff.js",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/CSS.sublime-settings",
+		"/C/Users/Leonardo/Desktop/style.css",
+		"/D/Facul/IC/scriptLattesDiff/test.bat",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Section-HTML.sublime-snippet",
+		"/C/Users/Leonardo/AppData/Local/Temp/7zO3E99.tmp/html.sublime-snippet",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/JavaScript Leo/console-log.sublime-snippet",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/JavaScript Leo/Completion Rules.tmPreferences",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/JavaScript Leo/Symbol List Banned.tmPreferences",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/D/Facul/IC/scriptLattesDiff/py/jsons/informations.js",
+		"/D/Facul/IC/scriptLattesV8.10c/css/scriptLattes.css",
+		"/C/Users/Leonardo/Desktop/dns.txt",
+		"/D/Facul/IC/scriptLattesDiff/js/importJsons.js",
+		"/D/Facul/IC/scriptLattesDiff/jsons/informations.js",
+		"/D/Facul/IC/scriptLattesV8.10c/scriptLattes/geradorDePaginasWeb.py",
+		"/D/Formatacao/Programas em comum/EsvaziarPenDrive.bat",
+		"/D/shortcuts/linux.bat",
+		"/D/Formatacao/Programas em comum/oi.txt",
+		"/D/Teste/a.txt",
+		"/C/Program Files (x86)/EasyPHP/data/localweb/yugioh/session/session.php",
+		"/D/Teste/session/session.php",
+		"/D/Facul/IC/scriptLattesDiff/idLattes/28072015/3030047284254233",
+		"/D/Facul/IC/scriptLattesDiff/idLattes/3030047284254233.xml",
+		"/D/Facul/IC/ICMC/10072015/get-ssc/teste-01-database.xml",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Python Leo/print-..-(printf).sublime-snippet",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/Anaconda/anaconda_lib/autopep/autopep8_lib/lib2to3/fixes/fix_print.py",
+		"/C/Users/Leonardo/AppData/Local/Microsoft/Windows/INetCache/IE/NXKGOPA4/anne[1].jpg",
+		"/C/Users/Leonardo/AppData/Local/Microsoft/Windows/INetCache/IE/9SO2ZZN6/mqdefault[1].webp",
+		"/D/Facul/IC/scriptLattesDiff/scriptLattesDiff.py",
+		"/C/Program Files (x86)/EasyPHP/data/localweb/Biblioteca/facebookBirthdays/fbBirthdays.js",
+		"/D/Facul/IC/scriptLattesDiff/teste.bat",
+		"/D/Facul/IC/scriptLattesDiff/__pycache__/scriptLattesDiff.cpython-34.pyc",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/Alignment/Default (Windows).sublime-keymap",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/Anaconda/Default (Windows).sublime-keymap",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/Repeat Macro/Default.sublime-keymap",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/Anaconda/Anaconda.sublime-settings",
+		"/D/Facul/IC/scriptLattesV8.10c/scriptLattesDiff1.3/scriptLattesDiff",
+		"/D/Facul/IC/scriptLattesDiff/scriptLattesDiffold.py",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Python Leo/if.sublime-snippet",
+		"/D/Facul/IC/scriptLattesDiff/html/index.htm",
+		"/D/Facul/IC/scriptLattesDiff/scriptLattesDiff (Cópia em conflito de leonardo-Vostro-5470 2015-07-28).py",
+		"/C/Users/Leonardo/Dropbox/Facul/IC/ICMC/2072015/get-scc/teste-01-database.xml",
+		"/D/Facul/IC/ICMC/get-ssc/teste-01-database.xml",
+		"/D/Facul/IC/ICMC/get-ssc/jsons/index.html",
+		"/D/Facul/IC/ICMC/get-ssc/jsons/allIdLattes.js",
+		"/D/Facul/IC/scriptLattesDiff/jsons/allIdLattes.js",
+		"/D/Facul/IC/ICMC/get-ssc.config",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Python Leo/while.sublime-snippet",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Python Leo/if-__name__-==-'__main__'.sublime-snippet",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/JavaScript Leo/JavaScript Indent.tmPreferences",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/JavaScript Leo/if.sublime-snippet",
+		"/D/Facul/IC/ICMC/get-ssc/jsons/importJsons.js",
+		"/D/Facul/IC/scriptLattesDiff/js/jsonForJs.json",
+		"/D/Facul/comp/misc.c",
+		"/D/Facul/comp/misc.h",
+		"/D/Facul/IC/scriptLattesDiff/saidaDebug/jsons/allIdLattes.js",
+		"/D/Facul/IC/scriptLattesDiff/saidaDebug/jsons/idLattes9836776931160228.js",
+		"/D/Facul/IC-Backup/teste.txt",
+		"/D/Facul/IC/teste.txt",
+		"/D/shortcuts/stoptorrent.pyw",
+		"/D/Facul/IC/scriptLattesDiff/saidaDebug/jsons/idLattes145887238250184.js",
+		"/D/Facul/IC/scriptLattesDiff/.gitattributes",
+		"/D/shortcuts/desligar.bat",
+		"/C/Users/Leonardo/Desktop/nul",
+		"/D/shortcuts/ff-prompt.bat",
+		"/D/Facul/IC/ICMC/get-ssc/jsons/idLattes1251013053012882.js",
+		"/D/Facul/IC/ICMC/get-ssc/jsons/idLattes7913302545613108.js",
+		"/C/Program Files (x86)/EasyPHP/data/localweb/Biblioteca/loadjs.txt",
+		"/D/Facul/IC/ICMC/get-ssc/jsons/idLattes145887238250184.js",
+		"/D/Facul/IC/ICMC/get-ssc/jsons/idLattes9836776931160228.js",
+		"/D/Facul/IC/ICMC/get-ssc/jsons/allIDsLattes.js",
+		"/C/Users/Leonardo/Desktop/buoro.txt",
+		"/D/Facul/IC/ICMC/get-ssc/json.js",
+		"/C/Users/Leonardo/Desktop/Filmes/filmes.txt",
+		"/D/dev/shutdownWhen/shutdownWnet.py",
+		"/C/ytcenter/YouTubeCenter.js",
+		"/D/Facul/IC/scriptLattesDiff/html/jsonForJs.json",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Anaconda.sublime-settings",
+		"/C/Program Files (x86)/EasyPHP/data/localweb/Biblioteca/downloadStringAsFile.js",
+		"/D/Facul/comp/runcodes/runcodes.js",
+		"/C/ytcenter/bypass.py",
+		"/C/ytcenter/update.bat",
+		"/C/Users/Leonardo/Desktop/ytcenter-settings.ytcs",
+		"/C/Users/Leonardo/Desktop/leonardo.json",
+		"/D/Facul/IC/scriptLattesDiff/html/json.json",
+		"/D/Facul/IC/ICMC/get-ssc/index.html",
+		"/D/Facul/IC/ICMC/get-scc.config",
+		"/D/Facul/IC/ICMC/get-sme.config",
+		"/D/Facul/IC/ICMC/get-sma.config",
+		"/D/Facul/IC/scriptLattesV8.10c/exemplo/teste-01.config",
+		"/D/Facul/IC/scriptLattesDiff/scriptLattesDiff - Copia.py",
+		"/D/Facul/IC/ICMC/get-scc/teste-01-database.xml",
+		"/D/Facul/IC/ICMC/get-scc/index.html",
+		"/D/Facul/IC/scriptLattesV8.10c/scriptLattes/parserLattesXML.py",
+		"/D/Facul/IC/scriptLattesV8.10c/scriptLattes/producoesArtisticas/producaoArtistica.py",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/C++ Leo/C++.sublime-build",
+		"/D/Facul/IC/scriptLattesDiff/json.json",
+		"/D/Facul/IC/scriptLattesDiff/html/js.js",
+		"/D/Facul/IC/ICMC/get-scc.list",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Python Leo/debug-..-(printf).sublime-snippet",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Python Leo/Python.sublime-build",
+		"/D/Facul/IC/scriptLattesV8.10c/scriptLattes/internacionalizacao/HTMLParserNew.py",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Python Leo/__magic__.sublime-snippet",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/Python Leo/Completion Rules.tmPreferences",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/C++ Leo/C++.sublime-settings",
+		"/D/Facul/IC/scriptLattesDiff/config.sublime-project",
+		"/C/Program Files (x86)/EasyPHP/data/localweb/Biblioteca/leojs.js",
+		"/C/Users/Leonardo/AppData/Roaming/Sublime Text 3/Packages/User/JavaScript Leo/while.sublime-snippet",
+		"/C/Program Files (x86)/EasyPHP/data/localweb/Biblioteca/jQuery-Lastest.txt",
+		"/D/Facul/IC/scriptLattesDiff/html/css.css",
+		"/D/Facul/IC/scriptLattesV8.10c/scriptLattes/membro.py"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"<open folders>",
+			"C:\\Users\\Leonardo\\AppData\\Roaming\\Sublime Text 3\\Packages\\User\\JavaScript Leo",
+			"./*.*",
+			"./*.config"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"jsons",
+			"(",
+			"elem",
+			"'oi'",
+			"child",
+			"carregar",
+			"revista",
+			"Software Testing, Verification & Reliability",
+			"titulo",
+			"dict",
+			"String",
+			"acrescidos",
+			"removidos",
+			"acrescidos",
+			"id",
+			"idLattes",
+			"this",
+			"that",
+			"Classe",
+			"dimportJsons",
+			"ch",
+			"json",
+			"elem",
+			"m",
+			"elem",
+			"houveAlteracao",
+			"Valor1",
+			"removidos",
+			"h3",
+			"right",
+			"Removid",
+			"Membros",
+			"allIdLattes",
+			"\n  ",
+			"margin",
+			"float",
+			"h2",
+			"ultima",
+			"30",
+			"30/04/2015",
+			"K4767859T8",
+			"Section//",
+			" | ",
+			"div",
+			"li",
+			"allDatas",
+			"    ",
+			" ",
+			"165",
+			"Tempo de Vida",
+			"    ",
+			"importJsons",
+			"pesquisadores",
+			"informations",
+			"jsonAnalisado",
+			"informations",
+			"allDatas",
+			"allIdLattes",
+			"\\\n",
+			"'manterNovosDados'",
+			"'manterMaisNovo'",
+			"delete",
+			"manterDadosComparados",
+			"'manterNovosDados'",
+			"manterNovosDados",
+			"file",
+			"configFiles",
+			"<iniciacao_cientifica>",
+			"Flase",
+			"<iniciacao_cientifica>",
+			"<pesquisador ",
+			"maisNovo",
+			"maisnovo",
+			"maisNovo",
+			"True",
+			"3030047284254233",
+			"tratarComoLista",
+			"<pesquisador ",
+			"<pesquisador",
+			"apresentacao_trabalho",
+			"        <trabalho_completo>",
+			"        <trabalho>",
+			"\n    <",
+			"<pesquisador",
+			"idiomas",
+			"pass",
+			"colaboradores",
+			"identificacao",
+			"self.json[i]",
+			"colaboradores",
+			"result",
+			"area_atuacao",
+			"isLista",
+			"area_atuacao",
+			"idiomas",
+			"casoGenerico",
+			"ana",
+			"analisarJsons",
+			"colaboradores",
+			"parametros",
+			"print",
+			"colaboradores",
+			"print(",
+			"exit()",
+			"colaboradores",
+			"resumo_expandido_congresso",
+			"trabalho_completo_congresso",
+			"casoListaManterDados",
+			"manterDados",
+			"compararDados",
+			"manterDados",
+			"configFile",
+			"manterDados",
+			"compararDados",
+			"parametros",
+			"analiseParcial",
+			"strToData",
+			"\n    def",
+			"def",
+			"colaboradores",
+			"area_atuacao",
+			"endereco",
+			"idiomas",
+			"identificacao",
+			"apresentacao_trabalho",
+			"participacao_evento",
+			"orientacao_outros_tipos_em_andamento",
+			"texto_em_jornal"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"datasProcessamento",
+			"./ICMC",
+			"= "
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "scriptLattesDiff.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 15010,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
+							],
+							"syntax": "Packages/User/Python Leo/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1703.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "html/index.htm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2661,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2259,
+								2267
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 750.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "css/style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1418,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								410,
+								410
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content"
+							],
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2832,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										176,
+										181
+									],
+									[
+										377,
+										382
+									],
+									[
+										713,
+										718
+									],
+									[
+										919,
+										924
+									],
+									[
+										1207,
+										1212
+									],
+									[
+										1500,
+										1505
+									],
+									[
+										1597,
+										1602
+									],
+									[
+										1972,
+										1977
+									],
+									[
+										2214,
+										2219
+									],
+									[
+										2337,
+										2342
+									],
+									[
+										2636,
+										2641
+									],
+									[
+										2740,
+										2745
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								2640,
+								2640
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content"
+							],
+							"default_dir": "D:\\Facul\\IC\\scriptLattesDiff",
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 405.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "js/documentReady.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2511,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1804,
+								1804
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
+							],
+							"syntax": "Packages/User/JavaScript Leo/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 795.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "js/importJsons.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2594,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1094,
+								1094
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content"
+							],
+							"syntax": "Packages/User/JavaScript Leo/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "js/idLattes.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2249,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
+							],
+							"syntax": "Packages/User/JavaScript Leo/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 135.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "py/misc.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 866,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9,
+								9
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
+							],
+							"syntax": "Packages/User/Python Leo/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/D/Facul/IC/scriptLattesV8.10c/scriptLattes/membro.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 25639,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								57,
+								57
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
+							],
+							"syntax": "Packages/User/Python Leo/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 30.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 198.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "scriptLattesDiff.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"jquery",
+				"scriptLattesDiff\\js\\jquery.js"
+			],
+			[
+				"index",
+				"scriptLattesDiff\\html\\index.htm"
+			],
+			[
+				".js",
+				"scriptLattesDiff\\js\\js.js"
+			],
+			[
+				"scrid",
+				"scriptLattesDiff\\scriptLattesDiff.py"
+			],
+			[
+				"scriptdiff.p",
+				"scriptLattesDiff\\scriptLattesDiff.sublime-project"
+			],
+			[
+				"docume",
+				"scriptLattesDiff\\js\\documentReady.js"
+			],
+			[
+				"imporj",
+				"scriptLattesDiff\\js\\importJsons.js"
+			],
+			[
+				"scriptla.js",
+				"scriptLattesDiff\\jsons\\scriptLattesDiff.js"
+			],
+			[
+				"style",
+				"scriptLattesDiff\\css\\style.css"
+			],
+			[
+				"sscxml",
+				"ICMC\\28072015\\get-ssc\\teste-01-database.xml"
+			],
+			[
+				"css",
+				"scriptLattesV8.10c\\css\\scriptLattes.css"
+			],
+			[
+				"doc",
+				"scriptLattesDiff\\js\\documentReady.js"
+			],
+			[
+				"import",
+				"scriptLattesDiff\\js\\importJsons.js"
+			],
+			[
+				"idnex",
+				"scriptLattesDiff\\html\\index.htm"
+			],
+			[
+				"ssc",
+				"ICMC\\10072015\\get-ssc.config"
+			],
+			[
+				"js",
+				"scriptLattesDiff\\js\\js.js"
+			],
+			[
+				"misc",
+				"scriptLattesDiff\\py\\misc.py"
+			],
+			[
+				"scriptidif",
+				"scriptLattesDiff\\scriptLattesDiff.py"
+			],
+			[
+				"scriptdif",
+				"scriptLattesV8.10c\\scriptLattesDiff1.3\\scriptLattesDiff"
+			],
+			[
+				"scridiff",
+				"scriptLattesDiff\\scriptLattesDiff.py"
+			],
+			[
+				"informatio",
+				"scriptLattesDiff\\jsons\\informations.js"
+			],
+			[
+				"misc.",
+				"scriptLattesDiff\\py\\misc.py"
+			],
+			[
+				"xml",
+				"ICMC\\get-ssc\\teste-01-database.xml"
+			],
+			[
+				"ssc.xml",
+				"ICMC\\get-ssc\\teste-01-database.xml"
+			],
+			[
+				"-ssc/teste-01-database.xml",
+				"ICMC\\get-ssc\\teste-01-database.xml"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"D:\\Facul\\IC\\scriptLattesDiff\\scriptLattesDiff.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

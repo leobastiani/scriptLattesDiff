@@ -1,0 +1,87 @@
+/* Informacoes iniciais para o padraoo da pagina */
+body {
+    margin-left: 2%;
+    margin-right: 2%;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 0.9em;
+    text-align: justify;
+}
+
+.campoAlterado {
+    border-bottom: 1px solid black;
+    margin-bottom: 20px;
+}
+
+.campoAlterado > div {
+    float: left;
+    width: 50%;
+}
+
+.alteradoValor {
+    margin-bottom: 20px;
+}
+
+.removidos .alteradoValor {
+    color: red;
+}
+
+.acrescidos .alteradoValor {
+    color: green;
+}
+
+header {
+    clear: both;
+    background: #D4E5F5;
+    color: #000000;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px 10px 10px 10px;
+}
+
+#datasProcessamento {
+    border-top: 1px solid #000;
+    margin-top: 30px;
+}
+
+
+/* ====================================================
+   TRATANDO A SECAO DE MEMBROS
+   ==================================================== */
+#principaisAlteracoes {
+    width: 60%;
+}
+.membro {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.nomeLattes {
+    overflow: hidden; /* Isso esta aqui porque float left nao tem height */
+    background-color: #EEE;
+    padding: 0 10px;
+}
+
+.nomeLattes > h3 {
+    float: left;
+    width: 50%;
+    margin: 10px 0;
+}
+
+.acrescidos > span {
+    color: green;
+}
+
+.removidos > span {
+    color: red;
+}
+
+.tabelaAlterados > span {
+    display: block;
+    font-weight: bold;
+}
+
+.clearfix:after {
+  content:"";
+  display:table;
+  clear:both;
+}
