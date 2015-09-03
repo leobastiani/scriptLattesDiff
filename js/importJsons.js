@@ -14,6 +14,11 @@ function loadJs(filename, onload) {
 // quantidade de arquivos carregados até o momento
 loadJs.filesLoaded = 0;
 
+
+
+
+
+
 /**
  * json com as informações obtidas do scriptLattesDiff
  * @type {dicionário}
@@ -41,6 +46,11 @@ var scriptLattesDiff = {
 };
 
 
+
+
+
+
+
 /**
  * função que deve ser chamada no lugar de $(document).ready,
  * pois ela será chamada assim que todos os jsons forem carregados
@@ -49,6 +59,14 @@ var scriptLattesDiff = {
 function documentReady() {
 	
 }
+
+
+
+
+
+
+
+
 
 $(document).ready(function() {
 
@@ -74,9 +92,14 @@ $(document).ready(function() {
 			}
 
 
-			documentReady();
+			// assim que todos já foram carregados, carrega o scriptLattesDiff
+			loadJs('../js/scriptLattesDiff.js', documentReady);
 		}
 	}
+
+
+
+
 
 
 
@@ -89,6 +112,10 @@ $(document).ready(function() {
 			loadJs('../json/idLattes/'+elem+'.js', onJsLoad);
 		});
 	}
+
+
+
+
 
 
 

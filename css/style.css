@@ -1,15 +1,16 @@
-/* Informacoes iniciais para o padraoo da pagina */
+/**
+ * Deixe que o chorme faça todo o trabalho
+ */
+
+
+
+
 body {
     margin-left: 2%;
     margin-right: 2%;
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
     font-size: 0.9em;
     text-align: justify;
-}
-
-.campoAlterado {
-    border-bottom: 1px solid black;
-    margin-bottom: 20px;
 }
 
 .campoAlterado > div {
@@ -39,16 +40,17 @@ header {
 }
 
 #datasProcessamento {
-    border-top: 1px solid #000;
-    margin-top: 30px;
+    background: #F4FAFF;
+    padding: 10px;
 }
 
 
 /* ====================================================
    TRATANDO A SECAO DE MEMBROS
    ==================================================== */
-#principaisAlteracoes {
-    width: 60%;
+.pagina {
+    width: 80%;
+    margin-left: 10%;
 }
 .membro {
     width: 100%;
@@ -84,4 +86,26 @@ header {
   content:"";
   display:table;
   clear:both;
+}
+
+#filtros {
+    margin-bottom: 10px;
+}
+
+.filtro {
+    display: block;      float: left;
+    margin: 10px;
+}
+
+#filtros > h3 {
+    margin: 0;
+}
+
+.listraCinza {
+    background-color: #F7F7F7;
+}
+
+.alteradoValor > span {
+    display: block;
+    margin-bottom: 25px;
 }

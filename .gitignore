@@ -1,7 +1,28 @@
-test.bat
+# arquivos de teste
+*.bat
+*.sh
+output
+debug/json/*.*
 
+
+
+
+
+# arquivos de saída
 json
 xml
 
+
+
+
+
+# sublime
+subl
+
+
+
+
+
+# cahce do python
 __pycache__
 **/*/__pycache__

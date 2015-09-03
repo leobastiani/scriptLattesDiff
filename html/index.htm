@@ -11,13 +11,24 @@
 
 
 	<!-- Jquery é a primeira biblioteca que deve ser carregada -->
-	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script src="../js/jquery.js"></script>
+
+
+
+	<!-- Funções que complementam a biblioteca padrão -->
+	<script src="../js/jqueryFn.js"></script>
+	<script src="../js/Array.js"></script>
+
+
+
+
+
 	<!-- arquivo com a Classe idLattes -->
-	<script type="text/javascript" src="../js/idLattes.js"></script>
+	<script src="../js/idLattes.js"></script>
 	<!-- Em seguida, carrega-se todos os jsons adquiridos do scriptLattesDiff -->
-	<script type="text/javascript" src="../js/importJsons.js"></script>
+	<script src="../js/importJsons.js"></script>
 	<!-- Documento com a função que é executada assim que se carrega todos os idLattes -->
-	<script type="text/javascript" src="../js/documentReady.js"></script>
+	<script src="../js/documentReady.js"></script>
 
 
 </head>
@@ -44,14 +55,32 @@
 	</header>
 
 
-	<section id="principaisAlteracoes">
+
+	
+
+	<!-- pagina com as principais alterações -->
+	<section id="principaisAlteracoes" class="pagina">
 
 
 		<h1>Lista com principais alterações</h1>
 
 
 
-		<div id="principaisAlteracoesContent">
+		<div id="filtros" class="clearfix">
+
+
+			<h2>Filtros:</h2>
+			<div class="filtro">
+				<input type="checkbox" value="exemplo" checked="checked" />
+				<span>exemplo</span>
+			</div>
+
+
+
+		</div>
+
+
+		<div id="principaisAlteracoesContent" class="clearfix">
 
 			<!-- Um exemplo de um membro -->
 			<div class="membro">
@@ -82,7 +111,8 @@
 
 				<div class="acrescidos tabelaAlterados">
 					<span>Acrescidos desde então</span>
-					
+
+
 					<!-- A tabela dos alterados tem
 					uma chave com o que foi alterado
 					e suas alterações -->
@@ -102,16 +132,16 @@
 		</div>
 
 
-		<div style="clear: both;"></div>
 	</section>
-	
 
-	<div id="datasProcessamento">
+
+
+	<footer id="datasProcessamento">
 		Datas de processamento do scriptLattes:
 		<ul>
 		<!-- Lista com todos as datas de processamento do scriptLattes -->
 		</ul>
-	</div>
+	</footer>
 
 </body>
 

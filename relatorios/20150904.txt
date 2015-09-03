@@ -1,0 +1,29 @@
+ - Campo de filtros na página HTML que apenas esconde os elementos, não apaga e não recria
+
+ - Implementado uma comparação dos elementos removidos e acrescidos do mesmo campo
+   Agora, elementos parecidos são removidos do resultado da diferença
+
+
+
+
+Dificuldades
+============
+
+Apesar de remover elementos parecidos, só remove dos campos iguais
+mas alguns elementos são removidos de um campo para outro e a fun-
+ção que remove elementos parecidos é muito complexa.
+
+Devo testar elementos parcidos de outros campos?
+Devo remove-los ou criar um campo "movidos"?
+
+
+
+
+
+Para os próximos dias
+=====================
+
+Meu script deve criar um arquivo de configuração parecido com o an-
+tecessor e deve chamar o scriptLattes
+
+O javascript devolve as diferenças de mais de duas datas
