@@ -71,3 +71,14 @@ $.fn.even = function () {
 		return index % 2;
 	});
 }
+
+
+
+
+
+
+
+$.fn.getDate = function () {
+	var data = $(this).val().split('-');
+	return new Date(data[0], parseInt(data[1])-1, parseInt(data[2]));
+}

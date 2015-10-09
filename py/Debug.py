@@ -5,17 +5,16 @@
 import sys
 from py.misc import *
 from py.JsonToJs import JsonToJs
+from py.Settings import Settings
+import shutil
 
 
 
 
 def debug(*args):
+    '''funciona como print, mas só é executada se sys.flags.debug == 1'''
     if not sys.flags.debug:
         return ;
-    # resolve o problema da codificação
-    args = list(args)
-    for i, arg in enumerate(args):
-        args[i] = strip_accents(str(arg))
     print(*args)
 
 
@@ -74,3 +73,12 @@ class Debug:
         # salva o os similares no arquivo de debug
         similarPath = str(Misc.scriptPath / 'debug' / 'json' / 'similares.json')
         JsonToJs.write(similarPath, 'Debug[\'similares\']', Debug.elementosSimilares)
+
+
+
+        # copia a pasta debug para a pasta de saída
+        if Settings.outputFolder != Misc.scriptPath:
+            shutil.copytree(
+                str(Misc.scriptPath / 'debug'),
+                str(Settings.outputFolder / 'debug')
+            )

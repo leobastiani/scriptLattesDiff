@@ -4,6 +4,7 @@
 
 
 
+# analisa as dependencias antes de começar
 import py.Dependencies
 
 
@@ -28,10 +29,6 @@ idSeiji = '3030047284254233'
 
 
 def main():
-
-
-    section('Analisando arquivos de configuração')
-
 
 
     scriptLattesDiff = ScriptLattesDiff()

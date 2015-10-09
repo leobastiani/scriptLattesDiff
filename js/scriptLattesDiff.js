@@ -36,11 +36,19 @@ scriptLattesDiff.paginas = {}
  * Funções importantes para o scriptLattesDiff
  */
 scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal) {
+	console.log('Gerando principaisAlteracoes para as datas:', dataInicial, dataFinal);
 
 
-	// apaga todo o conteudo de principaisAlteracoes
+
+	// apaga todo o conteudo antigo de principaisAlteracoes
 	$('#principaisAlteracoes .membro').remove();
 	$('#principaisAlteracoes .filtro').remove();
+
+	// teste se as datas não estiverem distanciadas
+	if(dataFinal <= dataInicial) {
+		console.log('Tentativa de gerar a principaisAlteracoes com as datas:\n'+dataInicial+'\n'+dataFinal);
+		return false;
+	}
 
 
 
@@ -64,7 +72,9 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		/**
 		 * obtem um dict com os campos alterados
 		 */
-		var alteracoes = pesquisador.getAlteracoes(dataInicial, dataFinal);
+		var iDataIni = scriptLattesDiff.datasProcessamento.indexOf(dataInicial);
+		var iDataFin = scriptLattesDiff.datasProcessamento.indexOf(dataFinal);
+		var alteracoes = pesquisador.getAlteracoes(iDataIni, iDataFin);
 
 
 		if($.isEmptyObject(alteracoes)) {
@@ -76,13 +86,13 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 
 		// jquery do membro que será ponto no final
-		jMembro = scriptLattesDiff.$.membro.clone();
+		var $membro = scriptLattesDiff.$.membro.clone();
 
 
 
 		// nome e idlattes
-		jMembro.find('.nome').text(nome);
-		jMembro.find('.idLattes').text(i);
+		$membro.find('.nome').text(nome);
+		$membro.find('.idLattes').text(i);
 
 
 
@@ -102,22 +112,24 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 				// sinal é + ou -
 				var campoAlteradoQuery = sinal == '+' ? '.acrescidos' : '.removidos';
 				// clona o objeto
-				var jCampoAlterado = scriptLattesDiff.$.campoAlterado.clone();
-				jCampoAlterado.appendTo(jMembro.find(campoAlteradoQuery));
+				var $campoAlterado = scriptLattesDiff.$.campoAlterado.clone();
+				$campoAlterado.appendTo($membro.find(campoAlteradoQuery));
 
 
 				/**
 				 * atualiza os campos
 				 */
-				jCampoAlterado.find('.alteradoChave').text(campo)
+				$campoAlterado.find('.alteradoChave').text(campo)
 				// preenche o campo data-campo, será usado para o filtro identificar
 				.attr('data-campo', campo);
 
 
 
-				var frasesResumidas = idLattes.resumir(alteracoes[campo][sinal]);
-				frasesResumidas.forEach(function (frase, index) {
-					$('<span>').text(frase).appendTo(jCampoAlterado.find('.alteradoValor'));
+				alteracoes[campo][sinal].forEach(function (dict, index) {
+					$('<span>').text(scriptLattesDiff.resumirDict(dict)).appendTo($campoAlterado.find('.alteradoValor'))
+					// neste campo, para conseguir adicionar o elemento completo depois
+					// devo salva-lo em algum lugar
+					.data('alteracoes', dict);
 				});
 
 
@@ -131,23 +143,62 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		/**
 		 * remove o primeiro elemento
 		 */
-		if(jMembro.find('.acrescidos .campoAlterado').length == 0) {
-			jMembro.find('.acrescidos').remove();
+		if($membro.find('.acrescidos .campoAlterado').length == 0) {
+			$membro.find('.acrescidos').remove();
 		}
-		if(jMembro.find('.removidos .campoAlterado').length == 0) {
-			jMembro.find('.removidos').remove();
+		if($membro.find('.removidos .campoAlterado').length == 0) {
+			$membro.find('.removidos').remove();
 		}
 
-		jMembro.appendTo('#principaisAlteracoesContent');
+		$membro.appendTo('#principaisAlteracoesContent');
 
 
 	}
 	
 
 	// cria os filtros
-	scriptLattesDiff.paginas.filtroPrincipaisAlterados(camposUtilizados);
+	scriptLattesDiff.paginas.filtroPrincipaisAlterados(camposUtilizados.sort());
 
 }
+
+
+
+
+
+
+
+$('#principaisAlteracoes').on('click', '.alteradoValor span', function(e) {
+	// expandido qr dizer q ele está mostrando tudo
+	$(this).toggleClass('expandido');
+
+
+	var alteracoes = $(this).data('alteracoes');
+	if($(this).hasClass('expandido')) {
+		// adiciona spans na forma
+		// chave: valor
+		
+		// se alterações é uma string, como no caso de colaboradores
+		// não faz nd
+		console.log(typeof alteracoes);
+		if(typeof alteracoes == "string") {
+			return ;
+		}
+
+		var spans = new Array();
+		for(var chave in alteracoes) {
+			var valor = alteracoes[chave];
+			spans.push(
+				$('<span>').text(chave+': '+valor)
+			);
+		}
+
+
+		// adiciona os spans no elemento atual
+		$(this).html(spans);
+	} else {
+		$(this).text(scriptLattesDiff.resumirDict(alteracoes));
+	}
+});
 
 
 
@@ -184,12 +235,12 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
 		
 
 
-		var jFiltro = scriptLattesDiff.$.filtro.clone();
-		jFiltro.find('span').text(campo);
-		jFiltro.find('input').val(campo);
+		var $filtro = scriptLattesDiff.$.filtro.clone();
+		$filtro.find('span').text(campo);
+		$filtro.find('input').val(campo);
 
 
-		jFiltro.appendTo('#filtros');
+		$filtro.appendTo('#filtros');
 
 
 	});
@@ -201,6 +252,13 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
 
 
 }
+
+
+
+
+
+
+
 
 
 // configurando o botao de filtro
@@ -247,3 +305,73 @@ $('#filtros').on('change', '.filtro > input', function(e) {
 
 
 });
+
+
+
+/**
+ * Procura a data mais próxima da data do argumento
+ * @param  {Date} data
+ * @return {Date}
+ */
+scriptLattesDiff.dataProx = function (data) {
+
+	var len = scriptLattesDiff.datasProcessamento.length;
+	var i = len-1;
+
+	while(i >= 0) {
+		var elem = scriptLattesDiff.datasProcessamento[i];
+		var zeroHour = new Date(elem);
+		zeroHour.setHours(0, 0, 0);
+
+		// se a data for menor ou igual, retorna ela
+		if(data >= zeroHour) {
+			return elem;
+		}
+
+
+
+		i--;
+	}
+
+	// se não encontrou nenhuma
+	return scriptLattesDiff.datasProcessamento[0];
+
+}
+
+
+
+
+
+/**
+ * resume um json obtido de um + e -, retorna uma string
+ * @param  {JSON} dict do campo dps do + e -
+ * @return {String}      string principal do dict
+ */
+scriptLattesDiff.resumirDict = function (dict) {
+	if(!(dict instanceof Object)) {
+		// se for uma string, retorna o dict direto
+		return dict;
+	}
+	// retorna um array, assim como recebido
+
+
+
+	// se ele possui um elemento que caracteriza o dicinário
+	var nomesCaract = ['nome_evento', 'titulo', 'nome', 'titulo_trabalho'];
+	for(i=0; i<nomesCaract.length; i++) {
+		var nome = nomesCaract[i];
+		if(!(nome in dict)) {
+			continue;
+		}
+
+
+		if(dict[nome] == '') {
+			return 'CAMPO "'+nome+'" VAZIO';
+		}
+		return dict[nome];
+
+	}
+
+
+	return result;
+}

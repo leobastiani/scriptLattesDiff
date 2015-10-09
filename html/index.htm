@@ -11,20 +11,23 @@
 
 
 	<!-- Jquery é a primeira biblioteca que deve ser carregada -->
-	<script src="../js/jquery.js"></script>
+	<script src="../vendor/jquery.js"></script>
 
 
 
 	<!-- Funções que complementam a biblioteca padrão -->
 	<script src="../js/jqueryFn.js"></script>
 	<script src="../js/Array.js"></script>
-
+	<script src="../js/Number.js"></script>
+	<script src="../js/Date.js"></script>
+	<script src="../js/Dict.js"></script>
+	
 
 
 
 
 	<!-- arquivo com a Classe idLattes -->
-	<script src="../js/idLattes.js"></script>
+	<script src="../js/Pesquisador.js"></script>
 	<!-- Em seguida, carrega-se todos os jsons adquiridos do scriptLattesDiff -->
 	<script src="../js/importJsons.js"></script>
 	<!-- Documento com a função que é executada assim que se carrega todos os idLattes -->
@@ -37,7 +40,7 @@
 
 	<!-- Campo de navegação no topo da tela -->
 	<header>
-		<h2 id="nomeDoGrupo">nomeDoGrupo</h2>
+		<h1 id="nomeDoGrupo">nomeDoGrupo</h1>
 
 		<!-- Lista de páginas possíveis para se navegar -->
 		<nav>
@@ -63,6 +66,32 @@
 
 
 		<h1>Lista com principais alterações</h1>
+
+
+
+		<div id="escolhaDatas" class="clearfix">
+			<h2>Datas comparativas:</h2>
+
+
+			<div>
+				<label>Data inicial:</label>
+				<input type="date">
+			</div>
+
+			<div>
+				<label>Data final:</label>
+				<input type="date">
+			</div>
+
+
+			<div style="line-height: 50px;">
+				<input type="submit" value="Pesquisar">
+			</div>
+
+		</div>
+
+
+
 
 
 

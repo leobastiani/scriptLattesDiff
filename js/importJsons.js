@@ -18,7 +18,6 @@ loadJs.filesLoaded = 0;
 
 
 
-
 /**
  * json com as informações obtidas do scriptLattesDiff
  * @type {dicionário}
@@ -88,8 +87,17 @@ $(document).ready(function() {
 			 */
 			var i;
 			for(i in scriptLattesDiff.idLattes) {
-				scriptLattesDiff.idLattes[i] = new idLattes(scriptLattesDiff.idLattes[i]);
+				scriptLattesDiff.idLattes[i] = new Pesquisador(scriptLattesDiff.idLattes[i]);
 			}
+
+
+
+			/**
+			 * convertendo as datas no objeto de Date
+			 */
+			scriptLattesDiff.datasProcessamento.forEach(function (elem, index) {
+				scriptLattesDiff.datasProcessamento[index] = Date.parseScriptLattes(elem);
+			});
 
 
 			// assim que todos já foram carregados, carrega o scriptLattesDiff

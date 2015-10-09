@@ -4,8 +4,11 @@
 
 
 import os
+from py.misc import *
 
 try:
+    # todas as dependencias vão aqui
+    # se o usuário não possuir alguma, sobe uma exceção
     import nltk
 
 
@@ -23,7 +26,8 @@ except ImportError as e:
 
 
     print('\nComando sugerido:')
-    command = 'python3 -m pip install -r requirements.txt'
+    pyCmd = Misc.getPyCmd()
+    command = pyCmd+' -m pip install -r requirements.txt'
     print('\t'+command)
 
 

@@ -18,7 +18,6 @@ class ScriptLattesDiff:
     def __init__(self):
 
 
-
         # glob de todos os arquivos em Settings.configFilesGlob
         self.filesPath = set(  # para remover duplicatas
                          sum(  # transforma lista de lista em lista
@@ -29,8 +28,8 @@ class ScriptLattesDiff:
 
 
 
-
     def analisarXml(self):
+        section('Analisando arquivos de configuração')
         self.configFiles = [ConfigFile(x) for x in self.filesPath]
 
 
@@ -44,16 +43,12 @@ class ScriptLattesDiff:
         Compara várias instancias de ConfigFile e retorna um json analisado com a data de cada configFile
         o parametro é uma lista com todos os ConfigFile para analisar
         '''
+        section('Comparando self.configFiles:')
 
 
 
         # ordena o vetor pela data
         self.configFiles = sorted(self.configFiles, key=lambda configFile: configFile.time)
-
-
-
-        section('Comparando self.configFiles:')
-
 
 
 

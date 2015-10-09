@@ -105,7 +105,34 @@ header {
     background-color: #F7F7F7;
 }
 
-.alteradoValor > span {
+.alteradoValor span {
     display: block;
     margin-bottom: 25px;
+    cursor: pointer;
+}
+
+#escolhaDatas div {
+    text-align: center;
+    width: 33.333%;
+    float: left;
+}
+
+#escolhaDatas label {
+    display: block;
+    margin-bottom: 9px;
+}
+
+.mostraElementoCompleto {
+position: absolute;}
+
+.alteradoValor > span:hover {
+    font-weight: bold;
+}
+
+.alteradoValor .expandido {
+    font-weight: bold;
+}
+
+.expandido span {
+    margin-bottom: 5px;
 }
