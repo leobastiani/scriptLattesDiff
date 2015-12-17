@@ -35,3 +35,12 @@ Array.prototype.pushUnique = function(elem) {
 Array.prototype.end = function() {
 	return this.slice(-1)[0];
 }
+
+
+
+/**
+ * Deixa o Array só com elementos únicos
+ */
+Array.prototype.unique = function () {
+	return $.unique(this);
+}

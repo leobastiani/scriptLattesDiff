@@ -6,6 +6,10 @@ import sys
 from pathlib import Path
 
 
+# é a porcentagem para que duas strings
+# sejam consideradas semelhantes
+porcentagemRatioSimilar = 0.8
+
 
 def strIsFloat(str):
     return str.replace('.', '', 1).isdigit()

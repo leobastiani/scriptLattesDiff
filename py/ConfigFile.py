@@ -2,14 +2,6 @@
 # coding=utf-8
 
 
-import time
-import os
-import xml.etree.ElementTree as ElementTree
-from pathlib import Path
-from py.misc import *
-
-
-
 
 class ConfigFile:
     '''Classe que trata um arquivo de configuração'''
@@ -60,9 +52,6 @@ class ConfigFile:
         # obtem uma instancia de time pela data de processamento
         self.time = self.strToData(self.data_processamento)
         self.loadJsonFromXml()
-
-
-
 
 
 
@@ -142,6 +131,29 @@ class ConfigFile:
     def loadXml(self):
         xmlFilePath = self.getXmlFilePath()
         print('Carregando arquivo xml: ', self.getXmlFilePath())
+        if not os.path.exists(str(xmlFilePath)):
+            print('O arquivo XML "%s" não existe.' % str(xmlFilePath))
+            print('Por favor, rode o scriptLattes para esse arquivo de configuração: %s' % str(self.filePath))
+            sys.exit(0)
+
+
+        # no xml que o scriptLattes gera
+        # o caracter & não é substituido por
+        # &amp;
+        # vamos verificar se existe o text &amp;
+        # se não, vamos substituir todos os
+        # & por &amp;
+        with open(str(xmlFilePath), 'r', encoding='utf-8') as file:
+            fileContent = file.read()
+        
+        if '&amp;' not in fileContent:
+            # esse arquivo precisa trocar & por &amp;
+            fileContent = fileContent.replace('&', '&amp;')
+            # agora é só salvar no arquivo
+            with open(str(xmlFilePath), 'w', encoding='utf-8') as file:
+                file.write(fileContent)
+
+
         self.xml = ElementTree.parse(str(xmlFilePath))
         return self.xml
 
@@ -249,3 +261,97 @@ class ConfigFile:
         '''Transfomr uma string obtida dos arquivos XML do scriptLattes
         Exemplo de String: 01/01/1970 23:59:59'''
         return time.strptime(str, '%d/%m/%Y %H:%M:%S')
+
+
+    def criarNovoSnapshot(novoArquivoConfig, novoArquivoList):
+        '''Seta os parametros do novoArquivoConfig de acordo com a data atual
+            Exemplo:
+                novoArquivoConfig = Path(...) # arquivo na pasta com a data atual
+                Devo ler o arquivo e alterar o que for necessário para
+                Rodar o scriptLattes novamente com esse arquivo'''
+
+        # todo comando é do tipo:
+        #   (palavra) = (palavra) # (comentários)
+        reComando = re.compile(r'([^=]+)\=([^#]+)(?:#(.*))?')
+        # lendo todas as linhas do arquivo
+        with open(str(novoArquivoConfig), 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+
+        # como exeplo:
+        #   D:/Facul/IC/SSC/DATA_ATUAL/
+        dirName = novoArquivoConfig.parents[0]
+
+        # analisa todas as linhas do arquivo
+        i = 0 # contador com a lista
+        for line in lines:
+            sintaxe = re.match(reComando, line)
+            if sintaxe:
+                # na sintaxe, vamos obter
+                #   (strComando) = (strValor) # (strComentarios)
+                sintaxeGroups = sintaxe.groups()
+                strComando = sintaxeGroups[0].strip()
+                strValor = sintaxeGroups[1].strip()
+                initStrValor = strValor
+                strComentarios = sintaxeGroups[2]
+                
+                # vou tratar somente os comandos que preciso
+                if strComando == 'global-arquivo_de_entrada':
+                    # onde está o arquivo de lista novo
+                    strValor = str(novoArquivoList)
+
+                elif strComando == 'global-diretorio_de_saida':
+                    # onde está o direitório de saída?
+                    # no mesmo lugar desse arquivo
+                    strValor = str(novoArquivoConfig.parents[0])
+
+                elif strComando == 'global-itens_ate_o_ano':
+                    strValor = datetime.now().strftime('%Y')
+
+                
+                elif strComando == 'global-arquivo_qualis_de_periodicos':
+                    # junta o dirName do novo arquivo
+                    # exemplo: D:/Facul/IC/SSC/DATA_ATUAL/
+                    # com o nome do aruqivo
+                    # exemplo: qualis_computacao_periodicos_2013.csv
+                    strValor = str(Path(dirName) / (Path(strValor).name))
+
+                elif strComando == 'global-arquivo_qualis_de_congressos':
+                    # igual ao elif de cima
+                    strValor = str(Path(dirName) / (Path(strValor).name))
+
+
+                # se o valor foi alterado, a linha de comando tmb é alterada
+                # portanto, vamos fazer essa verificação
+                if strValor != initStrValor:
+                    # devo alterar a linha
+                    lines[i] = sintaxeGroups[0] + '= ' + strValor
+
+                    # se houver comentários devo adicioná-los
+                    if strComentarios is not None:
+                        lines[i] += ' #' + sintaxeGroups[2]
+                    else:
+                        # preciso adicionar um \n
+                        lines[i] += '\n'
+            i += 1
+
+        newContent = ''.join(lines)
+        # só salvar no arquivo o novo conteúdo
+        with open(str(novoArquivoConfig), 'w', encoding='utf-8') as file:
+            file.write(newContent)
+
+        print('Novas configurações salvas no arquivo!')
+        print('Por favor, execute o scriptLattes com para o arquivo:')
+        print(novoArquivoConfig)
+        sys.exit(0)
+
+
+
+
+
+import time
+import re
+import os
+import xml.etree.ElementTree as ElementTree
+from pathlib import Path
+from py.misc import *
+from datetime import datetime

@@ -23,7 +23,91 @@ class ScriptLattesDiff:
                          sum(  # transforma lista de lista em lista
                          [glob.glob(x) for x in Settings.configFilesGlob], []))
 
+        if not self.filesPath:
+            # a lista está vazia
+            # nenhum arquivo foi encontrado pelo glob
+            # devo sair
+            print('Nenhum de configuração foi encontrado.')
+            sys.exit(0)
 
+        # ordeno os arquivos pela nome
+        # no nosso caso, o nome contém a data
+        # portanto, o índice zero é o mais antigo
+        # e o último é o mais recente
+        self.filesPath = sorted(self.filesPath)
+
+
+        if Settings.criarNovoSnapshot:
+            # preciso criar mais um arquivo de configuração
+            self.criarNovoSnapshot()
+
+
+
+    def criarNovoSnapshot(self):
+        '''Devo criar um novo Snapshot do scriptLattes
+            Exemplo:
+                self.filesPath = {
+                    'D:/Facul/IC/SSC\\20150711\\get-ssc.config',
+                    'D:/Facul/IC/SSC\\20150728\\get-ssc.config',
+                    'D:/Facul/IC/SSC\\20150830\\get-ssc.config'
+                }
+                Devo criar um novo arquivo de configuração na pasta:
+                    'D:/Facul/IC/SSC\\DATA_ATUAL\\get-ssc.config'
+                E adicioná-lo a filesPath'''
+
+        # é o último da lista
+        # no nosso exemplo:
+        #   D:/Facul/IC/SSC\\20150830\\get-ssc.config
+        maisRecente = list(self.filesPath)[-1]
+
+        # agora eu vou pegar o pathPai que nesse caso seria:
+        #   D:/Facul/IC/SSC
+
+        # nesse caso continua sendo o mais recente
+        maisRecentePath = Path(maisRecente)
+        # pathPai é o q eu procuro
+        pathPai = maisRecentePath.parents[1]
+        # criando o caminho destino, para onde vai o novoSnap
+        # no nosso exemplo:
+        #   D:/Facul/IC/SSC/DATAATUAL
+        dataAtual = datetime.now().strftime('%Y%m%d')
+        # name é o nome do arquivo
+        # se maisRecente = D:/Facul/IC/SSC\\20150830\\get-ssc.config
+        # name = get-ssc.config
+        name = maisRecentePath.name
+        caminhoDest = pathPai / dataAtual
+        # listDest no nosso exemplo deve ser:
+        #   fileDest = D:/Facul/IC/SSC/DATA_ATUAL/get-ssc.config
+        #   listDest = D:/Facul/IC/SSC/DATA_ATUAL/get-ssc.list
+        fileDest = caminhoDest / name
+        # se baseName = get-ssc
+        baseName = os.path.splitext(name)[0]
+        listDest = caminhoDest / (baseName + '.list')
+
+        # copia de fato
+        # cria a pasta primeiro
+        if not os.path.exists(str(caminhoDest)):
+            os.mkdir(str(caminhoDest))
+        else:
+            # o diretório já existe
+            print('Já existe um novo snapshot do scriptLattes.')
+            print('Por favor, rode o scriptLattes nesse novo snapshot e o scriptLattesDiff novamente sem a opção de criar um novo snapshot.')
+            sys.exit(0)
+
+        # copia o arquivo .config
+        shutil.copy(str(maisRecentePath), str(fileDest))
+
+        # copia o arquivo .list
+        maisRecenteListPath = os.path.splitext(maisRecente)[0] + '.list'
+        shutil.copy(str(maisRecenteListPath), str(listDest))
+        print('Arquivo gerado:', fileDest)
+
+        # devo adicionar o novo arquivo para a lista de arquivos a serem analisadas
+        self.filesPath.append(str(fileDest))
+
+        # agora eu só preciso ler esse e alterar o que for
+        # necessário antes de rodar o scriptLattes
+        ConfigFile.criarNovoSnapshot(fileDest, listDest)
 
 
 
@@ -44,12 +128,6 @@ class ScriptLattesDiff:
         o parametro é uma lista com todos os ConfigFile para analisar
         '''
         section('Comparando self.configFiles:')
-
-
-
-        # ordena o vetor pela data
-        self.configFiles = sorted(self.configFiles, key=lambda configFile: configFile.time)
-
 
 
         print('Arquivos:')
@@ -116,7 +194,17 @@ class ScriptLattesDiff:
                 for campo in ConfigFile.manterDados['novosDados']:
                     # pega os novos dados que apareceram desta configFile em relação a data anterior
                     # ou seja, a diferença do mais novo em relação ao mais antigo
-                    acrescido, subtraido = List.differences(configFileAnterior.json[pesquisador][campo], configFile.json[pesquisador][campo])
+                    try:
+                        acrescido, subtraido = List.differences(configFileAnterior.json[pesquisador][campo], configFile.json[pesquisador][campo])
+                    except Exception as e:
+                        section('Erro')
+                        print('Em List.differences:')
+                        print('Pesquisador:', pesquisador)
+                        print('Campo:', campo)
+                        print('configFileAnterior:', configFileAnterior.data_processamento)
+                        print('configFile:', configFile.data_processamento)
+                        raise e
+                        exit(0)
                     # cria um dict para saber o que foi acrescido e o que não foi
                     pesquisadores[pesquisador][campo][configFile.data_processamento] = {}
                     # para n ter q ficar digitando esse campo gigantesco, só armazenei ele numa variável
@@ -173,10 +261,6 @@ class ScriptLattesDiff:
 
 
 
-    def __del__(self):
-        '''esta função é chamada assim que o objeto é destruido'''
-        Debug.saveFiles()
-
 
 
 
@@ -201,9 +285,16 @@ class ScriptLattesDiff:
             except:
                 pass
 
+        def deleteFolder(path):
+            try:
+                shutil.rmtree(str(path))
+            except:
+                pass
+
         outputFolder = Settings.outputFolder
         tryMakeDir(outputFolder)
         # salvando jsonAnalisado, na pasta jsons
+        deleteFolder(outputFolder / 'json')
         tryMakeDir(outputFolder / 'json')
 
 
@@ -212,7 +303,7 @@ class ScriptLattesDiff:
         # salvando arquivo scriptLattesDiff.js
         # savalndo todos os ids
         scriptLattesDiff = {
-            'idLattes': {}, # todos os idLattes analisados
+            'versao': {}, # versao do scriptLattesDiff que gerou os arquivos json
             'allIdLattes': sorted(jsonAnalisado['idLattes'].keys(),
                 key=lambda x: jsonAnalisado['idLattes'][x]['identificacao']['nome_inicial']),
             'datasProcessamento': jsonAnalisado['datasProcessamento'],
@@ -236,8 +327,6 @@ class ScriptLattesDiff:
                 # nome da variável
                 'scriptLattesDiff.idLattes[\''+idLattes+'\']',
 
-
-
                 # conteudo
                 jsonAnalisado['idLattes'][idLattes]
             )
@@ -258,8 +347,6 @@ class ScriptLattesDiff:
 
         # se o diretorio de saída é o diretorio do script, não precisa copiar
         if Settings.outputFolder == Misc.scriptPath:
-            
-
             debug('O diretório de saída é o mesmo do scriptLattesDiff')
             return ;
 
@@ -267,9 +354,8 @@ class ScriptLattesDiff:
 
 
 
-
         # copia as seguintes pastas
-        copiarPastas = ['html', 'js', 'css']
+        copiarPastas = ['html', 'js', 'css', 'vendor']
         for pasta in copiarPastas:
 
 
@@ -279,11 +365,7 @@ class ScriptLattesDiff:
                 shutil.rmtree(dest)
 
 
-
             shutil.copytree(src, dest)
-
-
-
 
 
         # move o arquivo redirect para a raíz da pasta output
@@ -292,6 +374,13 @@ class ScriptLattesDiff:
             str(outputFolder / 'scriptLattesDiff.htm')
         )
 
+
+
+
+
+    def onFisnish():
+        '''Função para ser chamada assim que tudo acabar'''
+        Debug.saveFiles()
 
 
 
@@ -308,3 +397,4 @@ from py.Settings import Settings
 from py.misc import *
 from py.List import List
 from py.Debug import *
+from datetime import datetime

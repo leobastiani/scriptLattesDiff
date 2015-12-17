@@ -54,7 +54,20 @@ class Debug:
         if not Debug.isEnabled():
             return ;
 
+        # só vou adicionar os elementos que se parecem
+        # os que não se parecem não estarão na lista
+        # pois a lista chega a mais de 30MB
+        ratioParecido = list(elems[2].values())[0]
+        if ratioParecido == 1:
+            # não vou debugar strings iguais
+            return ;
 
+
+        if not ratioParecido > porcentagemRatioSimilar:
+            # se elas não são parecidas
+            return ;
+
+        # se for parecido, adiciona
         Debug.elementosSimilares.append(list(elems))
 
 

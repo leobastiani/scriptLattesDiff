@@ -43,7 +43,7 @@ class Str:
 
         # calcula o levenshtein
         ratio = Str.ratio(x, y)
-        if ratio > 0.8:
+        if ratio > porcentagemRatioSimilar:
             return ratio
 
 

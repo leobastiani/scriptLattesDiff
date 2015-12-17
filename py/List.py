@@ -54,15 +54,21 @@ class List:
             if not List.has(x, child):
                 result['acrescido'].append(child)
 
+        if not x or not y:
+            # se x ou y está vaziao, não tem mais o que comparar
+            return result['acrescido'], result['subtraido']
+            
 
+        if not List.isListOfDict(x) or not List.isListOfDict(y):
+            # se os elementos de x ou y não forem dicionários
+            # não preciso analisar os similares
+            # posso retornar já
+            return result['acrescido'], result['subtraido']
 
 
         # analisando os elementos que foram adicionados e subtraido
         if Settings.analisarSimilares:
             # se está abilitado nas configurações
-
-
-
 
 
             # permutando os elementos
@@ -96,3 +102,20 @@ class List:
 
 
         return result['acrescido'], result['subtraido']
+
+
+
+
+    @staticmethod
+
+
+    def isListOfDict(x):
+        '''testa se x é uma lista de dicionários, testando o primeiro elemento
+        se a lista estiver vazia, retorna False'''
+        if not x:
+            # lista vazia
+            return False
+
+
+        if isinstance(x[0], dict):
+            return True

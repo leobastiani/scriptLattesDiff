@@ -3,6 +3,10 @@
 *.sh
 output
 debug/json/*.*
+Django
+# não queremos outputs no github né
+outputs
+test
 
 
 

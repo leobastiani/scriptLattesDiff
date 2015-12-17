@@ -4,6 +4,9 @@
  * @param  {event} e
  */
 function documentReady() {
+
+	console.log('Todos os arquivos foram carregados!');
+	console.log('\n');
 	
 	/**
 	 * Começa alterando o título da página e o nome do grupo

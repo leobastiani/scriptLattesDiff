@@ -36,7 +36,9 @@ scriptLattesDiff.paginas = {}
  * Funções importantes para o scriptLattesDiff
  */
 scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal) {
-	console.log('Gerando principaisAlteracoes para as datas:', dataInicial, dataFinal);
+	console.log('Gerando principaisAlteracoes para as datas:');
+	console.log(dataInicial);
+	console.log(dataFinal);
 
 
 
@@ -75,7 +77,6 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		var iDataIni = scriptLattesDiff.datasProcessamento.indexOf(dataInicial);
 		var iDataFin = scriptLattesDiff.datasProcessamento.indexOf(dataFinal);
 		var alteracoes = pesquisador.getAlteracoes(iDataIni, iDataFin);
-
 
 		if($.isEmptyObject(alteracoes)) {
 			// se o campo está vazio, parte para o próximo elemento
@@ -124,13 +125,14 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 				.attr('data-campo', campo);
 
 
-
+				try{
 				alteracoes[campo][sinal].forEach(function (dict, index) {
 					$('<span>').text(scriptLattesDiff.resumirDict(dict)).appendTo($campoAlterado.find('.alteradoValor'))
 					// neste campo, para conseguir adicionar o elemento completo depois
 					// devo salva-lo em algum lugar
 					.data('alteracoes', dict);
 				});
+				} catch(e) {console.log(i, alteracoes);}
 
 
 
@@ -250,6 +252,9 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
 	// esconde o campo colaboradores, ele está se comportando de uma forma estranha
 	$('.filtro > input[value="colaboradores"]').removeAttr('checked').change();
 
+	// TODO: para teste, vou esconder todos os campos e revelar o colaboradores
+	$('.filtro > input').removeAttr('checked').change();
+	$('.filtro > input[value="colaboradores"]').click();
 
 }
 
@@ -357,7 +362,25 @@ scriptLattesDiff.resumirDict = function (dict) {
 
 
 	// se ele possui um elemento que caracteriza o dicinário
-	var nomesCaract = ['nome_evento', 'titulo', 'nome', 'titulo_trabalho'];
+	var nomesCaract = [
+		// pra mim
+		// esses aqui são os principais
+		'titulo', 'nome_evento', 'nome', 'titulo_trabalho',
+
+		// não são os principais
+		'descricao', 'autores', 'agencia_de_fomento', 'instituicao'
+	];
+
+	// nessa variável, diz que devo
+	// utilizar akele nome, porém ele estava vazio
+	// vou fazer a verificação no final
+	// exemplo:
+	// 	nomeVazio = null
+	// 		gera exceção, pois nenhum nome
+	// 		foi capaz de resumir esse dicionário
+	// 	nomeVazio = nome_evento
+	// 		return = Campo 'nome' vazio!
+	var nomeVazio = null;
 	for(i=0; i<nomesCaract.length; i++) {
 		var nome = nomesCaract[i];
 		if(!(nome in dict)) {
@@ -366,12 +389,31 @@ scriptLattesDiff.resumirDict = function (dict) {
 
 
 		if(dict[nome] == '') {
-			return 'CAMPO "'+nome+'" VAZIO';
+			// o campo está vazio
+			if(nomeVazio == null) {
+				nomeVazio = nome;
+			}
 		}
-		return dict[nome];
+		else {
+			// o campo não está vazio, retorna-o
+			return dict[nome];
+		}
+	}
 
+	// se foi encontrado o nome, porém ele estava vazio
+	if(nomeVazio != null) {
+		return 'Campo "'+nomeVazio+'" vazio.';
 	}
 
 
-	return result;
+	/**
+	 * Nenhum dos nomesCaract foram utilizados para resumir esse dicionário
+	 * vou lançar uma exceção e tratá-la
+	 * anilsar o dicionário e descobrir
+	 * que palavra caracteriza-o melhor
+	 */
+	var msg = 'Não foi possível resumir o dicionário:';
+	console.log(msg);
+	console.log(dict);
+	throw msg;
 }

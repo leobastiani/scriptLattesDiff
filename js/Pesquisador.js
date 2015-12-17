@@ -2,12 +2,19 @@
  * Classe que será aplicada para todos os pesquisadores
  * @param  {JSON} json json obitdo do scriptLattesDiff.py
  */
-var Pesquisador = function (json) {
+var Pesquisador = function (idLattes, json) {
+	this.idLattes = idLattes;
 	this.json = json;
 }
 
 
 
+/**
+ * Getter de json
+ */
+Pesquisador.prototype.getJson = function() {
+	return this.json;
+}
 
 
 /**
@@ -25,11 +32,10 @@ Pesquisador.prototype.getNome = function() {
 /**
  * obtem um JSON com as alterações de uma data para outra
  * @param  {Number} iDataIni   index da data inicial
- * @param  {Number} iDataFin index da data final
- * @return {JSON}            sem as datas, só com + e -
+ * @param  {Number} iDataFin   index da data final
+ * @return {JSON}              sem as datas, só com + e -
  */
 Pesquisador.prototype.getAlteracoes = function(iDataIni, iDataFin) {
-
 	// index da data
 	var dataIni = scriptLattesDiff.datasProcessamento[iDataIni];
 	var dataFin = scriptLattesDiff.datasProcessamento[iDataFin];
@@ -46,62 +52,74 @@ Pesquisador.prototype.getAlteracoes = function(iDataIni, iDataFin) {
 	// para utilizar dentro das funções como o foreach
 	var self = this;
 
-
-	if((iDataFin - iDataIni) == 1) {
+	// para debugar
+	var considerarSempreUltimaVersao = false;
+	if((iDataFin - iDataIni) == 1 || considerarSempreUltimaVersao) {
 		Pesquisador.camposComparativos.forEach(function (elem, index) {
 			// por enquanto, só analiza a diferença do segundo dia
 			var alteracoesData = self.json[elem][dataFin.toStringScriptLattes()];
 			if(alteracoesData) {
-				// retorna uma cópia
-				result[elem] = Dict.clone(alteracoesData);
-				console.log('alteracoesData', elem, alteracoesData);
+				// se houve alteração
+				result[elem] = alteracoesData;
 			}
 		});
-		return result;
+		// retorna uma cópia
+		// porque quando eu for analisar mais de um dia
+		// eu faço alterações nesse dicionário
+		return Dict.clone(result);
 	}
 
 
 
 
-	// obtem as alterações de mais de dois dias
+	// obtem as alterações de mais de duas datas
+
+
+	// pega as diferenças de uma única data
+	// e armazena nas variáveis
+	// vamos supor 4 datas, o vetor datasProcessamento possui [0, 1, 2]
+	// não fiz isso
+
 	
 	// obtem a alteração da data inicial e do dia seguinte
 	result = this.getAlteracoes(iDataIni, iDataIni+1);
 	// reconstroi os valores de data inicial e final
 	// num loop
-	for(iDataIni=iDataIni+1; iDataIni < iDataFin; iDataIni++) {
+	// vamos supor que eu tenho 4 datas: [0, 1, 2, 3]
+	// result = [(0,1)]
+	// alteracoes vai ser [(1,2)]
+	// depois result = [(0,2)]
+	// alteracoes = [(2,3)]
+	// result = [(0,3)]
+	// e pronto :D
+	for(i=iDataIni+1; i < iDataFin; i++) {
 		// pega as alterações da próxima data
-		var alteracoes = this.getAlteracoes(iDataIni, iDataFin);
+		var alteracoes = this.getAlteracoes(i, i+1);
 
-
-		for(var campo in result) {
+		// todas as chaves, presentes em result e alteracoes
+		var chaves = Pesquisador.chaves(result, alteracoes);
+		chaves.forEach(function (campo, index) {
 			// se campo está em alteracoesAnterior, mas não está em alteracoesPosterior
 			
 			
 			// são as alteracoes do tipo (+1) + (-1) e (-1) + (+1)
 			// removidos antes e acrescido depois
 			// acrescido antes e removido depois
-
 			Pesquisador.removerRepetidos(result, alteracoes, campo, '-');
 			Pesquisador.removerRepetidos(result, alteracoes, campo, '+');
 
 
 			// TODO: o que foi removido antes deve continuar no removido
 			// o que foi acrescido antes deve continuar no acrescido
-
-			Pesquisador.mergeAlteracoes(result, alteracoes, campo, '-');
-			Pesquisador.mergeAlteracoes(result, alteracoes, campo, '+');
-
-		}
+			Pesquisador.mergeAlteracoes(result, alteracoes, campo);
+		});
 
 
 
-		// já filtrei tudo o que tinha q filtar em alteracoes
-		// apaga o conteudo de result
-		result = alteracoes;
-
+		// neste ponto
+		// result e alterações são iguais
+		// devido a função mergeAlteracoes
 	}
-
 
 	return result;
 
@@ -119,10 +137,18 @@ Pesquisador.camposComparativos = ['colaboradores', 'formacao_academica', 'projet
 
 
 
+/**
+ * Se sinalAnterior = '-', tudo o que foi removido em alteracoesAnterior
+ * e foi acrescido em alteracoesPosterior, deve ser removido de alteracoesPosterior e alteracoesAnterior
+ * Se sinalAnterior = '+', tudo o que foi acrescido anteriormente, mas foi removido de novo,
+ * ou seja, (+1) + (-1), deve ser removido de alteracoesPosterior e alteracoesAnterior
+ */
 
 Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior, campo, sinalAnterior) {
-
 	if(!alteracoesPosterior[campo] || !alteracoesAnterior[campo]) {
+		// um deles está vazio
+		// não há algo que foi removido no anterior e que foi acrescido
+		// no posterior para eu verificar
 		return ;
 	}
 
@@ -134,18 +160,55 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 	// analisa os campos removidos em alteracoesAnterior com sinalAnterior
 	// e acrescidos em alteracoesPosterior com '+'
 	if(alteracoesAnterior[campo][sinalAnterior] && alteracoesPosterior[campo][sinalPosterior]) {
-		alteracoesAnterior[campo][sinalAnterior].forEach(function (removido, index) {
+		// se existe algum elemento nesses campos
+		
+		var lenAnt = alteracoesAnterior[campo][sinalAnterior].length;
+		for(var indexAnterior=0; indexAnterior<lenAnt; indexAnterior++) {
+			// se o sinal do anterior for '-'
 			// para todos os campos removidos em alteracoesAnterior
 			// se este campor for acrescido em alteracoesPosterior, remove de alteracoesPosterior
-			alteracoesPosterior[campo][sinalPosterior] = alteracoesPosterior[campo][sinalPosterior].filter(function (elem) {
-				// TODO: trocar == por .equals
-				if(elem == removido) {
-					alteracoesAnterior[campo][sinalAnterior].splice(index, 1);
-					return false;
+			var lenPost = alteracoesPosterior[campo][sinalPosterior].length;
+			for(var indexPosterior=0; indexPosterior<lenPost; indexPosterior++) {
+
+				// existe a possibilidade de a alteracoesAnterior[campo][sinalAnterior]
+				// ficar vazio
+				if(!alteracoesAnterior[campo][sinalAnterior]) {
+					break;
 				}
-				return true;
-			});
-		});
+
+
+				var elemAnt = alteracoesAnterior[campo][sinalAnterior][indexAnterior];
+				var elemPost = alteracoesPosterior[campo][sinalPosterior][indexPosterior];
+
+				if(typeof(elemPost) == "string") {
+					// se for string
+					// usa o ==
+					if(elemPost == elemAnt) {
+						alteracoesAnterior[campo][sinalAnterior].splice(indexAnterior, 1);
+						alteracoesPosterior[campo][sinalPosterior].splice(indexPosterior, 1);
+						// removo um por este exemplo:
+						// estou acessando o 0, removo o 0, o próximo que eu quero acessar é o 0
+						indexPosterior--;
+						lenPost--;
+						lenAnt--;
+					}
+				}
+
+				else {
+					// usa uma função especial que compara dois elementos
+					if(Dict.equals(elemPost, elemAnt)) {
+						alteracoesAnterior[campo][sinalAnterior].splice(indexAnterior, 1);
+						alteracoesPosterior[campo][sinalPosterior].splice(indexPosterior, 1);
+						// removo um por este exemplo:
+						// estou acessando o 0, removo o 0, o próximo que eu quero acessar é o 0
+						indexPosterior--;
+						lenPost--;
+						lenAnt--;
+					}
+				}
+
+			}
+		}
 
 
 
@@ -180,25 +243,68 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 
 
 
-Pesquisador.mergeAlteracoes = function (alteracoesAnterior, alteracoesPosterior, campo, sinalAnterior) {
-	if(!alteracoesPosterior[campo] || !alteracoesAnterior[campo]) {
+Pesquisador.mergeAlteracoes = function (alteracoesAnterior, alteracoesPosterior, campo) {
+	// se não tem nada no anterior, faz com que o anterior receba o posterior
+	if(!alteracoesAnterior[campo]) {
+		alteracoesAnterior[campo] = alteracoesPosterior[campo];
 		return ;
 	}
 
-
-	if(!alteracoesAnterior[campo][sinalAnterior]) {
-		// se não houve alteração anterior, não tem o que propagar
-		return ;
-	}
+	// mesmo caso com o posterior
 	if(!alteracoesPosterior[campo]) {
-		// caso de que não há nada acrescido nem retirado
-		alteracoesPosterior[campo] = {sinalAnterior: alteracoesAnterior[campo][sinalAnterior]};
-	} else if(alteracoesPosterior[campo][sinalAnterior]) {
-		// caso de também haver alterações em alteracoesPosterior
-		alteracoesPosterior[campo][sinalAnterior] = $.merge(alteracoesAnterior[campo][sinalAnterior], alteracoesPosterior[campo][sinalAnterior]);
-	} else {
-		// não há alterações em posterior,
-		// então as alterações feitas nesta data permanecem iguais a da data anterior
-		alteracoesPosterior[campo][sinalAnterior] = alteracoesAnterior[campo][sinalAnterior];
+		alteracoesPosterior[campo] = alteracoesAnterior[campo];
+		return ;
 	}
+
+	// vou definir o alteracoesPosterior
+	// e fazer o anterior ser igual
+
+
+	// exemplo:
+	// alteracoesAnterior[campo] = {
+	//   '-': [1, 2, 3]
+	//   '+': [4, 5, 6]
+	// }
+	// 
+	// alteracoesPosterior[campo] = {
+	//   '-': [7, 8, 9]
+	//   '+': [10, 11, 12]
+	// }
+	// O resultado deve ser:
+	// result[campo] = {
+	//   '-': [1, 2, 3] + [7, 8, 9]
+	//   '+': [4, 5, 6] + [10, 11, 12]
+	// }
+	
+	['-', '+'].forEach(function (sinal, index) {		
+		// se um deles está vazio, faz ser igual ao outro
+		if(!alteracoesAnterior[campo][sinal]) {
+			// o anterior está vazio
+			alteracoesAnterior[campo][sinal] = alteracoesPosterior[campo][sinal];
+			return ;
+		}
+		else if(!alteracoesPosterior[campo][sinal]) {
+			// o posterior está vazio
+			alteracoesPosterior[campo][sinal] = alteracoesAnterior[campo][sinal];
+			return ;
+		}
+
+		if(!alteracoesPosterior[campo]) {
+			// se os dois estão vazio
+		}
+		else {
+			// nenhum deles está vazio, devo concatenar
+			var result;
+			result = alteracoesAnterior[campo][sinal].concat(alteracoesPosterior[campo][sinal]);
+		}
+	});
+}
+
+
+/**
+ * Obtem todas as chaves de dois dicionários
+ */
+Pesquisador.chaves = function (dict1, dict2) {
+	var result = Object.keys(dict1).concat(Object.keys(dict2));
+	return result.unique();
 }
