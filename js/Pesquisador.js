@@ -109,7 +109,7 @@ Pesquisador.prototype.getAlteracoes = function(iDataIni, iDataFin) {
 			Pesquisador.removerRepetidos(result, alteracoes, campo, '+');
 
 
-			// TODO: o que foi removido antes deve continuar no removido
+			// o que foi removido antes deve continuar no removido
 			// o que foi acrescido antes deve continuar no acrescido
 			Pesquisador.mergeAlteracoes(result, alteracoes, campo);
 		});
@@ -212,6 +212,7 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 
 
 
+		// se o campo deixou de existir
 		if(alteracoesPosterior[campo][sinalPosterior].length == 0) {
 			if(!alteracoesPosterior[campo][sinalAnterior]) {
 				// remove o campo pois está vazio
@@ -223,6 +224,7 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 		}
 
 
+		// se o campo deixou de existir
 		if(alteracoesAnterior[campo][sinalAnterior].length == 0) {
 			if(!alteracoesAnterior[campo][sinalPosterior]) {
 				// remove o campo pois está vazio
@@ -278,24 +280,23 @@ Pesquisador.mergeAlteracoes = function (alteracoesAnterior, alteracoesPosterior,
 	
 	['-', '+'].forEach(function (sinal, index) {		
 		// se um deles está vazio, faz ser igual ao outro
-		if(!alteracoesAnterior[campo][sinal]) {
+		// e existe o outro
+		if(!alteracoesAnterior[campo][sinal] && alteracoesPosterior[campo][sinal]) {
 			// o anterior está vazio
 			alteracoesAnterior[campo][sinal] = alteracoesPosterior[campo][sinal];
 			return ;
 		}
-		else if(!alteracoesPosterior[campo][sinal]) {
+		else if(!alteracoesPosterior[campo][sinal] && alteracoesAnterior[campo][sinal]) {
 			// o posterior está vazio
 			alteracoesPosterior[campo][sinal] = alteracoesAnterior[campo][sinal];
 			return ;
 		}
 
-		if(!alteracoesPosterior[campo]) {
-			// se os dois estão vazio
-		}
-		else {
+		// se os dois existem, devo concatenar
+		if(alteracoesAnterior[campo][sinal] && alteracoesPosterior[campo][sinal]) {
 			// nenhum deles está vazio, devo concatenar
-			var result;
-			result = alteracoesAnterior[campo][sinal].concat(alteracoesPosterior[campo][sinal]);
+			var result = alteracoesAnterior[campo][sinal].concat(alteracoesPosterior[campo][sinal]);
+			alteracoesAnterior[campo][sinal] = alteracoesPosterior[campo][sinal] = result;
 		}
 	});
 }

@@ -83,6 +83,8 @@ def main():
     # copia os arquivos para o diretório de saída
     ScriptLattesDiff.copyFilesToOutput()
 
+
+    # assim que acabar, executa as funções finais
     ScriptLattesDiff.onFisnish()
 
 

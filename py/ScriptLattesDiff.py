@@ -244,7 +244,7 @@ class ScriptLattesDiff:
 
 
     def hasSameIdLattes(self):
-        '''função que diz se todos os arquivos tem o mesmo idLattes'''
+        '''função que diz se todos os arquivos tem os mesmos idLattes'''
 
 
         primeiraChave = self.configFiles[0].json.keys()

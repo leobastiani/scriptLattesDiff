@@ -126,13 +126,33 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 
 				try{
-				alteracoes[campo][sinal].forEach(function (dict, index) {
-					$('<span>').text(scriptLattesDiff.resumirDict(dict)).appendTo($campoAlterado.find('.alteradoValor'))
-					// neste campo, para conseguir adicionar o elemento completo depois
-					// devo salva-lo em algum lugar
-					.data('alteracoes', dict);
-				});
-				} catch(e) {console.log(i, alteracoes);}
+					alteracoes[campo][sinal].forEach(function (dict, index) {
+						$('<span>').text(scriptLattesDiff.resumirDict(dict)).appendTo($campoAlterado.find('.alteradoValor'))
+						// neste campo, para conseguir adicionar o elemento completo depois
+						// devo salva-lo em algum lugar
+						.data('alteracoes', dict);
+					});
+				} catch(e) {
+					// caso ocorra um erro que não é esperado nas funções
+					// de getAlteracao
+					// isso é muito provavel
+					// a base do programa está lá
+
+					console.log('a = scriptLattesDiff.idLattes["'+i+'""]');
+					a = scriptLattesDiff.idLattes[i.toString()];
+
+					console.log('b = '+campo);
+					b = campo;
+
+					console.log('c = alteracoes');
+					c = alteracoes;
+
+					console.log('i:', i);
+					console.log('alteracoes:', alteracoes);
+					console.log('campo:', campo);
+					console.log('sinal:', sinal);
+					throw "Erro inesperado!";
+				}
 
 
 
@@ -251,10 +271,6 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
 
 	// esconde o campo colaboradores, ele está se comportando de uma forma estranha
 	$('.filtro > input[value="colaboradores"]').removeAttr('checked').change();
-
-	// TODO: para teste, vou esconder todos os campos e revelar o colaboradores
-	$('.filtro > input').removeAttr('checked').change();
-	$('.filtro > input[value="colaboradores"]').click();
 
 }
 
