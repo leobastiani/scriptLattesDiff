@@ -40,8 +40,6 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 	console.log(dataInicial);
 	console.log(dataFinal);
 
-
-
 	// apaga todo o conteudo antigo de principaisAlteracoes
 	$('#principaisAlteracoes .membro').remove();
 	$('#principaisAlteracoes .filtro').remove();
@@ -64,6 +62,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 	 * dentro do elemento #membros
 	 */
 	for(var i in scriptLattesDiff.idLattes) {
+
 		// variáveis úteis
 		var pesquisador = scriptLattesDiff.idLattes[i];
 		var nome = pesquisador.getNome();
@@ -107,7 +106,6 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 			// sinal diz se foi removido ou acrescentado o item
 			for(var sinal in alteracoes[campo]) {
-
 
 
 				// sinal é + ou -

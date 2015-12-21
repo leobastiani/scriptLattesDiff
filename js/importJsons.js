@@ -76,6 +76,8 @@ $(document).ready(function() {
 	 */
 	var onJsLoad = function () {
 		loadJs.filesLoaded++; // +1, um novo arquivo foi carregado
+		Carregando.step();
+
 		if(loadJs.filesLoaded == scriptLattesDiff.allIdLattes.length) {
 			// se todos os aruqivos idLattes foram carregados
 			// chama a função documentReady
@@ -114,6 +116,12 @@ $(document).ready(function() {
 	var onLoadAllIdLattes = function () {
 		console.log('Variável allIdLattes carregada:', scriptLattesDiff.allIdLattes);
 
+		/**
+		 * Iniciar a tela de carregando
+		 */
+		var lenPesquisadores = scriptLattesDiff.allIdLattes.length;
+		Carregando.start(lenPesquisadores);
+
 		// cria o dicionário idLattes em scriptLattesDiff
 		// ele possuirá todos os pesquisadores do tipo
 		// new Pesquisador
@@ -134,6 +142,7 @@ $(document).ready(function() {
 
 	loadJs('../json/scriptLattesDiff.js', onLoadAllIdLattes);
 
-
+	// primeiros passos para a tela de carregando
+	Carregando.init('Baixando Lattes');
 
 });

@@ -10,6 +10,7 @@ try:
     # todas as dependencias vão aqui
     # se o usuário não possuir alguma, sobe uma exceção
     import nltk
+    import colorama
 
 
 
@@ -32,16 +33,14 @@ except ImportError as e:
 
 
     print('\nGostaria de instalá-las? (y/n)')
-
-
-
-    aws = input()
-    if aws != 'y':
-        exit()
+    aws = Misc.respostaYN()
+    if aws == 'n':
+        sys.exit(0)
     print()
-    print(command)
+    
 
     # instalando as dependecias
+    print(command)
     os.system(command)
 
 

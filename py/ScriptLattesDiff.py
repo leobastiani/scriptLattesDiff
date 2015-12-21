@@ -27,7 +27,7 @@ class ScriptLattesDiff:
             # a lista está vazia
             # nenhum arquivo foi encontrado pelo glob
             # devo sair
-            print('Nenhum de configuração foi encontrado.')
+            Print.erro('Nenhum arquivo de configuração foi encontrado.')
             sys.exit(0)
 
         # ordeno os arquivos pela nome
@@ -90,7 +90,7 @@ class ScriptLattesDiff:
             os.mkdir(str(caminhoDest))
         else:
             # o diretório já existe
-            print('Já existe um novo snapshot do scriptLattes.')
+            Print.erro('Já existe um novo snapshot do scriptLattes.')
             print('Por favor, rode o scriptLattes nesse novo snapshot e o scriptLattesDiff novamente sem a opção de criar um novo snapshot.')
             sys.exit(0)
 
@@ -127,7 +127,7 @@ class ScriptLattesDiff:
         Compara várias instancias de ConfigFile e retorna um json analisado com a data de cada configFile
         o parametro é uma lista com todos os ConfigFile para analisar
         '''
-        section('Comparando self.configFiles:')
+        section('Função analisar Jsons:')
 
 
         print('Arquivos:')
@@ -173,9 +173,13 @@ class ScriptLattesDiff:
 
 
 
-
+        # vou usar um contador de índices
+        # para calcular a porcentagem de quanto falta
+        pesquisadoresCarregados = 0
         for pesquisador in pesquisadores:
             configFile.printPesquisador(pesquisador)
+            Print.back(colorama.Fore.YELLOW + 'Carregando: '+Print.procentagem(pesquisadoresCarregados, len(pesquisadores))+'%' + colorama.Fore.RESET)
+            pesquisadoresCarregados += 1
 
 
 
@@ -229,6 +233,11 @@ class ScriptLattesDiff:
 
 
 
+        # ditar o fim de imprimir a porcentagem
+        # porcentagem eu tava imprimindo assim:
+        # Carregando: dd%
+        Print.back(colorama.Fore.GREEN+'Terminado!'+colorama.Fore.RESET)
+        Print.endBack()
 
 
         # reune as principais informações em result
@@ -309,7 +318,7 @@ class ScriptLattesDiff:
             'datasProcessamento': jsonAnalisado['datasProcessamento'],
             'nomeDoGrupo': jsonAnalisado['nomeDoGrupo']
         }
-        JsonToJs.write(str(outputFolder / 'json' / 'scriptLattesDiff.js'), 'scriptLattesDiff', scriptLattesDiff)
+        Json.writeToJs(str(outputFolder / 'json' / 'scriptLattesDiff.js'), 'scriptLattesDiff', scriptLattesDiff)
 
 
 
@@ -320,7 +329,7 @@ class ScriptLattesDiff:
 
 
             # salva no arquivo
-            JsonToJs.write(
+            Json.writeToJs(
                 # nome do arquivo
                 str(outputFolder / 'json' / 'idLattes' / (idLattes+'.js')),
 
@@ -356,9 +365,9 @@ class ScriptLattesDiff:
 
         # copia as seguintes pastas
         copiarPastas = ['html', 'js', 'css', 'vendor']
+
+
         for pasta in copiarPastas:
-
-
             src  = str(Misc.scriptPath / pasta)
             dest = str(outputFolder / pasta)
             if os.path.exists(dest):
@@ -369,9 +378,13 @@ class ScriptLattesDiff:
 
 
         # move o arquivo redirect para a raíz da pasta output
-        shutil.move(
+        shutil.copy(
             str(outputFolder / 'html' / 'redirect.htm'),
             str(outputFolder / 'scriptLattesDiff.htm')
+        )
+        shutil.move(
+            str(outputFolder / 'html' / 'redirect.htm'),
+            str(outputFolder / 'index.htm')
         )
 
 
@@ -397,4 +410,7 @@ from py.Settings import Settings
 from py.misc import *
 from py.List import List
 from py.Debug import *
+from py.Json import Json
+from py.Print import Print
 from datetime import datetime
+import colorama

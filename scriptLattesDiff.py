@@ -15,20 +15,13 @@ import sys
 from py.misc import *
 from py.Settings import Settings
 from py.ScriptLattesDiff import ScriptLattesDiff
-
-
-
-
-
-# variaveis para depuração
-idLattesAdes = '9836776931160228'
-idSeiji = '3030047284254233'
-
-
+import colorama
 
 
 
 def main():
+    # inicializa o colorama
+    colorama.init()
 
 
     scriptLattesDiff = ScriptLattesDiff()

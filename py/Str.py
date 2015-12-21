@@ -4,7 +4,7 @@
 
 import nltk
 from py.misc import *
-
+from py.Settings import Settings
 
 
 
@@ -43,7 +43,7 @@ class Str:
 
         # calcula o levenshtein
         ratio = Str.ratio(x, y)
-        if ratio > porcentagemRatioSimilar:
+        if ratio > Settings.porcentagemRatioSimilar:
             return ratio
 
 

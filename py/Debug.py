@@ -4,7 +4,7 @@
 
 import sys
 from py.misc import *
-from py.JsonToJs import JsonToJs
+from py.Json import Json
 from py.Settings import Settings
 import shutil
 
@@ -63,7 +63,7 @@ class Debug:
             return ;
 
 
-        if not ratioParecido > porcentagemRatioSimilar:
+        if not ratioParecido > Settings.porcentagemRatioSimilar:
             # se elas não são parecidas
             return ;
 
@@ -85,7 +85,7 @@ class Debug:
 
         # salva o os similares no arquivo de debug
         similarPath = str(Misc.scriptPath / 'debug' / 'json' / 'similares.json')
-        JsonToJs.write(similarPath, 'Debug[\'similares\']', Debug.elementosSimilares)
+        Json.writeToJs(similarPath, 'Debug[\'similares\']', Debug.elementosSimilares)
 
 
 

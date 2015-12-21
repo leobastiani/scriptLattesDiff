@@ -5,7 +5,7 @@
 
 
 
-body {
+.dialogoCarregando {
     margin-left: 2%;
     margin-right: 2%;
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
@@ -135,4 +135,34 @@ position: absolute;}
 
 .expandido span {
     margin-bottom: 5px;
+}
+
+.fundoPreto {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: #000;
+    width: 100%;
+    height: 100%;
+}
+
+.dialogoCarregando {
+    position: fixed;
+    background: #FFF;
+    margin: auto;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    width: 500px;
+    height: 300px;
+    text-align: center;
+}
+
+.displayBlock {
+    display: block;
+}
+
+.carregandoValor {
+    font-size: 34px;
 }

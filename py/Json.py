@@ -9,7 +9,7 @@ import json
 
 
 
-class JsonToJs:
+class Json:
 
     '''esta classe é responsável salvar/ler arquivos json que são tratados como Dict em python
     e como Object em javascript'''
@@ -26,11 +26,20 @@ class JsonToJs:
 
 
 
-    def write(fileName, varName, obj):
+    def writeToJs(filePath, varName, obj):
         '''salva o obj no arquivo
         @varName - nome da variavel que será lida pelo javascript'''
 
-        with open(fileName, 'w', encoding='utf-8') as file:
+        with open(filePath, 'w', encoding='utf-8') as file:
             file.write(
-                '%s = %s;' % (varName, json.dumps(obj, ensure_ascii=False))
+                '%s = %s;' % (varName, Json.toString(obj))
             )
+
+
+    def toString(obj):
+        return json.dumps(obj,
+            sort_keys=True,
+            indent=4,
+            separators=(',', ': '),
+            ensure_ascii=False
+        )

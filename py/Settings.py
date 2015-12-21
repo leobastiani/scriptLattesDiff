@@ -20,12 +20,22 @@ class Settings:
     # pego o mais recente e crio com base nele
     criarNovoSnapshot = False
 
+    # é a porcentagem para que duas strings
+    # sejam consideradas semelhantes
+    porcentagemRatioSimilar = 0.8
 
 
     @staticmethod
     def setSettingsByArgs(args):
         '''define as configurações com base nos argumentos
         aqueles parametros passados na linha de comando'''
+
+        def nextArg(args):
+            if len(args) == 0:
+                print('Foi esperado um argumento, mas não foi encontrado.')
+                sys.exit(0)
+            return args.pop()
+
 
 
         def isThisCommand(arg, *commands):
@@ -81,6 +91,14 @@ class Settings:
                     onErro(arg, 'Foi esperado um inteiro.')
                 return result
 
+            if tipo == float:
+                result = None
+                try:
+                    result = float(arg)
+                except:
+                    onErro(arg, 'Foi esperado um número decimal.')
+                return result
+
 
         # vamos usar um pilha para tratar os parametros
         # exemplo de args
@@ -92,7 +110,7 @@ class Settings:
         args.pop()
 
         while args:
-            arg = args.pop()
+            arg = nextArg(args)
 
 
             if isThisCommand(arg, 'help', 'h'):
@@ -103,14 +121,14 @@ class Settings:
 
 
             elif isThisCommand(arg, 'output-folder', 'o'):
-                novoCaminho = deveSer(args.pop(), str)
+                novoCaminho = deveSer(nextArg(args), str)
                 print('Novo caminho para a saída:', novoCaminho)
                 Settings.outputFolder = Path(novoCaminho)
 
 
 
 
-            elif isThisCommand(arg, 'not-similars'):
+            elif isThisCommand(arg, 'nao-analisar-similares'):
                 print('Não vou analisar as Strings similares.')
                 Settings.analisarSimilares = False
 
@@ -121,6 +139,10 @@ class Settings:
                 Settings.criarNovoSnapshot = True
 
 
+            elif isThisCommand(arg, 'porcentagem-similar'):
+                novaPorcentagem = deveSer(nextArg(args), float)
+                print('Nova porcentagem para similares: %g%%' % novaPorcentagem)
+                Settings.porcentagemRatioSimilar = novaPorcentagem / 100
 
 
             # insira mais comandos por parametro acima

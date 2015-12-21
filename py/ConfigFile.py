@@ -59,11 +59,8 @@ class ConfigFile:
     def printPesquisador(self, pesquisador):
         '''Imprime numa linha o dicionário pesquisador com o ID e o nome
         param: pesquisador => Id do pesquisador'''
-        print('Pesquisador: %s, Nome: %s' % (pesquisador, self.json[pesquisador]['identificacao']['nome_inicial']))
-
-
-
-
+        print(colorama.Fore.GREEN+'Pesquisador: '+colorama.Fore.RESET+pesquisador+
+            ', '+colorama.Fore.GREEN+'Nome: '+colorama.Fore.RESET+self.json[pesquisador]['identificacao']['nome_inicial'])
 
 
 
@@ -71,6 +68,7 @@ class ConfigFile:
 
     def carregarParametros(self, fp):
         '''Carrega as configurações para a variável parametros do arquivo de configuração'''
+        # função obtida do scriptLattes
         self.parametros = {}
         def getParametro(line):
             '''Retorna uma tupla (nomeDoParametro, valor)
@@ -232,7 +230,11 @@ class ConfigFile:
             # para evitar o caso de 0001
             self.json[i] = _xmlToJson(pesquisador)
             compactJson(self.json[i])
-            self.printPesquisador(i)
+
+            # antes eu imprimia os idLattes nesse ponto
+            # porém, é muito rápida a leitura
+            # nem vale a pena imprimir
+            # self.printPesquisador(i)
         return self.json
 
 
@@ -272,7 +274,7 @@ class ConfigFile:
 
         # todo comando é do tipo:
         #   (palavra) = (palavra) # (comentários)
-        reComando = re.compile(r'([^=]+)\=([^#]+)(?:#(.*))?')
+        reComando = re.compile(r'([^=]+)\=([^#]+)?(?:#(.*))?')
         # lendo todas as linhas do arquivo
         with open(str(novoArquivoConfig), 'r', encoding='utf-8') as file:
             lines = file.readlines()
@@ -305,7 +307,7 @@ class ConfigFile:
                     strValor = str(novoArquivoConfig.parents[0])
 
                 elif strComando == 'global-itens_ate_o_ano':
-                    strValor = datetime.now().strftime('%Y')
+                    strValor = '' # poderia deixar até o ano atual, mas não preferi: datetime.now().strftime('%Y')
 
                 
                 elif strComando == 'global-arquivo_qualis_de_periodicos':
@@ -329,9 +331,8 @@ class ConfigFile:
                     # se houver comentários devo adicioná-los
                     if strComentarios is not None:
                         lines[i] += ' #' + sintaxeGroups[2]
-                    else:
-                        # preciso adicionar um \n
-                        lines[i] += '\n'
+                    # preciso adicionar um \n
+                    lines[i] += '\n'
             i += 1
 
         newContent = ''.join(lines)
@@ -339,9 +340,9 @@ class ConfigFile:
         with open(str(novoArquivoConfig), 'w', encoding='utf-8') as file:
             file.write(newContent)
 
-        print('Novas configurações salvas no arquivo!')
-        print('Por favor, execute o scriptLattes com para o arquivo:')
-        print(novoArquivoConfig)
+        Print.success('Novas configurações salvas no arquivo!')
+        print('Por favor, execute o scriptLattes com a linha de comando:')
+        print('scriptLattes.py '+novoArquivoConfig)
         sys.exit(0)
 
 
@@ -355,3 +356,5 @@ import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 from py.misc import *
 from datetime import datetime
+import colorama
+from py.Print import Print
