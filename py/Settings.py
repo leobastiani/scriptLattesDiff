@@ -2,6 +2,7 @@
 # coding=utf-8
 
 import sys
+from py.Print import Print
 from pathlib import Path
 from py.misc import *
 
@@ -11,18 +12,43 @@ from py.misc import *
 class Settings:
 
     outputFolder = Path(sys.argv[0]).parents[0] # deve ser um objeto de Path
-    configFilesGlob = []  # arquivos de configuração que serão analisados pelo script
+    configFilesGlob = [] # arquivos de configuração que serão analisados pelo script
     
     # diz se vamos usar levensthein para analisar strings similares
     analisarSimilares = True
 
     # se eu devo criar um novo
     # pego o mais recente e crio com base nele
+    # criarNovoSnapshot como True vai criar o novo snap
+    # na pasta padrão dele
+    # que é uma pasta anterior a pasta do arquivo
+    # com o nome YYMMDD: ano, mês e dia
+    # se criarNovoSnapshot for uma string
+    # então o arquivo destino se encaminhará para essa pasta
     criarNovoSnapshot = False
 
     # é a porcentagem para que duas strings
     # sejam consideradas semelhantes
     porcentagemRatioSimilar = 0.8
+
+    # as informações do primeiro snap não são necessárias
+    # por isso, pode inclui-las no json ou não
+    incluirPrimeiroSnap = False
+
+    # quantidade máxima de pesquisadores para por no resultado final
+    # bom para testes
+    maxPesquisadores = float('inf')
+
+    # lista de pesquisadores com os IDs
+    # que eu devo pesquisar
+    # por padrão é None
+    # mas se for fornecido pelo usuário
+    # deve ser uma lista assim [12334, 144623, 16354123, ...]
+    pesquisadoresList = None
+
+    # Versão do scriptLattes que gerou aqueles arquivos json
+    # deve ser string
+    versao = '1'
 
 
     @staticmethod
@@ -30,11 +56,18 @@ class Settings:
         '''define as configurações com base nos argumentos
         aqueles parametros passados na linha de comando'''
 
-        def nextArg(args):
+        def novoArg(args):
+            '''obtem um novo argumento, removendo-o da pilha de argumentos'''
             if len(args) == 0:
-                print('Foi esperado um argumento, mas não foi encontrado.')
-                sys.exit(0)
+                return ''
             return args.pop()
+
+
+        def proxArg(args):
+            '''obtem o novo argumento, sem removê-lo da pilha'''
+            if len(args) == 0:
+                return ''
+            return args[0]
 
 
 
@@ -67,14 +100,20 @@ class Settings:
             return False
 
 
-        def deveSer(arg, tipo):
+        def deveSer(arg, tipo, saiSeNaoFor=True):
             '''passe um tipo e verifique se o arg é desse tipo
                 Exemplo:
                     arg = '123'
                     tipo = int
-                    retorna 123'''
+                    retorna 123
+                fecha o programa'''
 
             def onErro(arg, msg):
+                if not saiSeNaoFor:
+                    # se eu não quero sair do programa
+                    # apenas quis testar se o ele é
+                    return ;
+
                 print('Erro ao tratar o argumento: "%s"' % arg)
                 print(msg)
                 sys.exit(0)
@@ -110,7 +149,7 @@ class Settings:
         args.pop()
 
         while args:
-            arg = nextArg(args)
+            arg = novoArg(args).lower()
 
 
             if isThisCommand(arg, 'help', 'h'):
@@ -118,31 +157,67 @@ class Settings:
                 sys.exit(0)
 
 
-
-
             elif isThisCommand(arg, 'output-folder', 'o'):
-                novoCaminho = deveSer(nextArg(args), str)
+                novoCaminho = deveSer(novoArg(args), str)
                 print('Novo caminho para a saída:', novoCaminho)
                 Settings.outputFolder = Path(novoCaminho)
 
 
-
-
-            elif isThisCommand(arg, 'nao-analisar-similares'):
-                print('Não vou analisar as Strings similares.')
+            elif isThisCommand(arg, 'nao-analisar-similares', 'ns'):
+                Print.warning('Configuração para não analisar as os campos similares.')
                 Settings.analisarSimilares = False
 
 
 
-            elif isThisCommand(arg, 'novo-snap'):
-                print('Novo snapshot a caminho!')
-                Settings.criarNovoSnapshot = True
+            elif isThisCommand(arg, 'novo-snap', 'novo-arquivo'):
+                Print.warning('Novo snapshot a caminho!')
+                # eu posso digitar na linha de comando este exemplo:
+                # --novo-snap "D:\Aqui\"
+                # e o novo snap vai para a pasta descrita
+                pathDest = proxArg(args)
+                # o and pathDest qr dizer se ele tem algum conteúdo
+                if not isCommand(pathDest) and pathDest:
+                    # verifico antes se o diretório existe
+                    pathDest = Path(pathDest)
+                    if not pathDest.is_dir():
+                        # se o diretório inserido não existe
+                        # ou não é uma pasta
+                        # devo sair
+                        Print.erro('O destino "'+str(pathDest)+'" não corresponde a uma pasta.')
+                        sys.exit(0)
+                    # devo pegar o resolvido:
+                    Settings.criarNovoSnapshot = pathDest.absolute()
+
+                else:
+                    # criarNovoSnapshot como true
+                    # qr dizer que ele vai para a pasta padrão de novos snaps
+                    Settings.criarNovoSnapshot = True
 
 
-            elif isThisCommand(arg, 'porcentagem-similar'):
-                novaPorcentagem = deveSer(nextArg(args), float)
-                print('Nova porcentagem para similares: %g%%' % novaPorcentagem)
+            elif isThisCommand(arg, 'porcentagem-similar', 'ps'):
+                novaPorcentagem = deveSer(novoArg(args), float)
+                Print.warning('Nova porcentagem para similares: %g%%' % novaPorcentagem)
                 Settings.porcentagemRatioSimilar = novaPorcentagem / 100
+
+
+            elif isThisCommand(arg, 'incluir-primeiro-snap', 'ip'):
+                Print.warning('Incluindo o primeiro Snap nos arquivos Jsons')
+                Settings.incluirPrimeiroSnap = not Settings.incluirPrimeiroSnap
+
+
+            elif isThisCommand(arg, 'max-pesquisadores', 'max'):
+                maxPesquisadores = deveSer(novoArg(args), int)
+                Print.warning('Pesquisando no máximo %d pesquisadores.' % maxPesquisadores)
+                Settings.maxPesquisadores = maxPesquisadores
+
+
+            elif isThisCommand(arg, 'pesquisadores', 'p'):
+                # pesquisadoresStr é uma string do tipo
+                # 123345, 12324536, 123651, 542542656, 135236536
+                pesquisadoresStr = deveSer(novoArg(args), str)
+                pesquisadoresList = Misc.strToList(pesquisadoresStr)
+                Settings.pesquisadoresList = pesquisadoresList
+                Print.warning('Analisando os seguintes pesquisadores: "'+', '.join(pesquisadoresList)+'"')
 
 
             # insira mais comandos por parametro acima

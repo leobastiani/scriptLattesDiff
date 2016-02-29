@@ -12,14 +12,22 @@
 scriptLattesDiff.$ = {};
 
 
+/**
+ * Nesta função eu obtenho os jsons e apago as duplicatas na tela
+ * devo chamá-la antes da cortina preta abaixar
+ * ou seja, na tela de carregamento
+ */
+scriptLattesDiff.init = function () {
+	// dá mais um step para descer a cortina preta
+	Carregando.step();
 
-// analise temporal
-$('.campoAlterado .alteradoValor').html('');
-scriptLattesDiff.$.campoAlterado = $('.campoAlterado').cloneAndRemove();
-// jquery membro
-scriptLattesDiff.$.membro = $('.membro').cloneAndRemove();
 
-
+	// começa apagando os elementos e copiando na memória
+	$('.campoAlterado .alteradoValor').html('');
+	scriptLattesDiff.$.campoAlterado = $('.campoAlterado').cloneAndRemove();
+	// jquery membro
+	scriptLattesDiff.$.membro = $('.membro').cloneAndRemove();
+}
 
 
 
@@ -40,13 +48,18 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 	console.log(dataInicial);
 	console.log(dataFinal);
 
+	// altera o nav, embaixo do nome do grupo (que é o título)
+	var headerNav = $('header nav');
+	headerNav.find('span:eq(0)').text(new Date(dataInicial).toLocaleDateString());
+	headerNav.find('span:eq(1)').text(new Date(dataFinal).toLocaleDateString());
+
+
 	// apaga todo o conteudo antigo de principaisAlteracoes
 	$('#principaisAlteracoes .membro').remove();
-	$('#principaisAlteracoes .filtro').remove();
 
 	// teste se as datas não estiverem distanciadas
 	if(dataFinal <= dataInicial) {
-		console.log('Tentativa de gerar a principaisAlteracoes com as datas:\n'+dataInicial+'\n'+dataFinal);
+		console.log('Tentativa de gerar a principaisAlteracoes com dataFinal antes da inicial:\n'+dataInicial+'\n'+dataFinal);
 		return false;
 	}
 
@@ -56,30 +69,37 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 	var camposUtilizados = new Array();
 
 
+	// indices das datas no vetor que possui todas as datas
+	var iDataIni = scriptLattesDiff.datasProcessamento.indexOf(dataInicial);
+	var iDataFin = scriptLattesDiff.datasProcessamento.indexOf(dataFinal);
+
+
+	// põe em negrito todas as linhas do footer que possuem essas datas
+	var footerLi = $('footer li');
+	// começa removendo de todos
+	footerLi.removeClass('negrito');
+	for(var i=iDataIni; i<=iDataFin; i++) {
+		// coloca em negrito todos os indices I
+		footerLi.eq(i).addClass('negrito');
+	}
+
 
 	/**
 	 * Adicionando todos os membros na na página HTML
 	 * dentro do elemento #membros
 	 */
-	for(var i in scriptLattesDiff.idLattes) {
-
+	$.each(scriptLattesDiff.idLattes, function(i, pesquisador) {
 		// variáveis úteis
-		var pesquisador = scriptLattesDiff.idLattes[i];
 		var nome = pesquisador.getNome();
-
-
 
 
 		/**
 		 * obtem um dict com os campos alterados
 		 */
-		var iDataIni = scriptLattesDiff.datasProcessamento.indexOf(dataInicial);
-		var iDataFin = scriptLattesDiff.datasProcessamento.indexOf(dataFinal);
 		var alteracoes = pesquisador.getAlteracoes(iDataIni, iDataFin);
-
 		if($.isEmptyObject(alteracoes)) {
 			// se o campo está vazio, parte para o próximo elemento
-			continue;
+			return true;
 		}
 
 
@@ -103,10 +123,8 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		for(var campo in alteracoes) {
 
 
-
 			// sinal diz se foi removido ou acrescentado o item
-			for(var sinal in alteracoes[campo]) {
-
+			Pesquisador.sinaisEm(alteracoes[campo]).forEach(function (sinal) {
 
 				// sinal é + ou -
 				var campoAlteradoQuery = sinal == '+' ? '.acrescidos' : '.removidos';
@@ -156,7 +174,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 				// adiciona aos campos utilizados
 				camposUtilizados.pushUnique(campo);
-			}
+			});
 		}
 
 
@@ -173,7 +191,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		$membro.appendTo('#principaisAlteracoesContent');
 
 
-	}
+	});
 	
 
 	// cria os filtros
@@ -188,22 +206,22 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 
 $('#principaisAlteracoes').on('click', '.alteradoValor span', function(e) {
+	var alteracoes = $(this).data('alteracoes');
+	// se alterações é uma string, como no caso de colaboradores
+	// não faz nd
+	if(typeof alteracoes == "string") {
+		return ;
+	}
+
+
 	// expandido qr dizer q ele está mostrando tudo
 	$(this).toggleClass('expandido');
 
 
-	var alteracoes = $(this).data('alteracoes');
 	if($(this).hasClass('expandido')) {
 		// adiciona spans na forma
 		// chave: valor
 		
-		// se alterações é uma string, como no caso de colaboradores
-		// não faz nd
-		console.log(typeof alteracoes);
-		if(typeof alteracoes == "string") {
-			return ;
-		}
-
 		var spans = new Array();
 		for(var chave in alteracoes) {
 			var valor = alteracoes[chave];
@@ -215,8 +233,11 @@ $('#principaisAlteracoes').on('click', '.alteradoValor span', function(e) {
 
 		// adiciona os spans no elemento atual
 		$(this).html(spans);
-	} else {
+	}
+	else {
+		// quero contrair
 		$(this).text(scriptLattesDiff.resumirDict(alteracoes));
+
 	}
 });
 
@@ -230,12 +251,10 @@ $('#principaisAlteracoes').on('click', '.alteradoValor span', function(e) {
  * @param  {Array} campos todos os campos que foram utilizados para exibir as informações na tela
  */
 
-scriptLattesDiff.$.filtro = $('.filtro').cloneAndRemove();
+scriptLattesDiff.$.filtro = $('#filtrosComuns .filtro').cloneAndRemove();
 
 
 scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
-	
-
 	if($.isEmptyObject(campos)) {
 		// esconde o id filtros
 		$('#filtros').hide();
@@ -243,9 +262,19 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
 	$('#filtros').show();
 
 
+	// se eu estava usando o site e mexi nos filtros
+	// quando eu clico em Pesquisar, os filtros são resetados
+	// não quero que isso aconteça
+	var devoRecarregarFiltros = $('#filtrosComuns .filtro').length != 0;
+	var filtrosMarcados = null;
+	if(devoRecarregarFiltros) {
+		// obtenho os filtros marcados
+		filtrosMarcados = Filtro.getFiltrosByPerfil('Marcados').vals();
+	}
+
 
 	// remove todos os antigos filtros
-	$('.filtro').remove();
+	$('#filtrosComuns .filtro').remove();
 
 
 
@@ -260,15 +289,24 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
 		$filtro.find('input').val(campo);
 
 
-		$filtro.appendTo('#filtros');
+		$filtro.appendTo('#filtrosComuns');
 
 
 	});
 
 
 
-	// esconde o campo colaboradores, ele está se comportando de uma forma estranha
-	$('.filtro > input[value="colaboradores"]').removeAttr('checked').change();
+	if(devoRecarregarFiltros) {
+		// estou recarregando a página
+		Filtro._carregar(Filtro.getElem(filtrosMarcados));
+	}
+	else {
+		// é a primeira vez que estou carregando
+		
+		// esconde o campo colaboradores, ele está se comportando de uma forma estranha
+		Filtro.uncheck('colaboradores');
+	}
+
 
 }
 
@@ -281,49 +319,7 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
 
 
 // configurando o botao de filtro
-$('#filtros').on('change', '.filtro > input', function(e) {
-
-
-
-	var checked = $(this).is(':checked');
-	var campo = $(this).val(); // nome do campo
-
-
-
-
-	// elemento com o campo para esconder
-	var j = $('.alteradoChave[data-campo="'+campo+'"]').parent('.campoAlterado');
-	if(checked) {
-		j.show();
-	} else {
-		j.hide();
-	}
-
-
-	// escode akelas janelas Removidos desde então e a do acrescido
-	$('.tabelaAlterados, .membro').each(function(index, elem) {
-		var possuiElementosVisiveis = $(elem).find('.campoAlterado').visible().length != 0;
-		if(possuiElementosVisiveis) {
-			$(elem).show();
-		} else {
-			$(elem).hide();
-		}
-	});
-
-
-
-
-
-
-	// adicionando listras cinzas
-	$('.listraCinza').removeClass('listraCinza');
-	$('.campoAlterado:visible').even().addClass('listraCinza');
-
-
-
-
-
-});
+$('#filtrosComuns').on('change', '.filtro > input', Filtro.onchange);
 
 
 
@@ -395,7 +391,7 @@ scriptLattesDiff.resumirDict = function (dict) {
 	// 	nomeVazio = nome_evento
 	// 		return = Campo 'nome' vazio!
 	var nomeVazio = null;
-	for(i=0; i<nomesCaract.length; i++) {
+	for(var i=0; i<nomesCaract.length; i++) {
 		var nome = nomesCaract[i];
 		if(!(nome in dict)) {
 			continue;

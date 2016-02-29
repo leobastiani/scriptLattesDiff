@@ -28,85 +28,126 @@ class List:
 
 
 
-
     def differences(x, y):
         '''retorna das listas X e Y
-        é uma tupla de 2 elementos
-        o primeiro é o que foi acrescido em Y que não havia em X
-        o segundo é o que foi subtraido de X, não há em Y, mas há em X'''
+        é um dicionário com '+', '-' e '~'
+        o que foi acrescido, o que foi retirado e o que foi alterado
+        '''
 
 
-
-        result = {
-            'acrescido': [],
-            'subtraido': []
-        }
-
-
-
-
-        for child in x:
-            if not List.has(y, child):
-                result['subtraido'].append(child)
-
-
-        for child in y:
-            if not List.has(x, child):
-                result['acrescido'].append(child)
-
-        if not x or not y:
-            # se x ou y está vaziao, não tem mais o que comparar
-            return result['acrescido'], result['subtraido']
-            
-
-        if not List.isListOfDict(x) or not List.isListOfDict(y):
-            # se os elementos de x ou y não forem dicionários
-            # não preciso analisar os similares
-            # posso retornar já
-            return result['acrescido'], result['subtraido']
+        def _differences(x, y):
+            '''é a função principal que calcula a diferença
+            esta função existe, porque mesmo se ela estiver vazia, ela retorna:
+            {
+                '+': [],
+                '-': [],
+                '~': []
+            }
+            A função principal olha isso e retorna:
+            {}
+            '''
 
 
-        # analisando os elementos que foram adicionados e subtraido
-        if Settings.analisarSimilares:
-            # se está abilitado nas configurações
+            result = {
+                # o que foi acrescido em y
+                '+': [],
 
+                # o que foi removido em y
+                '-': [],
 
-            # permutando os elementos
-            i = len(result['acrescido']) - 1
-            while i >= 0:
-                j = len(result['subtraido']) - 1
-                while j >= 0:
+                # ~ pode não estar habilitado nas configurações
+                # por isso, não está aqui
+            }
 
 
 
 
+            for child in x:
+                if not List.has(y, child):
+                    result['-'].append(child)
 
-                    if Dict.similar(result['acrescido'][i], result['subtraido'][j]):
-                        del result['acrescido'][i]
-                        del result['subtraido'][j]
+
+            for child in y:
+                if not List.has(x, child):
+                    result['+'].append(child)
+
+            if not x or not y:
+                # se x ou y está vazios, não tem mais o que comparar
+                return result
+                
+
+            if not List.isListOfDict(x) or not List.isListOfDict(y):
+                # se os elementos de x ou y não forem dicionários
+                # não preciso analisar os similares
+                # posso retornar já
+                return result
+
+
+            # analisando os elementos que foram adicionados e subtraido
+            if Settings.analisarSimilares:
+                # se está abilitado nas configurações
+                result['~'] = []
+
+                # permutando os elementos
+                i = len(result['+']) - 1
+                while i >= 0:
+                    j = len(result['-']) - 1
+                    while j >= 0:
+
+
+
+
+                        # isSimilar ou vale {} ou vale algo como
+                        # {'descricao': 0.9},
+                        # portanto, vamos associar o resultado em '~'
+                        isSimilar = Dict.similar(result['+'][i], result['-'][j])
+                        if isSimilar:
+                            elemSimilar = [
+                                # primeiro valor é o que estava em X
+                                # ou seja, o mais antigo
+                                result['+'][i],
+
+                                # o segundo valor é o que estava em Y
+                                # ou seja, o mais novo
+                                result['-'][j],
+
+                                # o terceiro valor
+                                # é o campo que foi alterado
+                                # como: {'descricao': 0.9}
+                                isSimilar
+                            ]
+                            result['~'].append(elemSimilar)
+
+                            # elimina do vetor acrescido e removido
+                            del result['+'][i]
+                            del result['-'][j]
+                            j -= 1
+                            # não dou i -= 1 pq já vai acontecer dps do break
+                            break
+
+
+
+
+
+
                         j -= 1
-                        # não dou i -= 1 pq já vai acontecer dps do break
-                        break
+                    i -= 1
 
 
+            return result
 
 
+        result = _differences(x, y)
+        campos = list(result.keys())
+        for campo in campos:
+            if not result[campo]:
+                # se o campo está vazio, dou um delete
+                del result[campo]
 
 
-                    j -= 1
-                i -= 1
+        return result
 
 
-
-
-
-
-        return result['acrescido'], result['subtraido']
-
-
-
-
-    @staticmethod
 
 
     def isListOfDict(x):
@@ -119,3 +160,16 @@ class List:
 
         if isinstance(x[0], dict):
             return True
+
+        return False
+
+
+
+    def isContida(listaGrande, listaPequena):
+        '''diz se a lista pequena está contida em lista grande'''
+        for elemPeq in listaPequena:
+            if elemPeq not in listaGrande:
+                return False
+
+        # todos os elementos de listaPequena estão em listaGrande
+        return True

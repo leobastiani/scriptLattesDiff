@@ -15,15 +15,12 @@ import sys
 from py.misc import *
 from py.Settings import Settings
 from py.ScriptLattesDiff import ScriptLattesDiff
+from py.Print import Print
 import colorama
 
 
 
 def main():
-    # inicializa o colorama
-    colorama.init()
-
-
     scriptLattesDiff = ScriptLattesDiff()
 
 
@@ -36,27 +33,19 @@ def main():
 
 
 
-    print('Arquivos de configuração encontrados: ')
-    for file in scriptLattesDiff.filesPath:
-        print(str(file))
-
-
-
-
-
     # se foi carregado apenas um arquivo, não há como fazer análises temporais com ele
     if len(scriptLattesDiff.configFiles) < 2:
         # Não há arquivos de configuração suficientes para comparar.
-        print('Não há arquivos de configuração suficientes para comparar')
-        exit()
+        Print.erro('Não há arquivos de configuração suficientes para comparar')
+        sys.exit(0)
 
 
 
 
     # teste de pesquisadores no grupo
     if not scriptLattesDiff.hasSameIdLattes():
-        print('Os arquivos XMLs não possuem os mesmos pesquisadores.')
-        exit()
+        Print.erro('Os arquivos XMLs não possuem os mesmos pesquisadores.')
+        sys.exit(0)
 
 
 
@@ -77,14 +66,12 @@ def main():
     ScriptLattesDiff.copyFilesToOutput()
 
 
-    # assim que acabar, executa as funções finais
-    ScriptLattesDiff.onFisnish()
-
-
 
 
 
 if __name__ == '__main__':
+    # inicializa o colorama
+    colorama.init()
 
     section('Apresentação do scriptLattesDiff')
 

@@ -11,7 +11,7 @@ Number.prototype.fillZero = function(length) {
 	var leftZeros = length - this.toString().length;
 	var i;
 	var result = '';
-	for(i=0; i<leftZeros; i++) {
+	for(var i=0; i<leftZeros; i++) {
 		result += '0';
 	}
 	return result+this.toString();

@@ -3,21 +3,24 @@
 
 import os
 import sys
+import re
 from pathlib import Path
 import colorama
-
-
-def strIsFloat(str):
-    return str.replace('.', '', 1).isdigit()
-
 
 
 
 def section(*args):
     '''Cria um texto chamativo que divide seções no console'''
-    print(colorama.Fore.CYAN+'\n/* =============================\n   ', end='')
+
+    tamMaiorStr = 0
+    for arg in args:
+        tamMaiorStr = max(tamMaiorStr, len(str(arg)))
+
+    strIgual = '=' * tamMaiorStr
+
+    print(colorama.Fore.CYAN+'\n/* '+strIgual+'\n   ', end='')
     print('\n   '.join(str(x) for x in args))
-    print('   ============================= */'+colorama.Fore.RESET)
+    print('   '+strIgual+' */'+colorama.Fore.RESET)
 
 
 
@@ -65,3 +68,9 @@ class Misc:
                 return 'n'
             else:
                 print(errorMsg)
+
+
+    def strToList(x):
+        '''pega uma string x como "asd, 123, dsa" e retorna
+        ['asd', '123', 'dsa']'''
+        return re.findall(r'(\w+)', x)

@@ -1,14 +1,4 @@
 /**
- * Funções que implementarão a biblioteca Date
- */
-
-
-
-
-
-
-
-/**
  * Transforma a string recebida do scriptLattes em Date
  * @param  {String} str 01/01/1970 12:00:00
  * @return {Date}
@@ -47,7 +37,19 @@ Date.parseScriptLattes = function(str) {
  * @return {String}
  */
 Date.prototype.toStringScriptLattes = function() {
-	return this.toLocaleString();
+
+	var day = this.getDate().fillZero();
+	var month = (this.getMonth()+1).fillZero();
+	var year = this.getFullYear();
+	var date = day+'/'+month+'/'+year;
+
+	var hour = this.getHours().fillZero();
+	var minutes = this.getMinutes().fillZero();
+	var seconds = this.getSeconds().fillZero();
+	var time = hour+':'+minutes+':'+seconds;
+
+	var result = date+' '+time;
+	return result;
 }
 
 

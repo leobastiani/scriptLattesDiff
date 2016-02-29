@@ -62,23 +62,21 @@ $.fn.visible = function () {
 
 
 
+
 /**
- * retorna somente os elementos pares
- * @return {jQuery}
+ * Obtem um objeto Date a partir de um input date
  */
-$.fn.even = function () {
-	return $(this).filter(function(index) {
-		return index % 2;
-	});
+$.fn.getDate = function () {
+	var data = $(this).val().match(/(\d+)/g);
+	return new Date(data[0], parseInt(data[1])-1, parseInt(data[2]));
 }
 
 
-
-
-
-
-
-$.fn.getDate = function () {
-	var data = $(this).val().split('-');
-	return new Date(data[0], parseInt(data[1])-1, parseInt(data[2]));
+/**
+ * Retorna um array com todos os .val() de todos os jQuerys
+ */
+$.fn.vals = function () {
+	return $(this).map(function(index, elem) {
+		return $(elem).val();
+	});
 }

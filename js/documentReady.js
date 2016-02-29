@@ -6,13 +6,14 @@
 function documentReady() {
 
 	console.log('Todos os arquivos foram carregados!');
-	console.log('\n');
+	scriptLattesDiff.init()
 	
 	/**
 	 * Começa alterando o título da página e o nome do grupo
 	 */
 	document.title = scriptLattesDiff.nomeDoGrupo;
 	$('#nomeDoGrupo').text(scriptLattesDiff.nomeDoGrupo);
+
 
 
 
@@ -29,6 +30,29 @@ function documentReady() {
 	var datasCalendario = [scriptLattesDiff.datasProcessamento[0], scriptLattesDiff.datasProcessamento.end()];
 	$('#principaisAlteracoes #escolhaDatas input[type="date"]').each(function(index, el) {
 		$(this).val(datasCalendario[index].toValDate());
+	});
+	// agora coloca no combobox embaixo das datas de pesquisa
+	$('#datasComboIni, #datasComboFim').each(function(index, elem) {
+		$.each(scriptLattesDiff.datasProcessamento, function(index, data) {
+			var dataVal = data.toValDate();
+			var option = $('<option>').text(dataVal).val(dataVal);
+
+			option.appendTo($(elem));
+		});
+
+		// atribui a função dos datasCombo, qndo eu mudar o valor de datacombo devo alterar o valor da input date
+		$(elem).change(function(e) {
+			if($(this).val() == '') {
+				// se vim pro vazio, não faço nd
+				return ;
+			}
+			// selecionei uma data
+			var devoMudar = $(this).parent('div').find('input');
+			devoMudar.val($(this).val());
+
+			// volta para o estado inicial
+			$(this).val('');
+		});
 	});
 
 
@@ -48,20 +72,20 @@ function documentReady() {
 
 
 
-	$('#escolhaDatas input[type="submit"]').click(function(e) {
+	$('#escolhaDatas').submit(function(e) {
 		// obtendo os valores das datas
-		var $datas = $('#escolhaDatas input[type="date"]');
-		var dataInicial = scriptLattesDiff.dataProx($datas.eq(0).getDate());
-		var dataFinal   = scriptLattesDiff.dataProx($datas.eq(1).getDate());
+		var jDatas = $('#escolhaDatas input[type="date"]');
+		var dataInicial = scriptLattesDiff.dataProx(jDatas.eq(0).getDate());
+		var dataFinal   = scriptLattesDiff.dataProx(jDatas.eq(1).getDate());
 
 
 
 		// encontra as datas que estão em datasProcessamento
 		if(dataFinal < dataInicial) {
 			// swap de variaveis
-			var temp = $datas.eq(1).val();
-			$datas.eq(0).val($datas.eq(1).val());
-			$datas.eq(1).val(temp);
+			var temp = jDatas.eq(1).val();
+			jDatas.eq(0).val(jDatas.eq(1).val());
+			jDatas.eq(1).val(temp);
 
 
 			temp = dataInicial;
@@ -73,7 +97,13 @@ function documentReady() {
 		// após o ajuste de periodos
 		scriptLattesDiff.paginas.principaisAlteracoes(dataInicial, dataFinal);
 
+		// para não recarregar a página
+		return false;
 	});
 
-	
+
+	// define todos os perfis de filtros
+	Filtro.setPerfis(Object.keys(Filtro.getLocalStorage()));
+
+
 }

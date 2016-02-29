@@ -18,7 +18,7 @@ class Str:
 
     def similar(x, y):
         '''calcula Levensthein de X e Y em porcentagem em relação a X
-        devolve o ratio'''
+        devolve o ratio: um número entre 0 e 1 inclusive'''
 
 
 
@@ -26,6 +26,8 @@ class Str:
 
         # se um deles está vazio
         if x == '' or y == '':
+            # se os dois tão vazios, retorna 1
+            # se um tá vazio e o outro não, retorna 0
             return 1 if x == y else 0
 
 
@@ -34,11 +36,8 @@ class Str:
         # deixa que x seja a menor string
         if len(x) > len(y): x, y = y, x
         # y passa a ter o msmo tamanho de x
-        y = y[0:len(x)]
-
-
-
-
+        lenX = len(x)
+        y = y[0:lenX]
 
 
         # calcula o levenshtein

@@ -54,15 +54,28 @@ Pesquisador.prototype.getAlteracoes = function(iDataIni, iDataFin) {
 
 	// para debugar
 	var considerarSempreUltimaVersao = false;
+
+
 	if((iDataFin - iDataIni) == 1 || considerarSempreUltimaVersao) {
-		Pesquisador.camposComparativos.forEach(function (elem, index) {
-			// por enquanto, só analiza a diferença do segundo dia
-			var alteracoesData = self.json[elem][dataFin.toStringScriptLattes()];
-			if(alteracoesData) {
-				// se houve alteração
-				result[elem] = alteracoesData;
+		$.each(Pesquisador.camposComparativos, function (index, campo) {
+			if(!(campo in self.json)) {
+				// se nessa diferença de datas
+				// não houver self.json[campo]
+				// por exemplo: self.json[colaboradores]
+				// não ouve alteração nesse campo
+				return true;
 			}
+
+			// por enquanto, só analiza a diferença do segundo dia
+			var dataStr = dataFin.toStringScriptLattes();
+			// se houve diferença nesse dia
+			if(dataStr in self.json[campo]) {
+				var alteracoesData = self.json[campo][dataStr];
+				result[campo] = alteracoesData;
+			}
+
 		});
+
 		// retorna uma cópia
 		// porque quando eu for analisar mais de um dia
 		// eu faço alterações nesse dicionário
@@ -92,7 +105,7 @@ Pesquisador.prototype.getAlteracoes = function(iDataIni, iDataFin) {
 	// alteracoes = [(2,3)]
 	// result = [(0,3)]
 	// e pronto :D
-	for(i=iDataIni+1; i < iDataFin; i++) {
+	for(var i=iDataIni+1; i < iDataFin; i++) {
 		// pega as alterações da próxima data
 		var alteracoes = this.getAlteracoes(i, i+1);
 
@@ -308,4 +321,27 @@ Pesquisador.mergeAlteracoes = function (alteracoesAnterior, alteracoesPosterior,
 Pesquisador.chaves = function (dict1, dict2) {
 	var result = Object.keys(dict1).concat(Object.keys(dict2));
 	return result.unique();
+}
+
+
+
+/**
+ * Retorna os sinais no dict campo, se campo possuir:
+ * '+', '-' e '~' retorna ['+', '-']
+ * se possuir só o '+', retorna ['+']
+ * se for vazio, retorna []
+ */
+Pesquisador.sinaisEm = function (campo) {
+	if(campo == undefined) {
+		return [];
+	}
+
+	var result = ['+', '-'];
+	for(var i=0; i<result.length; i++) {
+		if(!(result[i] in campo)) {
+			result.splice(i, 1);
+			i--;
+		}
+	}
+	return result;
 }

@@ -1,5 +1,5 @@
 /**
- * Deixe que o chorme faça todo o trabalho
+ * Deixe que o chorme faÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§a todo o trabalho
  */
 
 
@@ -15,11 +15,11 @@
 
 .campoAlterado > div {
     float: left;
-    width: 50%;
 }
 
 .alteradoValor {
     margin-bottom: 20px;
+    width: 70%;
 }
 
 .removidos .alteradoValor {
@@ -125,7 +125,7 @@ header {
 .mostraElementoCompleto {
 position: absolute;}
 
-.alteradoValor > span:hover {
+.alteradoValor span:hover {
     font-weight: bold;
 }
 
@@ -165,4 +165,34 @@ position: absolute;}
 
 .carregandoValor {
     font-size: 34px;
+}
+
+.negrito {
+    font-weight: bold;
+}
+
+.filtroPrincipal {
+    margin-top: 20px;
+}
+
+.alteradoChave {
+    width: 30%;
+}
+
+.alteradoGrupo span {
+    width: 49.5%;
+    display: inline-block;
+}
+
+.alterados > span {
+    color: blue;
+}
+
+#perfilDeFiltros > * {
+    margin: 0px 40px;
+}
+
+#perfilDeFiltros {
+    background: #EEE;
+    line-height: 35px;
 }

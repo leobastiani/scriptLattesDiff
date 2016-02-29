@@ -46,18 +46,18 @@ class ScriptLattesDiff:
     def criarNovoSnapshot(self):
         '''Devo criar um novo Snapshot do scriptLattes
             Exemplo:
-                self.filesPath = {
-                    'D:/Facul/IC/SSC\\20150711\\get-ssc.config',
-                    'D:/Facul/IC/SSC\\20150728\\get-ssc.config',
-                    'D:/Facul/IC/SSC\\20150830\\get-ssc.config'
-                }
+                self.filesPath = [
+                    'D:/Facul/IC/SSC/20150711/get-ssc.config',
+                    'D:/Facul/IC/SSC/20150728/get-ssc.config',
+                    'D:/Facul/IC/SSC/20150830/get-ssc.config'
+                ]
                 Devo criar um novo arquivo de configuração na pasta:
-                    'D:/Facul/IC/SSC\\DATA_ATUAL\\get-ssc.config'
+                    'D:/Facul/IC/SSC/DATA_ATUAL/get-ssc.config'
                 E adicioná-lo a filesPath'''
 
         # é o último da lista
         # no nosso exemplo:
-        #   D:/Facul/IC/SSC\\20150830\\get-ssc.config
+        #   D:/Facul/IC/SSC/20150830/get-ssc.config
         maisRecente = list(self.filesPath)[-1]
 
         # agora eu vou pegar o pathPai que nesse caso seria:
@@ -75,7 +75,13 @@ class ScriptLattesDiff:
         # se maisRecente = D:/Facul/IC/SSC\\20150830\\get-ssc.config
         # name = get-ssc.config
         name = maisRecentePath.name
-        caminhoDest = pathPai / dataAtual
+
+        # se não foi digitado um caminho novo, devo usar esse caminho aqui
+        # ou seja, criarNovoSnapshot é True, então o caminho destino é o padrão
+        if Settings.criarNovoSnapshot is True:
+            caminhoDest = (pathPai / dataAtual).absolute()
+        else:
+            caminhoDest = Settings.criarNovoSnapshot
         # listDest no nosso exemplo deve ser:
         #   fileDest = D:/Facul/IC/SSC/DATA_ATUAL/get-ssc.config
         #   listDest = D:/Facul/IC/SSC/DATA_ATUAL/get-ssc.list
@@ -84,15 +90,15 @@ class ScriptLattesDiff:
         baseName = os.path.splitext(name)[0]
         listDest = caminhoDest / (baseName + '.list')
 
-        # copia de fato
-        # cria a pasta primeiro
-        if not os.path.exists(str(caminhoDest)):
-            os.mkdir(str(caminhoDest))
-        else:
+        if fileDest.exists() or listDest.exists():
             # o diretório já existe
             Print.erro('Já existe um novo snapshot do scriptLattes.')
             print('Por favor, rode o scriptLattes nesse novo snapshot e o scriptLattesDiff novamente sem a opção de criar um novo snapshot.')
             sys.exit(0)
+        # copia de fato
+        # cria a pasta primeiro
+        if not os.path.exists(str(caminhoDest)):
+            os.mkdir(str(caminhoDest))
 
         # copia o arquivo .config
         shutil.copy(str(maisRecentePath), str(fileDest))
@@ -130,7 +136,7 @@ class ScriptLattesDiff:
         section('Função analisar Jsons:')
 
 
-        print('Arquivos:')
+        Print.warning('Arquivos de configuração carregados:')
         for configFile in self.configFiles:
             print(configFile.filePath, '=> data:', configFile.data_processamento)
 
@@ -158,17 +164,22 @@ class ScriptLattesDiff:
 
 
 
-
         # fazendo a análise parcial
-        # primeiro, vamos começar com os valores do json mais antigos
-        for pesquisador in maisAntigo.json:
-            for campo in ConfigFile.manterDados['novosDados']:
-                pesquisadores[pesquisador][campo] = {}
-                if campo in maisAntigo.json[pesquisador]:
-                    pesquisadores[pesquisador][campo][maisAntigo.data_processamento] = maisAntigo.json[pesquisador][campo]
+        if Settings.incluirPrimeiroSnap:
+            # primeiro, vamos começar com os valores do json mais antigos
+            for pesquisador in maisAntigo.json:
+                for campo in ConfigFile.manterDados['novosDados']:
+                    pesquisadores[pesquisador][campo] = {}
+                    if campo in maisAntigo.json[pesquisador]:
+                        pesquisadores[pesquisador][campo][maisAntigo.data_processamento] = maisAntigo.json[pesquisador][campo]
 
-
-
+        else:
+            # aqui eu decidi que não quero manter o mais antigo
+            # não preciso mesmo manter ele
+            # mas devo criar pesquisadores[pesquisador][campo] = {}
+            for pesquisador in maisAntigo.json:
+                for campo in ConfigFile.manterDados['novosDados']:
+                    pesquisadores[pesquisador][campo] = {}
 
 
 
@@ -176,30 +187,51 @@ class ScriptLattesDiff:
         # vou usar um contador de índices
         # para calcular a porcentagem de quanto falta
         pesquisadoresCarregados = 0
+        # aqui está a parte lenta do código
+        # cada loop desse demanda tempo
+        # vou calcular quanto tempo
+        tempoDecorrido = TempoDecorrido()
+        qntConfigFiles = len(self.configFiles)
+        # se vou pesquisar menos pesquisadores do q a qntidade atual
+        # devo comparar o meno para atingir o 100%
+        lenPesquisadores = min(len(pesquisadores), Settings.maxPesquisadores)
         for pesquisador in pesquisadores:
+
+            if Settings.pesquisadoresList:
+                # se eu tenho uma lista específica para analisar
+                if pesquisador not in Settings.pesquisadoresList:
+                    # se o pesquisador atual não está nessa lista
+                    # eu pulo ele
+                    continue
+
+
+            if pesquisadoresCarregados >= Settings.maxPesquisadores:
+                Print.warning('Quantidade máxima de pesquisadores atingidos')
+                break
+
+
             configFile.printPesquisador(pesquisador)
-            Print.back(colorama.Fore.YELLOW + 'Carregando: '+Print.procentagem(pesquisadoresCarregados, len(pesquisadores))+'%' + colorama.Fore.RESET)
+            Print.back(colorama.Fore.YELLOW + 'Carregando: '+
+                Print.procentagem(pesquisadoresCarregados, lenPesquisadores)+'%' + colorama.Fore.RESET)
             pesquisadoresCarregados += 1
 
 
+            for campo in ConfigFile.manterDados['novosDados']:
 
 
-
-            # pula o primeiro configFile q já foi processado
-            i = 1
-            while i < len(self.configFiles):
-                # variaveis importantes
-                configFile = self.configFiles[i]
-                configFileAnterior = self.configFiles[i-1]
-
-
+                # pula o primeiro configFile q já foi processado
+                i = 1
+                while i < qntConfigFiles:
+                    # variaveis importantes
+                    # configFile sendo analisado nesse momento
+                    configFile = self.configFiles[i]
+                    configFileAnterior = self.configFiles[i-1]
 
 
-                for campo in ConfigFile.manterDados['novosDados']:
                     # pega os novos dados que apareceram desta configFile em relação a data anterior
                     # ou seja, a diferença do mais novo em relação ao mais antigo
                     try:
-                        acrescido, subtraido = List.differences(configFileAnterior.json[pesquisador][campo], configFile.json[pesquisador][campo])
+                        diferencas = List.differences(configFileAnterior.json[pesquisador][campo], configFile.json[pesquisador][campo])
                     except Exception as e:
                         section('Erro')
                         print('Em List.differences:')
@@ -209,28 +241,32 @@ class ScriptLattesDiff:
                         print('configFile:', configFile.data_processamento)
                         raise e
                         exit(0)
-                    # cria um dict para saber o que foi acrescido e o que não foi
-                    pesquisadores[pesquisador][campo][configFile.data_processamento] = {}
-                    # para n ter q ficar digitando esse campo gigantesco, só armazenei ele numa variável
-                    campoAtual = pesquisadores[pesquisador][campo][configFile.data_processamento]
-                    if acrescido:
-                        # se houver algo que foi acrescido
-                        campoAtual['+'] = acrescido
-                    if subtraido:
-                        # se houver alguma coisa que foi subtraida
-                        campoAtual['-'] = subtraido
-                    if not campoAtual:
-                        # se campo atual está vazio, removo para n ocupar espaço desnecessário
+                    
+                    # diferencas é:
+                    # {
+                    #   '+': ...,
+                    #   '-': ...,
+                    #   '~': ...
+                    # }
+                    # pesquisadores[pesquisador][campo][configFile.data_processamento] é:
+                    # pesquisadores[98...]['descricao'][19/19/19] que terá ['+', '-', '~']
+                    pesquisadores[pesquisador][campo][configFile.data_processamento] = diferencas
+                    if not diferencas:
+                        # se não houve diferenças para esta data
+                        # removo para n ocupar espaço desnecessário
                         del pesquisadores[pesquisador][campo][configFile.data_processamento]
 
+                    i += 1
 
 
+                # se depois de toda essa análise com as datas
+                # o campo não recebeu nenhum alteração, posso exclui-lo
+                if not pesquisadores[pesquisador][campo]:
+                    # aqui ele está vazio
+                    del pesquisadores[pesquisador][campo]
 
 
-
-                i += 1
-
-
+        # fim de analisar os pesquisadores
 
 
         # ditar o fim de imprimir a porcentagem
@@ -239,12 +275,14 @@ class ScriptLattesDiff:
         Print.back(colorama.Fore.GREEN+'Terminado!'+colorama.Fore.RESET)
         Print.endBack()
 
+        print(colorama.Fore.GREEN+'Tempo decorrido: '+colorama.Fore.RESET+tempoDecorrido.getFormatted()+'s');
+
 
         # reune as principais informações em result
         result = {
             'datasProcessamento': [x.data_processamento for x in self.configFiles], # lista com todas as datas de processamento
             'idLattes': pesquisadores,
-            'nomeDoGrupo': maisRecente.getParametro('global-nome_do_grupo')
+            'nomeDoGrupo': maisRecente.getParametro('global-nome_do_grupo'),
         }
         return result
 
@@ -290,7 +328,7 @@ class ScriptLattesDiff:
         def tryMakeDir(path):
             try:
                 # tenta criar a pasta de saída
-                os.mkdir(str(path))
+                os.makedirs(str(path))
             except:
                 pass
 
@@ -312,7 +350,7 @@ class ScriptLattesDiff:
         # salvando arquivo scriptLattesDiff.js
         # savalndo todos os ids
         scriptLattesDiff = {
-            'versao': {}, # versao do scriptLattesDiff que gerou os arquivos json
+            'versao': Settings.versao, # versao do scriptLattesDiff que gerou os arquivos json
             'allIdLattes': sorted(jsonAnalisado['idLattes'].keys(),
                 key=lambda x: jsonAnalisado['idLattes'][x]['identificacao']['nome_inicial']),
             'datasProcessamento': jsonAnalisado['datasProcessamento'],
@@ -391,17 +429,6 @@ class ScriptLattesDiff:
 
 
 
-    def onFisnish():
-        '''Função para ser chamada assim que tudo acabar'''
-        Debug.saveFiles()
-
-
-
-
-
-
-
-
 import shutil
 import os
 import glob
@@ -412,5 +439,7 @@ from py.List import List
 from py.Debug import *
 from py.Json import Json
 from py.Print import Print
+from py.TempoDecorrido import TempoDecorrido
 from datetime import datetime
+import time
 import colorama

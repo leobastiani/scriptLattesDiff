@@ -44,3 +44,13 @@ Array.prototype.end = function() {
 Array.prototype.unique = function () {
 	return $.unique(this);
 }
+
+// se o elemento não for um array, transforma-o em array
+// jQuery são quase um array também
+Array.force = function (elem) {
+	if(elem instanceof Array || elem instanceof jQuery) {
+		return elem;
+	}
+
+	return [elem];
+}

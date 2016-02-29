@@ -89,6 +89,13 @@ class Print:
         sys.stdout.write(colorama.Fore.RESET)
 
 
+    def warning(*args):
+        '''Mesmo que print, só que em amarelo'''
+        sys.stdout.write(colorama.Fore.YELLOW)
+        print(*args)
+        sys.stdout.write(colorama.Fore.RESET)
+
+
 
 if __name__ == '__main__':
     Print.test()

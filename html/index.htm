@@ -21,6 +21,7 @@
 	<script src="../js/Number.js"></script>
 	<script src="../js/Date.js"></script>
 	<script src="../js/Dict.js"></script>
+	<script src="../js/Filtro.js"></script>
 	<script src="../js/Carregando.js"></script>
 	
 
@@ -43,17 +44,10 @@
 	<header>
 		<h1 id="nomeDoGrupo">nomeDoGrupo</h1>
 
-		<!-- Lista de páginas possíveis para se navegar -->
+		<!-- Uma mensagem qualquer
+		Preferi colocar o tempo que o scriptLattesDiff está rodando -->
 		<nav>
-			<!-- Todos os links vão aqui -->        [
-			<a href="#">Membros</a>                 |
-			<a href="#">Produção bibliográfica</a>  |
-			<a href="#">Produção técnica</a>        |
-			<a href="#">Produção artística</a>      |
-			<a href="#">Orientações</a>             |
-			<a href="#">Projetos</a>                |
-			<a href="#">Prêmios</a>                 |
-			<a href="#">Eventos</a>                 ]
+			scriptLattesDiff está comparando de <span class="negrito">01/01/1990</span> até <span class="negrito">01/01/2000</span>.
 		</nav>
 
 	</header>
@@ -70,18 +64,25 @@
 
 
 
-		<div id="escolhaDatas" class="clearfix">
+		<form id="escolhaDatas" class="clearfix">
 			<h2>Datas comparativas:</h2>
 
 
 			<div>
 				<label>Data inicial:</label>
-				<input type="date">
+				<input type="date"><br/>
+				<select id="datasComboIni">
+					<option value=""></option>
+				</select>
+
 			</div>
 
 			<div>
 				<label>Data final:</label>
-				<input type="date">
+				<input type="date"><br/>
+				<select id="datasComboFim">
+					<option value=""></option>
+				</select>
 			</div>
 
 
@@ -89,7 +90,7 @@
 				<input type="submit" value="Pesquisar">
 			</div>
 
-		</div>
+		</form>
 
 
 
@@ -100,9 +101,31 @@
 
 
 			<h2>Filtros:</h2>
-			<div class="filtro">
-				<input type="checkbox" value="exemplo" checked="checked" />
-				<span>exemplo</span>
+	
+			<div id="perfilDeFiltros">
+				<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
+				<span>Perfil de filtros:</span>
+
+				<select id="filtroSelect">
+					<option value="Teste">Teste</option>
+				</select>
+
+				<input type="button" id="carregarPerfilFiltro" value="Carregar">
+				<input type="button" id="salvarPerfilFiltro"   value="Salvar">
+				<input type="button" id="apagarPerfilFiltro"   value="Apagar"> 
+			</div>
+
+			<div id="filtrosComuns" class="clearfix">
+				<div class="filtro">
+					<input type="checkbox" value="exemplo" checked="checked"/>
+					<span>exemplo</span>
+				</div>
+			</div>
+
+
+			<div class="filtroPrincipal filtro" style="display: none;">
+				<input type="checkbox" value="exemplo" checked="checked"/>
+				<span>Somente acrescidos</span>
 			</div>
 
 
@@ -133,7 +156,10 @@
 					e suas alterações -->
 					<div class="campoAlterado clearfix">
 						<div class="alteradoChave">exemplo</div>
-						<div class="alteradoValor">Valor 1 <br> Valor 2</div>
+						<div class="alteradoValor">
+							<span>Valor 1</span>
+							<span>Valor 2</span>
+						</div>
 					</div>
 
 				</div>
@@ -148,11 +174,43 @@
 					e suas alterações -->
 					<div class="campoAlterado clearfix">
 						<div class="alteradoChave">exemplo</div>
-						<div class="alteradoValor">Valor 1 <br> Valor 2</div>
+						<div class="alteradoValor">
+							<span>Valor 1</span>
+							<span>Valor 2</span>
+						</div>
 					</div>
 
+				</div>
+
+
+				<div class="alterados tabelaAlterados">
+					<!-- Aqui vão os elementos de '~' -->
+					<span>Alterados desde então</span>
+
+
+					<!-- A tabela dos alterados tem
+					uma chave com o que foi alterado
+					e suas alterações -->
+					<div class="campoAlterado clearfix">
+						<div class="alteradoChave">exemplo</div>
+						<div class="alteradoValor">
+							<div class="alteradoGrupo">
+								<!-- Aqui vão os dois valores alterados
+								que tem um Por no meio -->
+								<span>Valor 1</span>
+								<span>Valor 2</span>
+							</div>
+							<div class="alteradoGrupo">
+								<!-- Aqui vão os dois valores alterados
+								que tem um Por no meio -->
+								<span>Valor 1</span>
+								<span>Valor 2</span>
+							</div>
+						</div>
+					</div>
 
 				</div>
+
 
 
 			</div>
@@ -167,7 +225,8 @@
 
 
 	<footer id="datasProcessamento">
-		Datas de processamento do scriptLattes:
+		Datas de processamento do scriptLattes<br/>
+		Em <b>negrito</b>, os que estão sendo comparados.
 		<ul>
 		<!-- Lista com todos as datas de processamento do scriptLattes -->
 		</ul>

@@ -8,11 +8,16 @@ class ConfigFile:
 
 
 
-    filePath = None # local do arquivo de configuracao, instancia de Path
-    parametros = None # parametros carregados do arquivo de configuracao
-    xml = None # o arquivo xml carregado de configFile
-    json = None # formatacao em json do xml
-    data_processamento = None # data de processamento do grupo
+    # local do arquivo de configuracao, instancia de Path
+    filePath = None
+    # parametros carregados do arquivo de configuracao
+    parametros = None
+    # o arquivo xml carregado de configFile
+    xml = None
+    # formatacao em json do xml
+    json = None
+    # data de processamento do grupo
+    data_processamento = None
 
 
 
@@ -43,7 +48,7 @@ class ConfigFile:
     def __init__(self, filePath):
         '''filePath é o path do arquivo de configuração'''
 
-        self.filePath = Path(os.getcwd(), filePath)
+        self.filePath = Path(os.getcwd(), filePath).absolute()
         section('Novo arquivo de configuração carregado:', self.filePath)
         with open(filePath, 'r') as fp:
             self.carregarParametros(fp)
@@ -100,12 +105,6 @@ class ConfigFile:
 
 
 
-
-
-
-
-
-
     def getOutputFolder(self):
         '''Retorna o Path da pasta de saída do arquivo de configuração'''
         # começa contando de sys.argv[0] que é o path do script .py
@@ -118,7 +117,7 @@ class ConfigFile:
 
 
     def getXmlFilePath(self):
-        return self.getOutputFolder() / (self.getParametro('global-prefixo')+'-database.xml')
+        return (self.getOutputFolder() / (self.getParametro('global-prefixo')+'-database.xml')).absolute()
 
 
 
@@ -128,7 +127,7 @@ class ConfigFile:
 
     def loadXml(self):
         xmlFilePath = self.getXmlFilePath()
-        print('Carregando arquivo xml: ', self.getXmlFilePath())
+        print(colorama.Fore.YELLOW+'Carregando arquivo xml:'+colorama.Fore.RESET, self.getXmlFilePath())
         if not os.path.exists(str(xmlFilePath)):
             print('O arquivo XML "%s" não existe.' % str(xmlFilePath))
             print('Por favor, rode o scriptLattes para esse arquivo de configuração: %s' % str(self.filePath))
@@ -160,13 +159,15 @@ class ConfigFile:
 
 
 
-
-
-
-
     def loadJsonFromXml(self):
         root = self.xml.getroot()
         self.json = {}
+
+        def childText(child):
+            '''Retorna a string existente dentro de um child
+            exemplo: <child>Oi, texto! <i>ComoVai</i>, <b>Por que deixaram isso?</b></child>
+            retorna: Oi, texto! ComoVai, Por que deixaram isso?'''
+            return "".join(child.itertext())
 
         def childNomeComum(xml):
             children = xml.getchildren()
@@ -176,21 +177,29 @@ class ConfigFile:
                 return children[0].tag
             return ''
 
-        def _xmlToJson(xml):
+        def _xmlToJson(xml, profundidade=1):
             result = {}
-            # se for filho, retorna seu valor
             if not xml.getchildren():
-                return xml.text if xml.text else ''
+                # se for o último filho, retorna seu valor
+                return childText(xml)
+
+            # eu tenho filhos!!
+            if profundidade >= 4:
+                # mas provavelmente, meu filho é um <i> ou <b>
+                return childText(xml)
+
+
             # se não for filho, retorna um dicionário
             for child in xml:
                 if result.get(child.tag):
                     # se já existe esse elemento dentro de result
                     # soma-se o resultado ao vetor
-                    result[child.tag] += [_xmlToJson(child)]
+                    result[child.tag] += [_xmlToJson(child, profundidade+1)]
                 else:
                     # se não, cria um novo vetor
-                    result[child.tag] = [_xmlToJson(child)]
+                    result[child.tag] = [_xmlToJson(child, profundidade+1)]
             return result
+
 
         def compactJson(json):
             '''Os valores de json estão sempre em listas
@@ -227,7 +236,11 @@ class ConfigFile:
 
         for pesquisador in root:
             i = pesquisador.attrib['id'] # deve ser tratado como string
+
+            Print.back('Analisando: %s Data: %s' % (i, self.data_processamento))
+
             # para evitar o caso de 0001
+            # se tornar 1, porque é inteiro
             self.json[i] = _xmlToJson(pesquisador)
             compactJson(self.json[i])
 
@@ -235,6 +248,9 @@ class ConfigFile:
             # porém, é muito rápida a leitura
             # nem vale a pena imprimir
             # self.printPesquisador(i)
+        
+        Print.back('Completado')
+        Print.endBack()
         return self.json
 
 
@@ -342,7 +358,7 @@ class ConfigFile:
 
         Print.success('Novas configurações salvas no arquivo!')
         print('Por favor, execute o scriptLattes com a linha de comando:')
-        print('scriptLattes.py '+novoArquivoConfig)
+        print('scriptLattes.py '+str(novoArquivoConfig))
         sys.exit(0)
 
 
@@ -355,6 +371,5 @@ import os
 import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 from py.misc import *
-from datetime import datetime
 import colorama
 from py.Print import Print

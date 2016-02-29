@@ -68,7 +68,6 @@ function documentReady() {
 
 
 $(document).ready(function() {
-
 	// carregará todos os arquivos jsons e em seguida chamará a função documentReady
 	/**
 	 * função que é chamada toda vez que um arquivo for carregado em loadJs
@@ -87,7 +86,7 @@ $(document).ready(function() {
 			 * converte todos os idLattes para o objeto idLattes
 			 */
 			var i;
-			for(i in scriptLattesDiff.idLattes) {
+			for(var i in scriptLattesDiff.idLattes) {
 				scriptLattesDiff.idLattes[i] = new Pesquisador(i, scriptLattesDiff.idLattes[i]);
 			}
 
@@ -120,7 +119,9 @@ $(document).ready(function() {
 		 * Iniciar a tela de carregando
 		 */
 		var lenPesquisadores = scriptLattesDiff.allIdLattes.length;
-		Carregando.start(lenPesquisadores);
+		// mais um porque vou dar um step dentro da função
+		// scriptLattesDiff.init()
+		Carregando.start(lenPesquisadores + 1);
 
 		// cria o dicionário idLattes em scriptLattesDiff
 		// ele possuirá todos os pesquisadores do tipo
@@ -143,6 +144,6 @@ $(document).ready(function() {
 	loadJs('../json/scriptLattesDiff.js', onLoadAllIdLattes);
 
 	// primeiros passos para a tela de carregando
-	Carregando.init('Baixando Lattes');
+	Carregando.init('Carregando...');
 
 });

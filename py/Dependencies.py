@@ -4,7 +4,8 @@
 
 
 import os
-from py.misc import *
+import sys
+
 
 try:
     # todas as dependencias vão aqui
@@ -17,9 +18,30 @@ try:
 
 
 
+except:
+    def getPyCmd():
+        '''retorna py -3 se for windows e python3 se for linux'''
+        if os.name == 'nt':
+            return 'py -3'
+        elif os.name == 'posix':
+            return 'python3'
+        else:
+            raise OSError("Não foi possível obter o comando de Python para esse sistema")
 
-except ImportError as e:
+    def respostaYN(errorMsg='Por favor, digite y ou n.'):
+        '''Exige que você responda y ou n pela entrada do teclado'''
+        while True:
+            try:
+                aws = input().lower()
+            except:
+                exit(0)
 
+            if aws == 'y':
+                return 'y'
+            elif aws == 'n':
+                return 'n'
+            else:
+                print(errorMsg)
 
 
     print('As dependecias para o scriptLattesDiff não foram encontradas.')
@@ -27,13 +49,13 @@ except ImportError as e:
 
 
     print('\nComando sugerido:')
-    pyCmd = Misc.getPyCmd()
+    pyCmd = getPyCmd()
     command = pyCmd+' -m pip install -r requirements.txt'
     print('\t'+command)
 
 
     print('\nGostaria de instalá-las? (y/n)')
-    aws = Misc.respostaYN()
+    aws = respostaYN()
     if aws == 'n':
         sys.exit(0)
     print()
