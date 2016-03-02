@@ -95,6 +95,11 @@ class Print:
         print(*args)
         sys.stdout.write(colorama.Fore.RESET)
 
+    def cyan(*args):
+        '''Mesmo que print, só que em cyan'''
+        sys.stdout.write(colorama.Fore.CYAN)
+        print(*args)
+        sys.stdout.write(colorama.Fore.RESET)
 
 
 if __name__ == '__main__':

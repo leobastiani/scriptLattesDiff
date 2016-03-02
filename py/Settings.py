@@ -52,6 +52,49 @@ class Settings:
 
 
     @staticmethod
+    def usage():
+        '''imprime o comando help ou os exemplos de como usar'''
+        def printCommand(*args):
+            Print.cyan(*args)
+
+        print('Insira os arquivos .config nos parâmetros sem nenhum caracter especial.')
+        print('  Por exemplo: \n  ./Data1/*.config ./Data2./*.config\n')
+        print('Utilize wildcards para economizar esforços.')
+        print('  Por exemplo:')
+        print('  Essa linha de comando seria capaz de varrer essa estrutura com facilidade:')
+        print('  ./')
+        print('    Datas/')
+        print('      Data1/')
+        print('        grupo1.config\n')
+        print('      Data2/')
+        print('        grupo1.config\n')
+        print('  Comando: ./Datas/**/*.config\n')
+        print('Os comandos começam por "--", "-" ou "/", por exemplo:')
+        print('  --help, -help ou /help\n')
+        print('Os seguintes comandos estão disponíveis para complementar as funcionalidades do scriptLattesDiff:')
+        Print.cyan('-output-folder, -o:')
+        print('  Define o novo caminho para a saída dos arquivos gerados.')
+        print('  Por exemplo: -o "PastaDeSaida"\n')
+        Print.cyan('-nao-analisar-similares, -ns:')
+        print('  O scriptLattesDiff não analisará frases semelhantes.')
+        print('  Com esse comando o scriptLattesDiff se torna muito mais rápido.\n')
+        Print.cyan('-novo-snap, -novo-arquivo, -na:')
+        print('  Cria um novo arquivo .config para que o scriptLattes possa interpretá-lo.\n')
+        Print.cyan('-porcentagem-similar, ps:')
+        print('  Define a nova porcentagem de critério para frases parecidas, sendo que 0 significa que apenas frases idênticas são consideradas semelhantes e 100 significa que todas as frases serão consideradas semelhantes.')
+        print('  Por exemplo: -ps 88\n')
+        Print.cyan('-incluir-primeiro-snap, -ip:')
+        print('  Permite ao scriptLattesDiff inserir os dados do primeiro arquivo XML nos arquivos finais.\n')
+        Print.cyan('-pesquisadores, -p:')
+        print('  Limita o número de pesquisadores que o scriptLattesDiff irá pesquisar.')
+        print('  Insira logo em sequência o número correspondente ao currículo desses pesquisadores.')
+        print('  Por exemplo: -p "123, 456, 789"\n')
+        Print.cyan('-max-pesquisadores, -max:')
+        print('  Defina o número máximo de pesquisadores que serão comparados.')
+        print('  Por exemplo: -max 5\n')
+        print('Site do projeto: github.com/leobastiani/scriptLattesDiff')
+
+
     def setSettingsByArgs(args):
         '''define as configurações com base nos argumentos
         aqueles parametros passados na linha de comando'''
@@ -152,8 +195,8 @@ class Settings:
             arg = novoArg(args).lower()
 
 
-            if isThisCommand(arg, 'help', 'h'):
-                print('Comando help:')
+            if isThisCommand(arg, 'help', 'h', '?'):
+                Settings.usage()
                 sys.exit(0)
 
 
@@ -195,6 +238,7 @@ class Settings:
 
 
             elif isThisCommand(arg, 'porcentagem-similar', 'ps'):
+                # porcentagem aqui é um número de 0 a 100
                 novaPorcentagem = deveSer(novoArg(args), float)
                 Print.warning('Nova porcentagem para similares: %g%%' % novaPorcentagem)
                 Settings.porcentagemRatioSimilar = novaPorcentagem / 100
