@@ -288,6 +288,17 @@ class ConfigFile:
                 Devo ler o arquivo e alterar o que for necessário para
                 Rodar o scriptLattes novamente com esse arquivo'''
 
+        def comandoNovoArquivo(pathNovoArquivo):
+            '''obtenha um comando para ser executado pelo terminal
+            para o novo arquivo. Por exemplo:
+            "scriptLattes d:/facul/ic/snaps/icmc/20160302/ICMC.config"'''
+            if Misc.isWindows():
+                return 'scriptLattes '+str(pathNovoArquivo)
+            # não estou no windows
+            return 'python3 scriptLattes.py '+str(pathNovoArquivo)
+
+
+
         # todo comando é do tipo:
         #   (palavra) = (palavra) # (comentários)
         reComando = re.compile(r'([^=]+)\=([^#]+)?(?:#(.*))?')
@@ -358,7 +369,13 @@ class ConfigFile:
 
         Print.success('Novas configurações salvas no arquivo!')
         print('Por favor, execute o scriptLattes com a linha de comando:')
-        print('scriptLattes.py '+str(novoArquivoConfig))
+        comando = comandoNovoArquivo(novoArquivoConfig)
+        print(comando)
+        print('Deseja executá-lo? (y/n)')
+        resp = Misc.respostaYN()
+        if resp:
+            os.system(comando)
+
         sys.exit(0)
 
 

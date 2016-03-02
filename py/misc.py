@@ -38,17 +38,20 @@ class Misc:
 
 
     @staticmethod
+
+    def isWindows():
+        return os.name == 'nt'
+
+
     def getPyCmd():
         '''retorna py -3 se for windows e python3 se for linux'''
         if Misc.pyCmd:
             return Misc.pyCmd # já sabe ql o valor para retornar
 
-        if os.name == 'nt':
+        if Misc.isWindows():
             Misc.pyCmd = 'py -3'
-        elif os.name == 'posix':
-            Misc.pyCmd = 'python3'
         else:
-            raise OSError("Não foi possível obter o comando de Python para esse sistema")
+            Misc.pyCmd = 'python3'
 
         return Misc.pyCmd
 
@@ -58,14 +61,14 @@ class Misc:
         '''Exige que você responda y ou n pela entrada do teclado'''
         while True:
             try:
-                aws = input()
+                aws = input().lower()
             except:
                 exit(0)
 
             if aws == 'y':
-                return 'y'
+                return True
             elif aws == 'n':
-                return 'n'
+                return False
             else:
                 print(errorMsg)
 

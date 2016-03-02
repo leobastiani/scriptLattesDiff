@@ -169,7 +169,7 @@ class Settings:
 
 
 
-            elif isThisCommand(arg, 'novo-snap', 'novo-arquivo'):
+            elif isThisCommand(arg, 'novo-snap', 'novo-arquivo', 'na'):
                 Print.warning('Novo snapshot a caminho!')
                 # eu posso digitar na linha de comando este exemplo:
                 # --novo-snap "D:\Aqui\"
