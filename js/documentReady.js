@@ -102,8 +102,29 @@ function documentReady() {
 	});
 
 
+	////////////////////////////////
+	// adicionando filtros Amplos //
+	////////////////////////////////
+	// Filtros amplos são do time nomeFiltrosAmplo
+	var filtroAmplo = $('#filtrosAmplos .filtro');
+	var nomeFiltrosAmplo = {
+		'+': 'Exibir acrescidos',
+		'-': 'Exibir removidos',
+		'~': 'Exibir alterados',
+		//'>': 'Somente movidos',
+	};
+	var jFiltroAmplo = $('#filtrosAmplos .filtro').cloneAndRemove();
+	// adicionando os filtros amplos, cada um para cada sinal
+	$.each(nomeFiltrosAmplo, function(sinal, nomeFiltro) {
+		var newFiltroAmplo = jFiltroAmplo.clone();
+		newFiltroAmplo.find('span').text(nomeFiltro);
+		newFiltroAmplo.find('input').attr('data-sinal', sinal);
+		newFiltroAmplo.appendTo('#filtrosAmplos');
+	});
+
+	// gostei de começar desmarcando o filtro colaboradores logo de início
+	Filtro.uncheck('colaboradores');
+
 	// define todos os perfis de filtros
 	Filtro.setPerfis(Object.keys(Filtro.getLocalStorage()));
-
-
 }

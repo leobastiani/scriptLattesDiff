@@ -1,6 +1,7 @@
 #!python3
 # coding=utf-8
 
+
 import os
 import sys
 import re
@@ -9,7 +10,8 @@ import colorama
 
 
 
-def section(*args):
+
+def section(*args, beg='\n'):
     '''Cria um texto chamativo que divide seções no console'''
 
     tamMaiorStr = 0
@@ -17,8 +19,8 @@ def section(*args):
         tamMaiorStr = max(tamMaiorStr, len(str(arg)))
 
     strIgual = '=' * tamMaiorStr
-
-    print(colorama.Fore.CYAN+'\n/* '+strIgual+'\n   ', end='')
+    print(beg, end='')
+    print(colorama.Fore.CYAN+'/* '+strIgual+'\n   ', end='')
     print('\n   '.join(str(x) for x in args))
     print('   '+strIgual+' */'+colorama.Fore.RESET)
 
@@ -59,6 +61,10 @@ class Misc:
 
     def respostaYN(errorMsg='Por favor, digite y ou n.'):
         '''Exige que você responda y ou n pela entrada do teclado'''
+        if Settings.suprimirYN:
+            # devo suprimir, ou seja, retornar yes direto
+            return True
+
         while True:
             try:
                 aws = input().lower()
@@ -77,3 +83,9 @@ class Misc:
         '''pega uma string x como "asd, 123, dsa" e retorna
         ['asd', '123', 'dsa']'''
         return re.findall(r'(\w+)', x)
+
+
+
+
+
+from py.Settings import Settings

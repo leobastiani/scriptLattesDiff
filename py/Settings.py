@@ -46,6 +46,10 @@ class Settings:
     # deve ser uma lista assim [12334, 144623, 16354123, ...]
     pesquisadoresList = None
 
+    # este argumento não faz necessida da pergunta de Y/N, supondo que a pessoa
+    # quis deixar como Y
+    suprimirYN = False
+
     # Versão do scriptLattes que gerou aqueles arquivos json
     # deve ser string
     versao = '1'
@@ -80,8 +84,8 @@ class Settings:
         print('  Com esse comando o scriptLattesDiff se torna muito mais rápido.\n')
         Print.cyan('-novo-snap, -novo-arquivo, -na:')
         print('  Cria um novo arquivo .config para que o scriptLattes possa interpretá-lo.\n')
-        Print.cyan('-porcentagem-similar, ps:')
-        print('  Define a nova porcentagem de critério para frases parecidas, sendo que 0 significa que apenas frases idênticas são consideradas semelhantes e 100 significa que todas as frases serão consideradas semelhantes.')
+        Print.cyan('-porcentagem-similar, -ps:')
+        print('  Define a nova porcentagem de critério para frases parecidas, sendo que 0 significa que todas as frases serão consideradas semelhantes e 100 significa que apenas frases idênticas são consideradas semelhantes.')
         print('  Por exemplo: -ps 88\n')
         Print.cyan('-incluir-primeiro-snap, -ip:')
         print('  Permite ao scriptLattesDiff inserir os dados do primeiro arquivo XML nos arquivos finais.\n')
@@ -92,7 +96,7 @@ class Settings:
         Print.cyan('-max-pesquisadores, -max:')
         print('  Defina o número máximo de pesquisadores que serão comparados.')
         print('  Por exemplo: -max 5\n')
-        print('Site do projeto: github.com/leobastiani/scriptLattesDiff')
+        print('Site do projeto: http://github.com/leobastiani/scriptLattesDiff')
 
 
     def setSettingsByArgs(args):
@@ -262,6 +266,10 @@ class Settings:
                 pesquisadoresList = Misc.strToList(pesquisadoresStr)
                 Settings.pesquisadoresList = pesquisadoresList
                 Print.warning('Analisando os seguintes pesquisadores: "'+', '.join(pesquisadoresList)+'"')
+
+
+            elif isThisCommand(arg, 'yes', 'y'):
+                Settings.suprimirYN = True
 
 
             # insira mais comandos por parametro acima

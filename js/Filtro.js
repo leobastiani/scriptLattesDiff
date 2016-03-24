@@ -39,6 +39,27 @@ Filtro.onchange = function(e) {
 
 
 /**
+ * Retorna o sinal do tipo +, -, ~, >
+ * com base num elemento .tabelaAlterados
+ */
+Filtro.getSinalTabelaAlterados = function (elem) {
+	var tabelaClasse = {
+		'+': '.acrescidos',
+		'-': '.removidos',
+	}
+	var result = '';
+	$.each(tabelaClasse, function(sinal, classe) {
+		if(elem.is(classe)) {
+			result = sinal;
+			return false;
+		}
+	});
+	return result;
+}
+
+
+
+/**
  * Sempre que uma alteração nos filtros é feita, essa função deve ser chamada
  * para que as devidas divs devam ser mostradas
  */
@@ -63,14 +84,62 @@ Filtro.update = function () {
 
 
 	// escode aquelas janelas Removidos desde então e a do acrescido
-	$('.tabelaAlterados, .membro').each(function(index, elem) {
-		var possuiElementosVisiveis = $(elem).find('.campoAlterado').visible().length != 0;
-		if(possuiElementosVisiveis) {
+	var esconderPais = function(index, elem) {
+		var possuiCamposVisiveis = $(elem).find('.campoAlterado').visible().length != 0;
+		// variavel que importa para saber se vou esconder ou mostrar
+		var possuiElementosVisiveis = null;
+
+		// fico sabendo se estou tratando um .membro(mais amplo) ou .tabelaAlterados
+		var isMembro = $(elem).is('.membro');
+		if(isMembro) {
+			// esstou num membro, tmb devo conferir se existem tabelaAlterados visiveis
+			var possuiTabelaVisiveis = $(elem).find('.tabelaAlterados').visible().length != 0;
+
+			// se não possuo tabelas visiveis, não tenho elementos visiveis
+			if(!possuiTabelaVisiveis) {
+				possuiElementosVisiveis = false;
+			} else {
+				// se tenho tabela visiveis, posso ter ou n elementos visiveis
+				possuiElementosVisiveis = possuiCamposVisiveis;
+			}
+		}
+
+		// caso se eu for uma tabelaAlterados
+		else {
+			// fica fácil de saber se tenho elementos visiveis ou não
+			possuiElementosVisiveis = possuiCamposVisiveis;
+		}
+
+		// se o filtro amplo for true, devo esconder akela .tabelaAlterados
+		var filtroAmploQrMostrar = true;
+
+		// se estou na tabela alterados
+		if(!isMembro) {
+			// devo pegar o sinal do tipo +, -, ...
+			var sinal = Filtro.getSinalTabelaAlterados($(elem));
+			var checkBoxAmplo = $('#filtrosAmplos input[data-sinal="'+sinal+'"]');
+			if(!checkBoxAmplo.is(':checked')) {
+				// não está marcado, devo esconder
+				// isso força ele a esconder
+				filtroAmploQrMostrar = false;
+			}
+		}
+
+		// devoMostrar se simultaneamente
+		// Ele possui elementos visiveis
+		// E se eu quero mostra-lo
+		var devoMostrar = possuiElementosVisiveis && filtroAmploQrMostrar;
+		if(devoMostrar) {
 			$(elem).show();
 		} else {
 			$(elem).hide();
 		}
-	});
+	};
+
+	// primeiro para as tabelas
+	$('.tabelaAlterados').each(esconderPais);
+	// depois para o membro
+	$('.membro').each(esconderPais);
 
 	// adicionando listras cinzas
 	// remove de todos
@@ -275,6 +344,7 @@ Filtro._carregar = function (filtrosParaMarcar) {
 
 /**
  * carrega um filtro pelo nome
+ * que é uma string em localSotrage
  */
 Filtro.carregar = function (nomePerfil) {
 	var filtrosParaMarcar = Filtro.getFiltrosByPerfil(nomePerfil);

@@ -300,12 +300,6 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
 		// estou recarregando a página
 		Filtro._carregar(Filtro.getElem(filtrosMarcados));
 	}
-	else {
-		// é a primeira vez que estou carregando
-		
-		// esconde o campo colaboradores, ele está se comportando de uma forma estranha
-		Filtro.uncheck('colaboradores');
-	}
 
 
 }
@@ -319,7 +313,7 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
 
 
 // configurando o botao de filtro
-$('#filtrosComuns').on('change', '.filtro > input', Filtro.onchange);
+$('#filtros').on('change', '.filtro > input', Filtro.onchange);
 
 
 

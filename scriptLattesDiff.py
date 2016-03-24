@@ -73,12 +73,12 @@ if __name__ == '__main__':
     # inicializa o colorama
     colorama.init()
 
-    section('Apresentação do scriptLattesDiff')
+    section('ScriptLattesDiff', beg='')
 
 
     # analisando os parâmetros
     if len(sys.argv) < 2:
-        print('Messagem de apenas um argumento')
+        Settings.usage()
         sys.exit(0)
 
 
