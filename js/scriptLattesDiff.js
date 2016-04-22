@@ -24,6 +24,9 @@ scriptLattesDiff.init = function () {
 
 	// começa apagando os elementos e copiando na memória
 	$('.campoAlterado .alteradoValor').html('');
+	// o campoAlterado da tabela de alterados é diferente, olha ele ai:
+	scriptLattesDiff.$.campoAlteradoAlterados = $('.alterados').find('.campoAlterado').cloneAndRemove();
+	// esse é para o caso genérico, de .acrecidos e .removidos
 	scriptLattesDiff.$.campoAlterado = $('.campoAlterado').cloneAndRemove();
 	// jquery membro
 	scriptLattesDiff.$.membro = $('.membro').cloneAndRemove();
@@ -127,9 +130,18 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 			Pesquisador.sinaisEm(alteracoes[campo]).forEach(function (sinal) {
 
 				// sinal é + ou -
-				var campoAlteradoQuery = sinal == '+' ? '.acrescidos' : '.removidos';
+				// exemplo de campoAlteradoQuery = '.acrescidos'
+				var campoAlteradoQuery = scriptLattesDiff.paginas.getClassBySinal(sinal);
 				// clona o objeto
-				var $campoAlterado = scriptLattesDiff.$.campoAlterado.clone();
+				var $campoAlterado;
+				if(sinal == '~') {
+					// o campo de alterados é diferente, por isso, vamos trabalhar com ele a parte
+					$campoAlterado = scriptLattesDiff.$.campoAlteradoAlterados.clone();
+				}
+				else {
+					// campos comuns
+					$campoAlterado = scriptLattesDiff.$.campoAlterado.clone();
+				}
 				$campoAlterado.appendTo($membro.find(campoAlteradoQuery));
 
 
@@ -137,17 +149,52 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 				 * atualiza os campos
 				 */
 				$campoAlterado.find('.alteradoChave').text(campo)
-				// preenche o campo data-campo, será usado para o filtro identificar
-				.attr('data-campo', campo);
+					// preenche o campo data-campo, será usado para o filtro identificar
+					.attr('data-campo', campo);
 
 
-				try{
-					alteracoes[campo][sinal].forEach(function (dict, index) {
-						$('<span>').text(scriptLattesDiff.resumirDict(dict)).appendTo($campoAlterado.find('.alteradoValor'))
-						// neste campo, para conseguir adicionar o elemento completo depois
-						// devo salva-lo em algum lugar
-						.data('alteracoes', dict);
-					});
+				try {
+
+					// caso em que uso campos de uma informação
+					var camposUmaInfo = ['+', '-'];
+					if($.inArray(sinal, camposUmaInfo) != -1) {
+
+						alteracoes[campo][sinal].forEach(function (dict, index) {
+
+							$('<span>').text(scriptLattesDiff.resumirDict(dict)).appendTo($campoAlterado.find('.alteradoValor'))
+								// neste campo, para conseguir adicionar o elemento completo depois
+								// devo salva-lo em algum lugar
+								.data('alteracoes', dict);
+
+						});
+
+					}
+
+					else {
+						// campos com duas informações, como é o caso de
+						// ~
+						alteracoes[campo][sinal].forEach(function (elementos, index) {
+							// elementos é um array de 3 posições
+							// é assim:
+							// elementos = [elemComoEra, elemComoFicou, campoUtilizadoParaPercepeção]
+							// sendo como cada elem é um dicionário como feito linhas a cima
+							
+							// primeiro cria-se um grupo
+							var $alteradoGrupo = $('<div>').addClass('alteradoGrupo');
+
+							// vamos inserir neles
+							for(var i=0; i<2; i++) {
+								$('<span>').text(scriptLattesDiff.resumirDict(elementos[i])).appendTo($alteradoGrupo)
+									// informações integrais desse elemento
+									.data('alteracoes', elementos[i]);
+							}
+
+							// vamos adicioná-lo ao campoAlterado
+							$alteradoGrupo.appendTo($campoAlterado.find('.alteradoValor'));
+
+						});
+					}
+
 				} catch(e) {
 					// caso ocorra um erro que não é esperado nas funções
 					// de getAlteracao
@@ -167,7 +214,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 					console.log('alteracoes:', alteracoes);
 					console.log('campo:', campo);
 					console.log('sinal:', sinal);
-					throw "Erro inesperado!";
+					throw e;
 				}
 
 
@@ -187,10 +234,11 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		if($membro.find('.removidos .campoAlterado').length == 0) {
 			$membro.find('.removidos').remove();
 		}
+		/*if($membro.find('.alterados .campoAlterado').length == 0) {
+			$membro.find('.alterados').remove();
+		}*/
 
 		$membro.appendTo('#principaisAlteracoesContent');
-
-
 	});
 	
 
@@ -206,7 +254,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 
 $('#principaisAlteracoes').on('click', '.alteradoValor span', function(e) {
-	var alteracoes = $(this).data('alteracoes');
+	alteracoes = $(this).data('alteracoes');
 	// se alterações é uma string, como no caso de colaboradores
 	// não faz nd
 	if(typeof alteracoes == "string") {
@@ -420,4 +468,29 @@ scriptLattesDiff.resumirDict = function (dict) {
 	console.log(msg);
 	console.log(dict);
 	throw msg;
+}
+
+
+
+
+/**
+ * retorna o nome da classe da tabelaAlterados
+ */
+scriptLattesDiff.paginas.getClassBySinal = function (sinal) {
+	if(sinal == '+') {
+		return '.acrescidos';
+	}
+
+	else if(sinal == '-') {
+		return '.removidos';
+	}
+
+	else if(sinal == '~') {
+		return '.alterados';
+	}
+
+	else {
+		// erro, sinal não encontrado
+		throw new Error('Sinal "'+sinal+'" não encontrado em scriptLattesDiff.paginas.getClassBySinal');
+	}
 }

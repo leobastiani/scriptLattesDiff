@@ -86,6 +86,16 @@ class Misc:
 
 
 
+    def strExecutarScriptLattes(pathConfigFile):
+        '''obtenha um comando para ser executado pelo terminal
+        para o novo arquivo. Por exemplo:
+        "scriptLattes d:/facul/ic/snaps/icmc/20160302/ICMC.config"'''
+        if Misc.isWindows():
+            return 'scriptLattes '+str(pathConfigFile)
+        # não estou no windows
+        return 'bash scriptLattes.sh '+str(pathConfigFile)
+
+
 
 
 from py.Settings import Settings

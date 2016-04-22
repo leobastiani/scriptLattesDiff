@@ -201,8 +201,22 @@ class ScriptLattesDiff:
                 # se eu tenho uma lista específica para analisar
                 if pesquisador not in Settings.pesquisadoresList:
                     # se o pesquisador atual não está nessa lista
-                    # eu pulo ele
-                    continue
+                    # eu pretendo pular ele
+
+                    # agora vamos testar por nome
+                    # se na lista de pesquisadores a serem incluidos
+                    # tem um nome que se encaixa nesse pesquisador
+                    hasNome = False
+                    for nome in Settings.pesquisadoresList:
+                        
+                        if nome in configFile.getPesquisadorNome(pesquisador):
+                            hasNome = True
+                            break
+
+                    if not hasNome:
+                        # ele não tem o nome válido na lista de pesquisadores
+                        continue
+
 
 
             if pesquisadoresCarregados >= Settings.maxPesquisadores:
@@ -316,6 +330,34 @@ class ScriptLattesDiff:
     # funções estáticas que não dependem do objeto
 
 
+    def main():
+        scriptLattesDiff = ScriptLattesDiff()
+
+
+        scriptLattesDiff.analisarXml()
+
+
+        # se foi carregado apenas um arquivo, não há como fazer análises temporais com ele
+        if len(scriptLattesDiff.configFiles) < 2:
+            # Não há arquivos de configuração suficientes para comparar.
+            Print.erro('Não há arquivos de configuração suficientes para comparar')
+            sys.exit(0)
+
+
+
+        # teste de pesquisadores no grupo
+        if not scriptLattesDiff.hasSameIdLattes():
+            Print.erro('Os arquivos XMLs não possuem os mesmos pesquisadores.')
+            sys.exit(0)
+
+
+        # cria as classes com os arquivos de configuração
+        jsonAnalisado = scriptLattesDiff.analisarJsons()
+        ScriptLattesDiff.saveJsonAnalisado(jsonAnalisado)
+
+
+        # copia os arquivos para o diretório de saída
+        ScriptLattesDiff.copyFilesToOutput()
 
 
 
@@ -402,7 +444,7 @@ class ScriptLattesDiff:
 
 
         # copia as seguintes pastas
-        copiarPastas = ['html', 'js', 'css', 'vendor']
+        copiarPastas = ['html', 'js', 'css', 'vendor', 'php']
 
 
         for pasta in copiarPastas:

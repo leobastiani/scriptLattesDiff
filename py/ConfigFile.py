@@ -65,9 +65,12 @@ class ConfigFile:
         '''Imprime numa linha o dicionário pesquisador com o ID e o nome
         param: pesquisador => Id do pesquisador'''
         print(colorama.Fore.GREEN+'Pesquisador: '+colorama.Fore.RESET+pesquisador+
-            ', '+colorama.Fore.GREEN+'Nome: '+colorama.Fore.RESET+self.json[pesquisador]['identificacao']['nome_inicial'])
+            ', '+colorama.Fore.GREEN+'Nome: '+colorama.Fore.RESET+self.getPesquisadorNome(pesquisador))
 
 
+
+    def getPesquisadorNome(self, pesquisador):
+        return self.json[pesquisador]['identificacao']['nome_inicial']
 
 
 
@@ -288,17 +291,6 @@ class ConfigFile:
                 Devo ler o arquivo e alterar o que for necessário para
                 Rodar o scriptLattes novamente com esse arquivo'''
 
-        def comandoNovoArquivo(pathNovoArquivo):
-            '''obtenha um comando para ser executado pelo terminal
-            para o novo arquivo. Por exemplo:
-            "scriptLattes d:/facul/ic/snaps/icmc/20160302/ICMC.config"'''
-            if Misc.isWindows():
-                return 'scriptLattes '+str(pathNovoArquivo)
-            # não estou no windows
-            return 'python3 scriptLattes.py '+str(pathNovoArquivo)
-
-
-
         # todo comando é do tipo:
         #   (palavra) = (palavra) # (comentários)
         reComando = re.compile(r'([^=]+)\=([^#]+)?(?:#(.*))?')
@@ -369,12 +361,23 @@ class ConfigFile:
 
         Print.success('Novas configurações salvas no arquivo!')
         print('Por favor, execute o scriptLattes com a linha de comando:')
-        comando = comandoNovoArquivo(novoArquivoConfig)
+        comando = Misc.strExecutarScriptLattes(novoArquivoConfig)
         print(comando)
         print('Deseja executá-lo? (y/n)')
         resp = Misc.respostaYN()
         if resp:
             os.system(comando)
+        else:
+            sys.exit(0)
+
+        # agora que eu ja executei o scriptLattes
+        # posso me executar de novo
+        # mas tem um detalhe, nao preciso mais criar o novo arquivo
+        Settings.criarNovoSnapshot = False
+        print('Deseja executar o scriptLattesDiff com as mesmas configurações? (y/n)')
+        resp = Misc.respostaYN()
+        if resp:
+            ScriptLattesDiff.main()
 
         sys.exit(0)
 
@@ -390,3 +393,4 @@ from pathlib import Path
 from py.misc import *
 import colorama
 from py.Print import Print
+from py.ScriptLattesDiff import ScriptLattesDiff

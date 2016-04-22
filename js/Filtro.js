@@ -46,7 +46,9 @@ Filtro.getSinalTabelaAlterados = function (elem) {
 	var tabelaClasse = {
 		'+': '.acrescidos',
 		'-': '.removidos',
-	}
+		'~': '.alterados',
+		'>': '.movidos',
+	};
 	var result = '';
 	$.each(tabelaClasse, function(sinal, classe) {
 		if(elem.is(classe)) {

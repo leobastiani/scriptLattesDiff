@@ -31,3 +31,4 @@ subl
 # cahce do python
 __pycache__
 **/*/__pycache__
+TODO.txt

@@ -127,4 +127,68 @@ function documentReady() {
 
 	// define todos os perfis de filtros
 	Filtro.setPerfis(Object.keys(Filtro.getLocalStorage()));
+
+
+
+	//----------------------------------------------------
+	// Trabalhando com o botão Run
+	//----------------------------------------------------
+	
+	// decisão de esconder o botão Run que roda novamente a iniciação
+	// escondo ele quando não estou executando numa máquina com php
+	// para testar, vamos ver o protocolo
+	// se for file:/// escondo
+	var isProtocoloFile = window.location.href.match(/^file:\/\/\//);
+	var devoMostrarSempre = false;
+	if(isProtocoloFile && !devoMostrarSempre) {
+		// devo esconder o botão
+		$('.botaoRun').hide();
+	}
+	else {
+		// vamos definir qual o comando que será executado assim que o botão for chamado
+		$('.botaoRun').click(function(e) {
+
+
+			var msgAguardo = 'Sua requisição foi enviada, por favor, aguarde enquanto a aplicação é executada.<br>'+
+			'O processo demora alguns minutos, por favor aguarde. Enquanto isso, navegue na internet, isso não irá interferir no tempo de espera.<br>'+
+			'Executando';
+			$(document.body).html(msgAguardo);
+			
+			// de tempos em tempos, vamos colocar uns pontinhos nessa msg
+			var i = 1;
+			var maxPontos = 10;
+			var msgInterval = setInterval(function() {
+				var pontosFinais = '.'.repeat(i);
+
+				$(document.body).html(msgAguardo+'<b>'+pontosFinais+'</b>');
+				
+				i = (i+1) % (maxPontos + 1);
+			}, 1000);
+			
+
+			// faço um get no arquivo php/novoArquivo.php
+			if(!devoMostrarSempre) {
+
+				var novoArquivoPhp = '/php/novoArquivo.php';
+				var onSuccess = function(data) {
+					// atualiza a página
+					window.location.reload();
+				};
+				var onFail = function (data) {
+					clearInterval(msgInterval);
+					alert('Desculpe, um erro ocorreu enquanto a aplicação trabalhava');
+					window.location.reload();
+				}
+
+
+				// faz a requisão do novo arquivo para o servidor http
+				$.ajax(novoArquivoPhp).done(onSuccess).fail(onFail);
+			}
+
+		});
+	}
+
+
+
+	
 }

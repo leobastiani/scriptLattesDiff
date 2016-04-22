@@ -1,5 +1,5 @@
 /**
- * Deixe que o chorme faÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§a todo o trabalho
+ * Deixe que o chorme faÃ§a todo o trabalho
  */
 
 
@@ -107,7 +107,7 @@ header {
 
 .alteradoValor span {
     display: block;
-    margin-bottom: 25px;
+    margin-bottom: 55px;
     cursor: pointer;
 }
 
@@ -179,9 +179,10 @@ position: absolute;}
     width: 30%;
 }
 
-.alteradoGrupo span {
-    width: 49.5%;
-    display: inline-block;
+.alteradoGrupo > span {
+    width: 49%;
+    padding: 0px 0.5%;
+    display: inline-table;
 }
 
 .alterados > span {
@@ -195,4 +196,22 @@ position: absolute;}
 #perfilDeFiltros {
     background: #EEE;
     line-height: 35px;
+}
+
+.tituloListaAlteracoes {
+    float: left;
+    width: 50%;
+}
+
+.botaoRun {
+    float: left;
+    width: 50%;
+    margin: 10px 0;
+    height: 27px;
+    line-height: 27px;
+    text-align: center;
+}
+
+.alterados .alteradoValor {
+    color: blue;
 }

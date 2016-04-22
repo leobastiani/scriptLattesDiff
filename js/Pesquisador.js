@@ -33,7 +33,7 @@ Pesquisador.prototype.getNome = function() {
  * obtem um JSON com as alterações de uma data para outra
  * @param  {Number} iDataIni   index da data inicial
  * @param  {Number} iDataFin   index da data final
- * @return {JSON}              sem as datas, só com + e -
+ * @return {JSON}              sem as datas, só com +, -, ~ e >
  */
 Pesquisador.prototype.getAlteracoes = function(iDataIni, iDataFin) {
 	// index da data
@@ -291,7 +291,7 @@ Pesquisador.mergeAlteracoes = function (alteracoesAnterior, alteracoesPosterior,
 	//   '+': [4, 5, 6] + [10, 11, 12]
 	// }
 	
-	['-', '+'].forEach(function (sinal, index) {		
+	['-', '+', '~', '>'].forEach(function (sinal, index) {		
 		// se um deles está vazio, faz ser igual ao outro
 		// e existe o outro
 		if(!alteracoesAnterior[campo][sinal] && alteracoesPosterior[campo][sinal]) {
@@ -336,7 +336,7 @@ Pesquisador.sinaisEm = function (campo) {
 		return [];
 	}
 
-	var result = ['+', '-'];
+	var result = ['+', '-', '~', '>'];
 	for(var i=0; i<result.length; i++) {
 		if(!(result[i] in campo)) {
 			result.splice(i, 1);
