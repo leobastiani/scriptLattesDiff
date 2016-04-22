@@ -169,7 +169,7 @@ function documentReady() {
 			// faço um get no arquivo php/novoArquivo.php
 			if(!devoMostrarSempre) {
 
-				var novoArquivoPhp = '/php/novoArquivo.php';
+				var novoArquivoPhp = '../php/novoArquivo.php';
 				var onSuccess = function(data) {
 					// atualiza a página
 					window.location.reload();
