@@ -34,9 +34,17 @@ class ConfigFile:
         'maisNovo': [
             # aqui ficam os dados que não são necessários para comparação
             'identificacao', 'idiomas', 'endereco', 'area_atuacao'
-        ]
-    }
+        ],
 
+        'movidos': [
+            # aqui ficam tuplas de campos que terão os elementos movidos, ou seja
+            # devo analisar essas tuplas
+            ('orientacao_doutorado_em_andamento', 'orientacao_doutorado_concluido'),
+            ('orientacao_mestrado_em_andamento', 'orientacao_mestrado_concluido'),
+            ('supervisao_pos_doutorado_em_andamento', 'supervisao_pos_doutorado_concluido'),
+            ('artigos_em_revista', 'artigos_em_periodicos')
+        ],
+    }
 
 
 

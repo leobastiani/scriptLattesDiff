@@ -11,7 +11,7 @@
 class Dict:
 
 
-    """Trata as funções de dicionário do scriptLattesDiff"""
+    '''Trata as funções de dicionário do scriptLattesDiff'''
 
 
     
@@ -114,6 +114,43 @@ class Dict:
         # fecha o programa para tratar esse erro
         print(x)
         raise 'Erro resumir dict'
+
+
+
+
+    def compact(json):
+        '''vamos supor esse dicionário:
+        {
+            'campo1': 'asd',
+            'campo2': []',
+            'campo3': {},
+            'campo4': None,
+            'campo5': ''
+        }
+        essa função irá retornar:
+        {
+            'campo1': 'asd',
+            'campo5': ''
+        }'''
+
+        if not isinstance(json, dict):
+            # já cheguei no ultimo estágio, posso voltar
+            return ;
+
+        chaves = list(json.keys())
+
+        for chave in chaves:
+            # chavo recursivamente todos os que estão em cima
+            Dict.compact(json[chave])
+
+
+            # se for uma string, não analiso
+            if isinstance(json[chave], str):
+                continue
+
+            # se estiver vazio, removo de json
+            if not json[chave]:
+                del json[chave]
 
 
 

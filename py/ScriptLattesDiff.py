@@ -11,7 +11,7 @@
 
 
 class ScriptLattesDiff:
-    """Classe principal do scriptLattesDiff"""
+    '''Classe principal do scriptLattesDiff'''
 
 
 
@@ -156,6 +156,11 @@ class ScriptLattesDiff:
         # começa construido os campos que não serão analisados
         # apenas serão copiados do mais novo
         for pesquisador in maisRecente.json:
+
+            if not Settings.pesquisadorNaListaPermitidos(maisRecente, pesquisador):
+                # se o pesquisador não está na lista, passo para o próximo
+                continue
+
             pesquisadores[pesquisador] = {}
             for campo in ConfigFile.manterDados['maisNovo']:
                 pesquisadores[pesquisador][campo] = maisRecente.json[pesquisador][campo]
@@ -178,6 +183,11 @@ class ScriptLattesDiff:
             # não preciso mesmo manter ele
             # mas devo criar pesquisadores[pesquisador][campo] = {}
             for pesquisador in maisAntigo.json:
+
+                if not Settings.pesquisadorNaListaPermitidos(maisRecente, pesquisador):
+                    # se o pesquisador não está na lista, passo para o próximo
+                    continue
+
                 for campo in ConfigFile.manterDados['novosDados']:
                     pesquisadores[pesquisador][campo] = {}
 
@@ -197,25 +207,9 @@ class ScriptLattesDiff:
         lenPesquisadores = min(len(pesquisadores), Settings.maxPesquisadores)
         for pesquisador in pesquisadores:
 
-            if Settings.pesquisadoresList:
-                # se eu tenho uma lista específica para analisar
-                if pesquisador not in Settings.pesquisadoresList:
-                    # se o pesquisador atual não está nessa lista
-                    # eu pretendo pular ele
-
-                    # agora vamos testar por nome
-                    # se na lista de pesquisadores a serem incluidos
-                    # tem um nome que se encaixa nesse pesquisador
-                    hasNome = False
-                    for nome in Settings.pesquisadoresList:
-                        
-                        if nome in configFile.getPesquisadorNome(pesquisador):
-                            hasNome = True
-                            break
-
-                    if not hasNome:
-                        # ele não tem o nome válido na lista de pesquisadores
-                        continue
+            if not Settings.pesquisadorNaListaPermitidos(configFile, pesquisador):
+                # se o pesquisador não está na lista, passo para o próximo
+                continue
 
 
 
@@ -228,6 +222,9 @@ class ScriptLattesDiff:
             Print.back(colorama.Fore.YELLOW + 'Carregando: '+
                 Print.procentagem(pesquisadoresCarregados, lenPesquisadores)+'%' + colorama.Fore.RESET)
             pesquisadoresCarregados += 1
+
+
+
 
 
             for campo in ConfigFile.manterDados['novosDados']:
@@ -263,7 +260,7 @@ class ScriptLattesDiff:
                     #   '~': ...
                     # }
                     # pesquisadores[pesquisador][campo][configFile.data_processamento] é:
-                    # pesquisadores[98...]['descricao'][19/19/19] que terá ['+', '-', '~']
+                    # pesquisadores[98...]['descricao'][19/19/19] que terá ['+', '-', '~', '>']
                     pesquisadores[pesquisador][campo][configFile.data_processamento] = diferencas
                     if not diferencas:
                         # se não houve diferenças para esta data
@@ -280,8 +277,34 @@ class ScriptLattesDiff:
                     del pesquisadores[pesquisador][campo]
 
 
-        # fim de analisar os pesquisadores
 
+            # agora que analisamos as diferenças, vamos analisar os movidos
+            # que é pegar as diferenças e calcular outras diferenças
+            for campoRemovido, campoAcrescido in ConfigFile.manterDados['movidos']:
+                # vamos analisar este campo em result
+
+                # não vamos ter movidos se tanto os campos não possuirem elementos
+                if campoRemovido not in pesquisadores[pesquisador] or campoAcrescido not in pesquisadores[pesquisador]:
+                    continue
+
+
+                # agora vamos analisar as datas em igual
+                datasRemovidos = pesquisadores[pesquisador][campoRemovido].keys()
+                datasAcrescidos = pesquisadores[pesquisador][campoAcrescido].keys()
+                datasIguais = [dataIgual for dataIgual in datasRemovidos if dataIgual in datasAcrescidos]
+                
+                for dataIgual in datasIguais:
+                    # deve haver algo removido nos removidos e deve haver algo acrescido no acrescidos
+                    if '-' not in pesquisadores[pesquisador][campoRemovido][dataIgual] or '+' not in pesquisadores[pesquisador][campoAcrescido][dataIgual]:
+                        # tento a próxima data
+                        continue
+
+                    # agora precisamos remover os similares
+                    pesquisadores[pesquisador][campoAcrescido][configFile.data_processamento]['>'] = List.removeSimilares(pesquisadores[pesquisador][campoRemovido][dataIgual]['-'], pesquisadores[pesquisador][campoAcrescido][dataIgual]['+'])
+
+
+        # fim de analisar os pesquisadores
+        Dict.compact(pesquisadores)
 
         # ditar o fim de imprimir a porcentagem
         # porcentagem eu tava imprimindo assim:
@@ -292,6 +315,7 @@ class ScriptLattesDiff:
         print(colorama.Fore.GREEN+'Tempo decorrido: '+colorama.Fore.RESET+tempoDecorrido.getFormatted()+'s');
 
 
+        # reune as principais informações em result
         # reune as principais informações em result
         result = {
             'datasProcessamento': [x.data_processamento for x in self.configFiles], # lista com todas as datas de processamento
@@ -308,10 +332,10 @@ class ScriptLattesDiff:
         '''função que diz se todos os arquivos tem os mesmos idLattes'''
 
 
-        primeiraChave = self.configFiles[0].json.keys()
-        chaves = (configFile.json.keys() for configFile in self.configFiles[1:])
-        for chave in chaves:
-            if primeiraChave != chave:
+        chavesPrimeiroEstado = self.configFiles[0].json.keys()
+        chavesDemaisEstados = (configFile.json.keys() for configFile in self.configFiles[1:])
+        for chavesDesseEstado in chavesDemaisEstados:
+            if chavesPrimeiroEstado != chavesDesseEstado:
                 return False
 
         return True
@@ -319,6 +343,10 @@ class ScriptLattesDiff:
 
 
 
+
+    def __del__(self):
+        '''esta função é chamada assim que o objeto é destruido'''
+        Debug.saveFiles()
 
 
 
@@ -480,8 +508,8 @@ from py.misc import *
 from py.List import List
 from py.Debug import *
 from py.Json import Json
+from py.Dict import Dict
 from py.Print import Print
 from py.TempoDecorrido import TempoDecorrido
 from datetime import datetime
-import time
 import colorama

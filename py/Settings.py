@@ -17,6 +17,11 @@ class Settings:
     # diz se vamos usar levensthein para analisar strings similares
     analisarSimilares = True
 
+    # diz se vamos analisar os movidos
+    # movidos são elementos que estão em um campos e são removidos desse campo, mas aparecem em outro
+    # e o analisarSimilares não capta isso, pois ele só capta elementos que estão no mesmo campo
+    analisarMovidos = True
+
     # se eu devo criar um novo
     # pego o mais recente e crio com base nele
     # criarNovoSnapshot como True vai criar o novo snap
@@ -97,6 +102,43 @@ class Settings:
         print('  Defina o número máximo de pesquisadores que serão comparados.')
         print('  Por exemplo: -max 5\n')
         print('Site do projeto: http://github.com/leobastiani/scriptLattesDiff')
+
+
+
+
+
+
+
+
+    def pesquisadorNaListaPermitidos(configFile, idLattes):
+        '''diz se o pesquisador faz parta da lista pesquisadoresList'''
+        if not Settings.pesquisadoresList:
+            # a lista de pesquisadores está vazia
+            # todos estão na lista
+            return True
+
+        # se eu tenho uma lista específica para analisar
+        if idLattes in Settings.pesquisadoresList:
+            # se o idLattes está na lista, já posso dizer que ele está
+            return True
+
+        # testando se o nome dele está na lista
+        # agora vamos testar por nome
+        # se na lista de pesquisadores a serem incluidos
+        # tem um nome que se encaixa nesse pesquisador
+        for nome in Settings.pesquisadoresList:
+            
+            if nome in configFile.getPesquisadorNome(idLattes):
+                return True
+
+        # ele não tem o nome válido na lista de pesquisadores
+        return False
+
+
+
+
+
+
 
 
     def setSettingsByArgs(args):
@@ -283,3 +325,6 @@ class Settings:
             else:
                 # todos os arquivos que serão analisados passa por aqui
                 Settings.configFilesGlob.append(arg)
+
+
+

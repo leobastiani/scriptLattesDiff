@@ -5,6 +5,7 @@
 import nltk
 from py.misc import *
 from py.Settings import Settings
+from py.Debug import Debug
 
 
 
@@ -19,7 +20,9 @@ class Str:
     def similar(x, y):
         '''calcula Levensthein de X e Y em porcentagem em relação a X
         devolve o ratio: um número entre 0 e 1 inclusive'''
-
+        if not Settings.analisarSimilares:
+            # não quero analisar os similares
+            return x == y
 
 
 
@@ -56,4 +59,10 @@ class Str:
     def ratio(x, y):
         '''calcula em porcentagem o quanto a string X é parecida com a Y'''
         sumLen = len(x) + len(y)
-        return ( sumLen - nltk.metrics.distance.edit_distance(x.lower(), y.lower()) ) / sumLen
+        result = ( sumLen - nltk.metrics.distance.edit_distance(x.lower(), y.lower()) ) / sumLen
+
+        # se eu quero depurar, vamos analisar todos os similares
+        if Debug.DEBUG:
+            Debug.addRatio(x, y, result)
+
+        return result
