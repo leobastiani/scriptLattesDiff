@@ -161,7 +161,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 					// o novo campo movido, eu digo qual é o campo antigo
 					var campoAntigo = {
 						'orientacao_doutorado_concluido':        'orientacao_doutorado_em_andamento',
-						'orientacao_mestrado_em_andamneto':      'orientacao_mestrado_concliudo',
+						'orientacao_mestrado_concluido':         'orientacao_mestrado_em_andamento',
 						'supervisao_pos_doutorado_em_andamneto': 'supervisao_pos_doutorado_concliudo',
 						'artigos_em_periodicos':                 'artigos_em_revista',
 					};
