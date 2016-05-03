@@ -148,18 +148,53 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 				/**
 				 * atualiza os campos
 				 */
-				$campoAlterado.find('.alteradoChave').text(campo)
+
+				// este é o nome do campo que será exibido
+				// em .alteradoChave, aquele que fica a esquerda e diz que são
+				// os elementos a direta coloridos
+				var campoHtml = campo;
+
+				// mas, no caso especial de movidos, o nome do campo será
+				// campoAntigo ~> campoNovo
+				if(sinal == '>') {
+					// campo antigo é um dicionário que dado
+					// o novo campo movido, eu digo qual é o campo antigo
+					var campoAntigo = {
+						'orientacao_doutorado_concluido':        'orientacao_doutorado_em_andamento',
+						'orientacao_mestrado_em_andamneto':      'orientacao_mestrado_concliudo',
+						'supervisao_pos_doutorado_em_andamneto': 'supervisao_pos_doutorado_concliudo',
+						'artigos_em_periodicos':                 'artigos_em_revista',
+					};
+					campoHtml = 'De: '+campoAntigo[campo]+'\nPara: '+campo;
+				}
+
+				$campoAlterado.find('.alteradoChave').text(campoHtml)
+					// agora eu troco os \n por <br>
+					.html(function(index, html) { return html.replace('\n', '<br>'); })
 					// preenche o campo data-campo, será usado para o filtro identificar
 					.attr('data-campo', campo);
 
 
 				try {
 
-					// caso em que uso campos de uma informação
-					var camposUmaInfo = ['+', '-'];
-					if($.inArray(sinal, camposUmaInfo) != -1) {
-
+					if(sinal == '+' || sinal == '-' || sinal == '>') {
+						// caso em que uso campos de uma informação
 						alteracoes[campo][sinal].forEach(function (dict, index) {
+
+
+							if(sinal == '>') {
+								// quando estou trabalhando com movidos, tenho o caso especial
+								// porque não é exatamente dict que estou recebendo de cada alteracoes[campo][sinal]
+								// cada dict é dessa forma:
+								// [
+								//   elemAntigo,
+								//   elemNovo,
+								//   {'campo': ratio}
+								// ]
+								// portanto, o novo dict será o elemNovo
+								dict = dict[1];
+							}
+
 
 							$('<span>').text(scriptLattesDiff.resumirDict(dict)).appendTo($campoAlterado.find('.alteradoValor'))
 								// neste campo, para conseguir adicionar o elemento completo depois
@@ -170,7 +205,8 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 					}
 
-					else {
+
+					else if(sinal == '~') {
 						// campos com duas informações, como é o caso de
 						// ~
 						alteracoes[campo][sinal].forEach(function (elementos, index) {
@@ -193,6 +229,13 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 							$alteradoGrupo.appendTo($campoAlterado.find('.alteradoValor'));
 
 						});
+					}
+
+
+
+					else {
+						console.log('Sinal "'+sinal+'" não encontrado!');
+						return false;
 					}
 
 				} catch(e) {
@@ -484,6 +527,12 @@ scriptLattesDiff.paginas.getClassBySinal = function (sinal) {
 	else if(sinal == '-') {
 		return '.removidos';
 	}
+
+
+	else if(sinal == '>') {
+		return '.movidos';
+	}
+
 
 	else if(sinal == '~') {
 		return '.alterados';

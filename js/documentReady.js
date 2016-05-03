@@ -110,8 +110,8 @@ function documentReady() {
 	var nomeFiltrosAmplo = {
 		'+': 'Exibir acrescidos',
 		'-': 'Exibir removidos',
+		'>': 'Exibir movidos',
 		'~': 'Exibir alterados',
-		//'>': 'Somente movidos',
 	};
 	var jFiltroAmplo = $('#filtrosAmplos .filtro').cloneAndRemove();
 	// adicionando os filtros amplos, cada um para cada sinal

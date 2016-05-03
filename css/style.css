@@ -180,7 +180,7 @@ position: absolute;}
 }
 
 .alteradoGrupo > span {
-    width: 49%;
+    width: 48.5%;
     padding: 0px 0.5%;
     display: inline-table;
 }
@@ -214,4 +214,13 @@ position: absolute;}
 
 .alterados .alteradoValor {
     color: blue;
+}
+
+
+.movidos > span {
+    color: orange;
+}
+
+.movidos .alteradoValor {
+    color: orange;
 }
