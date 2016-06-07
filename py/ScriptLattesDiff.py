@@ -229,6 +229,11 @@ class ScriptLattesDiff:
 
             for campo in ConfigFile.manterDados['novosDados']:
 
+                # # TODO: remover dps
+                # quando eu for testar o caso do jorge, descomento
+                # if campo != 'livros_publicados':
+                #     continue
+
 
                 # pula o primeiro configFile q já foi processado
                 i = 1
@@ -281,6 +286,9 @@ class ScriptLattesDiff:
             # agora que analisamos as diferenças, vamos analisar os movidos
             # que é pegar as diferenças e calcular outras diferenças
             for campoRemovido, campoAcrescido in ConfigFile.manterDados['movidos']:
+                # # TODO: remover
+                # quando eu for testar o caso do jorge, descomento
+                # break
                 # vamos analisar este campo em result
 
                 # não vamos ter movidos se tanto os campos não possuirem elementos
@@ -289,9 +297,14 @@ class ScriptLattesDiff:
 
 
                 # agora vamos analisar as datas em igual
+                # exemplo: campoRemovido = 'artigos_em_revista' e campoAcrescido = 'artigos_em_periodicos'
+                # datas removidos: [data1, data2, data5, data6, data7]
                 datasRemovidos = pesquisadores[pesquisador][campoRemovido].keys()
+                # datas acrescidos: [data1, data2, data9, data10, data11]
                 datasAcrescidos = pesquisadores[pesquisador][campoAcrescido].keys()
+                # datas iguais: [data1, data2]
                 datasIguais = [dataIgual for dataIgual in datasRemovidos if dataIgual in datasAcrescidos]
+
                 
                 for dataIgual in datasIguais:
                     # deve haver algo removido nos removidos e deve haver algo acrescido no acrescidos
@@ -300,7 +313,7 @@ class ScriptLattesDiff:
                         continue
 
                     # agora precisamos remover os similares
-                    pesquisadores[pesquisador][campoAcrescido][configFile.data_processamento]['>'] = List.removeSimilares(pesquisadores[pesquisador][campoRemovido][dataIgual]['-'], pesquisadores[pesquisador][campoAcrescido][dataIgual]['+'])
+                    pesquisadores[pesquisador][campoAcrescido][dataIgual]['>'] = List.removeSimilares(pesquisadores[pesquisador][campoRemovido][dataIgual]['-'], pesquisadores[pesquisador][campoAcrescido][dataIgual]['+'])
 
 
         # fim de analisar os pesquisadores

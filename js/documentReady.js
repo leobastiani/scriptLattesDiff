@@ -122,11 +122,11 @@ function documentReady() {
 		newFiltroAmplo.appendTo('#filtrosAmplos');
 	});
 
-	// gostei de começar desmarcando o filtro colaboradores logo de início
-	Filtro.uncheck('colaboradores');
-
 	// define todos os perfis de filtros
 	Filtro.setPerfis(Object.keys(Filtro.getLocalStorage()));
+	// um update inicial para remover
+	// movidos e alterados que não possuem campos ou datas
+	Filtro.update(false);
 
 
 
@@ -138,9 +138,8 @@ function documentReady() {
 	// escondo ele quando não estou executando numa máquina com php
 	// para testar, vamos ver o protocolo
 	// se for file:/// escondo
-	var isProtocoloFile = window.location.href.match(/^file:\/\/\//);
 	var devoMostrarSempre = false;
-	if(isProtocoloFile && !devoMostrarSempre) {
+	if(scriptLattesDiff.isProtocoloFile() && !devoMostrarSempre) {
 		// devo esconder o botão
 		$('.botaoRun').hide();
 	}

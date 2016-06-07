@@ -40,6 +40,10 @@ scriptLattesDiff.paginas = {}
 
 
 
+// retorna true se estou no protocolo file:/// ou seja, estou offline
+scriptLattesDiff.isProtocoloFile = function () {
+	return window.location.href.match(/^file:\/\/\//);
+}
 
 
 
@@ -66,10 +70,6 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		return false;
 	}
 
-
-
-	// terá os campos que foram exibidos na tela, será usado para criar o filtro
-	var camposUtilizados = new Array();
 
 
 	// indices das datas no vetor que possui todas as datas
@@ -160,10 +160,12 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 					// campo antigo é um dicionário que dado
 					// o novo campo movido, eu digo qual é o campo antigo
 					var campoAntigo = {
-						'orientacao_doutorado_concluido':        'orientacao_doutorado_em_andamento',
-						'orientacao_mestrado_concluido':         'orientacao_mestrado_em_andamento',
-						'supervisao_pos_doutorado_em_andamneto': 'supervisao_pos_doutorado_concliudo',
-						'artigos_em_periodicos':                 'artigos_em_revista',
+						// concluido desse lado                em andamento desse lado
+						'orientacao_doutorado_concluido':     'orientacao_doutorado_em_andamento',
+						'orientacao_mestrado_concluido':      'orientacao_mestrado_em_andamento',
+						'supervisao_pos_doutorado_concluido': 'supervisao_pos_doutorado_em_andamento',
+						'orientacao_outros_tipos_concluido':  'orientacao_outros_tipos_em_andamento',
+						'artigos_em_periodicos':              'artigos_em_revista',
 					};
 					campoHtml = 'De: '+campoAntigo[campo]+'\nPara: '+campo;
 				}
@@ -260,10 +262,6 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 					throw e;
 				}
 
-
-
-				// adiciona aos campos utilizados
-				camposUtilizados.pushUnique(campo);
 			});
 		}
 
@@ -286,7 +284,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 	
 
 	// cria os filtros
-	scriptLattesDiff.paginas.filtroPrincipaisAlterados(camposUtilizados.sort());
+	scriptLattesDiff.paginas.filtroPrincipaisAlterados();
 
 }
 
@@ -345,13 +343,9 @@ $('#principaisAlteracoes').on('click', '.alteradoValor span', function(e) {
 scriptLattesDiff.$.filtro = $('#filtrosComuns .filtro').cloneAndRemove();
 
 
-scriptLattesDiff.paginas.filtroPrincipaisAlterados = function (campos) {
-	if($.isEmptyObject(campos)) {
-		// esconde o id filtros
-		$('#filtros').hide();
-	}
-	$('#filtros').show();
-
+scriptLattesDiff.paginas.filtroPrincipaisAlterados = function() {
+	// todos os campos, como string
+	var campos = Filtro.todosOsCampos;
 
 	// se eu estava usando o site e mexi nos filtros
 	// quando eu clico em Pesquisar, os filtros são resetados

@@ -66,7 +66,9 @@ class Dict:
             # dicionário com o resultado de similar
             similar = {}
             # aqui vão os campos para não analisarmos
-            camposNaoAnalisar = set(['autores'])
+            # costumava ser 'autores', mas eu resolvi deixar vazio
+            # deve ser do tipo set
+            camposNaoAnalisar = set([])
             # já testei os camposImportantes e não preciso testar camposNãoAnalisar
             campos = set(x.keys()) - camposNaoAnalisar - set(camposImportantes)
             for campo in campos:
@@ -140,17 +142,19 @@ class Dict:
         chaves = list(json.keys())
 
         for chave in chaves:
-            # chavo recursivamente todos os que estão em cima
-            Dict.compact(json[chave])
-
-
             # se for uma string, não analiso
-            if isinstance(json[chave], str):
-                continue
+            isDict = isinstance(json[chave], dict)
+            isList = isinstance(json[chave], list)
 
-            # se estiver vazio, removo de json
-            if not json[chave]:
-                del json[chave]
+            if isDict:
+                # chavo recursivamente todos os que estão em cima
+                Dict.compact(json[chave])
+
+            if isDict or isList:
+                # é um {} ou um []
+                # se estiver vazio, removo de json
+                if not json[chave]:
+                    del json[chave]
 
 
 

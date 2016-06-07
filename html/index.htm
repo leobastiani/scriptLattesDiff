@@ -66,7 +66,7 @@
 				<h1 style="margin: 10px 0;">Lista com principais alterações</h1>
 			</div>
 			<div class="botaoRun">
-				<button>Executar scriptLattesDiff para esta data</button>
+				<button>Executar scriptLattesDiff para a data de hoje</button>
 			</div>
 		</div>
 
@@ -108,9 +108,9 @@
 		<div id="filtros" class="clearfix">
 
 
-			<h2>Filtros:</h2>
+			<h2>Perfis de Filtros:</h2>
 	
-			<div id="perfilDeFiltros">
+			<div id="perfilDeFiltros" class="menuFiltros">
 				<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
 				<span>Perfil de filtros:</span>
 
@@ -123,6 +123,13 @@
 				<input type="button" id="apagarPerfilFiltro"   value="Apagar"> 
 			</div>
 
+
+			<h2>Filtros para perfis:</h2>
+
+			<div class="menuFiltros">
+				<input id="aplicarFiltroBtn" type="button" value="Aplicar" onclick="Filtro.update()" disabled="disabled">
+			</div>
+
 			<div id="filtrosComuns" class="clearfix">
 				<div class="filtro">
 					<input type="checkbox" value="exemplo" checked="checked"/>
@@ -132,7 +139,7 @@
 
 
 			<div id="filtrosAmplos">
-				<h2>Filtros mais amplos:</h2>
+				<h2>Opções de saída:</h2>
 				<div class="filtro">
 					<input type="checkbox" value="exemplo" checked="checked" data-sinal="+"/>
 					<span>Exibir acrescidos</span>

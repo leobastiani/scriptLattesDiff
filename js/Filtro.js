@@ -33,7 +33,11 @@ Filtro.getElem = function (nomeFiltro) {
  * devo chamar a função de update
  */
 Filtro.onchange = function(e) {
-	Filtro.update();
+	// antes eu dava um update, agr só dou um update dps q clicar em aplicar
+	// Filtro.update();
+
+	// devo habilitar o botão de aplicar
+	Filtro.enableAplicar(true);
 }
 
 
@@ -65,7 +69,9 @@ Filtro.getSinalTabelaAlterados = function (elem) {
  * Sempre que uma alteração nos filtros é feita, essa função deve ser chamada
  * para que as devidas divs devam ser mostradas
  */
-Filtro.update = function () {
+Filtro.update = function (showConcluidoMessage) {
+	// sete para true e no final de update, veja um Concluido na tela
+	showConcluidoMessage = typeof showConcluidoMessage == 'undefined' ? true : showConcluidoMessage;
 	console.log('Atulizando os filtros que devem ser mostrados.');
 
 	var todos = Filtro.getFiltrosByPerfil('Todos');
@@ -148,6 +154,16 @@ Filtro.update = function () {
 	$('.listraCinza').removeClass('listraCinza');
 	// adiciona apenas nos pares
 	$('.campoAlterado:visible').filter(':even').addClass('listraCinza');
+
+
+
+	// vamos desabilitar o botão aplicar
+	Filtro.enableAplicar(false);
+
+	// no final, vamos imprimir um alerta de concluido
+	if(showConcluidoMessage) {
+		alert('Concluido');
+	}
 }
 
 
@@ -445,3 +461,23 @@ $(document).ready(function() {
 
 
 });
+
+
+
+
+Filtro.enableAplicar = function (enable) {
+	var btn = $('#aplicarFiltroBtn');
+	if(enable) {
+		// habilitando
+		btn.addClass('botaoChamativo').removeAttr('disabled');
+	}
+	else {
+		// desabilitando
+		btn.removeClass('botaoChamativo').attr('disabled', 'disabled');
+	}
+}
+
+
+
+
+Filtro.todosOsCampos = ['apresentacao_trabalho', 'artigos_em_periodicos', 'artigos_em_revista', 'capitulos_livros', 'colaboradores', 'formacao_academica', 'livros_publicados', 'organizacao_evento', 'orientacao_doutorado_concluido', 'orientacao_doutorado_em_andamento', 'orientacao_especializacao_concluido', 'orientacao_iniciacao_cientifica_concluido', 'orientacao_iniciacao_cientifica_em_andamento', 'orientacao_mestrado_concluido', 'orientacao_mestrado_em_andamento', 'orientacao_outros_tipos_concluido', 'orientacao_outros_tipos_em_andamento', 'orientacao_tcc_concluido', 'orientacao_tcc_em_andamento', 'participacao_evento', 'premios_titulos', 'processo_tecnica', 'producao_artistica', 'producao_bibliografica', 'producao_tecnica', 'produto_tecnologico', 'projetos_pesquisa', 'resumo_congresso', 'resumo_expandido_congresso', 'supervisao_pos_doutorado_concluido', 'supervisao_pos_doutorado_em_andamento', 'texto_em_jornal', 'trabalho_completo_congresso', 'trabalhos_tecnicos'];

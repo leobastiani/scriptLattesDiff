@@ -1,5 +1,5 @@
 /**
- * Deixe que o chorme faÃ§a todo o trabalho
+ * Deixe que o chorme faca todo o trabalho
  */
 
 
@@ -189,11 +189,11 @@ position: absolute;}
     color: blue;
 }
 
-#perfilDeFiltros > * {
-    margin: 0px 40px;
+.menuFiltros > * {
+    margin: 0 40px;
 }
 
-#perfilDeFiltros {
+.menuFiltros {
     background: #EEE;
     line-height: 35px;
 }
@@ -223,4 +223,8 @@ position: absolute;}
 
 .movidos .alteradoValor {
     color: orange;
+}
+
+.botaoChamativo {
+    box-shadow: 0px 0px 15px red;
 }
