@@ -74,80 +74,55 @@ Filtro.update = function (showConcluidoMessage) {
 	showConcluidoMessage = typeof showConcluidoMessage == 'undefined' ? true : showConcluidoMessage;
 	console.log('Atulizando os filtros que devem ser mostrados.');
 
-	var todos = Filtro.getFiltrosByPerfil('Todos');
-	// todos os que estão desmarcados e estão visíveis
-	// devem ser revelados
-	todos.each(function(index, el) {
-		var elem = $(el);
-		var campo = elem.val();
-		var isChecked = elem.is(':checked');
 
-		var jPaiToHide = $('.alteradoChave[data-campo="'+campo+'"]').parent('.campoAlterado');
-		if(isChecked) {
-			jPaiToHide.show();
-		} else {
-			jPaiToHide.hide();
-		}
+	// mostra todo mundo
+	$('.filtro-invisivel').removeClass('filtro-invisivel');
+
+	// esconde os campos
+	var filtrosComunsEsconder = $('#filtrosComuns .filtro').filter(function(index) {
+		return !$(this).find('input[type=checkbox]').prop('checked');
+	});
+
+	filtrosComunsEsconder.each(function(index, filtro) {
+		// esconde o pai do campo correspondente
+		$('*[data-campo="'+$.trim($(filtro).text())+'"]').parent().addClass('filtro-invisivel');
 	});
 
 
-	// escode aquelas janelas Removidos desde então e a do acrescido
-	var esconderPais = function(index, elem) {
-		var possuiCamposVisiveis = $(elem).find('.campoAlterado').visible().length != 0;
-		// variavel que importa para saber se vou esconder ou mostrar
-		var possuiElementosVisiveis = null;
 
-		// fico sabendo se estou tratando um .membro(mais amplo) ou .tabelaAlterados
-		var isMembro = $(elem).is('.membro');
-		if(isMembro) {
-			// esstou num membro, tmb devo conferir se existem tabelaAlterados visiveis
-			var possuiTabelaVisiveis = $(elem).find('.tabelaAlterados').visible().length != 0;
+	// esconde os filtros amplos
+	var filtrosAmplosEsconder = $('#filtrosAmplos .filtro').filter(function(index) {
+		return !$(this).find('input[type=checkbox]').prop('checked');
+	});
 
-			// se não possuo tabelas visiveis, não tenho elementos visiveis
-			if(!possuiTabelaVisiveis) {
-				possuiElementosVisiveis = false;
-			} else {
-				// se tenho tabela visiveis, posso ter ou n elementos visiveis
-				possuiElementosVisiveis = possuiCamposVisiveis;
-			}
-		}
+	filtrosAmplosEsconder.each(function(index, filtro) {
+		var tabelaEsconder = $('.tabelaAlterados').filter(scriptLattesDiff.paginas.getClassBySinal($(filtro).find('input').attr('data-sinal')));
+		tabelaEsconder.addClass('filtro-invisivel');
+	});
 
-		// caso se eu for uma tabelaAlterados
-		else {
-			// fica fácil de saber se tenho elementos visiveis ou não
-			possuiElementosVisiveis = possuiCamposVisiveis;
-		}
 
-		// se o filtro amplo for true, devo esconder akela .tabelaAlterados
-		var filtroAmploQrMostrar = true;
+	
+	// esconde os pais
 
-		// se estou na tabela alterados
-		if(!isMembro) {
-			// devo pegar o sinal do tipo +, -, ...
-			var sinal = Filtro.getSinalTabelaAlterados($(elem));
-			var checkBoxAmplo = $('#filtrosAmplos input[data-sinal="'+sinal+'"]');
-			if(!checkBoxAmplo.is(':checked')) {
-				// não está marcado, devo esconder
-				// isso força ele a esconder
-				filtroAmploQrMostrar = false;
-			}
-		}
+	// começando pela tebelaAlterados
+	$('.tabelaAlterados').filter(function(index) {
+		// essa tabela alterados deve ter todos os camposAlterados invisiveis
+		var camposAlteradosVisiveis = $(this).find('.campoAlterado:not(.filtro-invisivel)');
+		// se eu quero esconder
+		// não pode ter nenhum visivel
+		return camposAlteradosVisiveis.length == 0;
+	}).addClass('filtro-invisivel');
 
-		// devoMostrar se simultaneamente
-		// Ele possui elementos visiveis
-		// E se eu quero mostra-lo
-		var devoMostrar = possuiElementosVisiveis && filtroAmploQrMostrar;
-		if(devoMostrar) {
-			$(elem).show();
-		} else {
-			$(elem).hide();
-		}
-	};
+	// esconde membro
+	$('.membro').filter(function(index) {
+		// esse membro não pode ter nenhum tabelaAlterados visivel
+		var tabelaAlteradosVisivel = $(this).find('.tabelaAlterados:not(.filtro-invisivel)');
+		// se eu quero esconder
+		// não pode ter nenhum visivel
+		return tabelaAlteradosVisivel.length == 0;
+	}).addClass('filtro-invisivel');
 
-	// primeiro para as tabelas
-	$('.tabelaAlterados').each(esconderPais);
-	// depois para o membro
-	$('.membro').each(esconderPais);
+
 
 	// adicionando listras cinzas
 	// remove de todos
@@ -156,16 +131,13 @@ Filtro.update = function (showConcluidoMessage) {
 	$('.campoAlterado:visible').filter(':even').addClass('listraCinza');
 
 
-
 	// vamos desabilitar o botão aplicar
 	Filtro.enableAplicar(false);
-
-	// no final, vamos imprimir um alerta de concluido
+	
 	if(showConcluidoMessage) {
 		alert('Concluido');
 	}
 }
-
 
 
 /**

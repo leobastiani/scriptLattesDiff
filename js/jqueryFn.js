@@ -49,7 +49,7 @@ $.fn.cloneAndRemove = function () {
  * diferente de :visible, essa função testa o css e diz se é diferente de none
  * @return {jQuery}
  */
-$.fn.visible = function () {
+$.fn.filterDisplayNone = function () {
 	return $(this).filter(function(index) {
 		return $(this).css('display') != 'none';
 	});

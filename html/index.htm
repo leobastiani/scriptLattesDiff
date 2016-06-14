@@ -6,6 +6,7 @@
 
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="cache-control" content="no-cache">
 	<link rel="stylesheet" href="../css/style.css">
 
 
@@ -112,7 +113,7 @@
 	
 			<div id="perfilDeFiltros" class="menuFiltros">
 				<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
-				<span>Perfil de filtros:</span>
+				<span>Perfil de filtros de campo:</span>
 
 				<select id="filtroSelect">
 					<option value="Teste">Teste</option>
@@ -148,7 +149,29 @@
 				<!-- Insira mais filtros aqui -->
 			</div>
 
+			<div class="clearfix"></div>
 
+			<h2>Perfis de Filtros de pesquisadores:</h2>
+
+			<div id="perfilDeFiltrosPesquisadores" class="menuFiltros">
+				<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
+				<span>Perfil de filtros de pesquisadores:</span>
+
+				<select id="filtroSelect">
+					<option value="Teste">Teste</option>
+				</select>
+
+				<input type="button" id="carregarPerfilFiltro" value="Carregar">
+				<input type="button" id="salvarPerfilFiltro"   value="Salvar">
+				<input type="button" id="apagarPerfilFiltro"   value="Apagar"> 
+			</div>
+
+			<div id="filtrosPesquisadores" class="clearfix">
+				<div class="filtro">
+					<input type="checkbox" value="exemplo" checked="checked"/>
+					<span>exemplo</span>
+				</div>
+			</div>
 
 		</div>
 
