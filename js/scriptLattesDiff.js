@@ -91,8 +91,9 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 	 * Adicionando todos os membros na na página HTML
 	 * dentro do elemento #membros
 	 */
-	$.each(scriptLattesDiff.idLattes, function(i, pesquisador) {
+	$.each(scriptLattesDiff.allIdLattes, function(i, pesquisadorId) {
 		// variáveis úteis
+		var pesquisador = scriptLattesDiff.idLattes[pesquisadorId];
 		var nome = pesquisador.getNome();
 
 

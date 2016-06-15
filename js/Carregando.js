@@ -78,20 +78,13 @@ Carregando.step = function () {
 	// aumenta um carregado
 	this.carregados++;
 
-	if(this.carregados < this.total) {
+	if(this.carregados <= this.total) {
 		// se estou contando ainda
 		var pct = this.carregados / this.total * 100;
 		var pctRounded = (Math.round(pct * 100) / 100);
 		var pctStr = pctRounded + '%';
 		this.jPorcentagemText.text(pctStr);
 	}
-
-
-	else if(this.carregados == this.total) {
-		// 100% carregado!!
-		this.finish();
-	}
-
 
 }
 

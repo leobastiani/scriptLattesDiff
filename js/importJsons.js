@@ -121,7 +121,7 @@ $(document).ready(function() {
 		var lenPesquisadores = scriptLattesDiff.allIdLattes.length;
 		// mais um porque vou dar um step dentro da função
 		// scriptLattesDiff.init()
-		Carregando.start(lenPesquisadores + 1);
+		Carregando.start(lenPesquisadores);
 
 		// cria o dicionário idLattes em scriptLattesDiff
 		// ele possuirá todos os pesquisadores do tipo
@@ -144,6 +144,6 @@ $(document).ready(function() {
 	loadJs('../json/scriptLattesDiff.js', onLoadAllIdLattes);
 
 	// primeiros passos para a tela de carregando
-	Carregando.init('Carregando...');
+	Carregando.init('Baixando...');
 
 });

@@ -16,9 +16,6 @@ function documentReady() {
 
 
 
-
-
-
 	/**
 	 * Coloca as datas no devido lugar
 	 */
@@ -107,13 +104,13 @@ function documentReady() {
 	////////////////////////////////
 	// Filtros amplos são do time nomeFiltrosAmplo
 	var filtroAmplo = $('#filtrosAmplos .filtro');
+	var jFiltroAmplo = $('#filtrosAmplos .filtro').cloneAndRemove();
 	var nomeFiltrosAmplo = {
 		'+': 'Exibir acrescidos',
 		'-': 'Exibir removidos',
 		'>': 'Exibir movidos',
 		'~': 'Exibir alterados',
 	};
-	var jFiltroAmplo = $('#filtrosAmplos .filtro').cloneAndRemove();
 	// adicionando os filtros amplos, cada um para cada sinal
 	$.each(nomeFiltrosAmplo, function(sinal, nomeFiltro) {
 		var newFiltroAmplo = jFiltroAmplo.clone();
@@ -127,6 +124,20 @@ function documentReady() {
 	// um update inicial para remover
 	// movidos e alterados que não possuem campos ou datas
 	Filtro.update(false);
+
+
+	//////////////////////////////////////////
+	// adicionando filtros de pesquisadores //
+	//////////////////////////////////////////
+	var filtrosPesquisadores = $('#filtrosPesquisadores');
+	$.each(scriptLattesDiff.allIdLattes, function(index, pesquisadorId) {
+		var pesquisador = scriptLattesDiff.idLattes[pesquisadorId];
+
+		// devo adicionar um elemento ddo tipo jFiltroAmplo
+		var elem = jFiltroAmplo.clone();
+		elem.find('span').text(pesquisador.getNome());
+		elem.appendTo(filtrosPesquisadores);
+	});
 
 
 
@@ -189,5 +200,7 @@ function documentReady() {
 
 
 
+	// já posso remover o fundo preto
+	Carregando.finish();
 	
 }

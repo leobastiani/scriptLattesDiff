@@ -3,11 +3,18 @@
 *.sh
 output
 debug/json/*.*
-Django
+json - Copia
+TODO.txt
+
+
+
+
+
 # não queremos outputs no github né
 outputs
 test
 exemplos
+saida.txt
 
 
 
@@ -31,4 +38,3 @@ subl
 # cahce do python
 __pycache__
 **/*/__pycache__
-TODO.txt
