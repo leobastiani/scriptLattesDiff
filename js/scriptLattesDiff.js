@@ -120,7 +120,6 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 
 
-
 		/**
 		 * testa os campos removidos
 		 */
@@ -286,6 +285,10 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 	// cria os filtros
 	scriptLattesDiff.paginas.filtroPrincipaisAlterados();
+
+
+	// posso tirar o fundo preto
+	Carregando.finish();
 
 }
 

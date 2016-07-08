@@ -60,10 +60,10 @@ function documentReady() {
 	/**
 	 * cria as principais páginas do meu script
 	 */
-	scriptLattesDiff.paginas.principaisAlteracoes(
+	setTimeout(function() {scriptLattesDiff.paginas.principaisAlteracoes(
 		scriptLattesDiff.datasProcessamento[0],   // data inicial
 		scriptLattesDiff.datasProcessamento.end() // data final
-	);
+	);}, 1);
 
 
 
@@ -199,8 +199,4 @@ function documentReady() {
 	}
 
 
-
-	// já posso remover o fundo preto
-	Carregando.finish();
-	
 }
