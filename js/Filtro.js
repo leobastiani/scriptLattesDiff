@@ -1,4 +1,110 @@
-var Filtro = {};
+var Filtro = function(perfisLocalStorage, jPerfil) {
+	/**
+	 * nome padrão do JSON que está no localStorage que possui
+	 * os filtros salvos pelo usuário
+	 * @type {String}
+	 */
+	this.perfisLocalStorage = perfisLocalStorage;
+
+	// variável com o jquery do perfil de filtros
+	this.jPerfil = jPerfil;
+
+	// div que engloba todos os elementos do filtro
+	this.jTipoFiltro = jPerfil.parents('.tipoFiltro');
+
+	// definindo o ponteiro no elemento html
+	this.jTipoFiltro.data('filtro', this);
+
+
+	// vamos adicionar funções ao document.ready
+	var self = this;
+
+	/**
+	 * vou adicionar as funções dos botões de carregar, salvar e apagar
+	 */
+	$(document).ready(function() {
+
+		/**
+		 * Função de carregar
+		 */
+		self.jTipoFiltro.find('#carregarPerfilFiltro').click(function(e) {
+			// obtem o nome do perfil em filtroSelect
+			var nomePerfil = self.jPerfil.val();
+			self.carregar(nomePerfil);
+		});
+
+
+
+
+		/**
+		 * Função de salvar Filtro
+		 */
+		// devo garantir que existe um item em localStorage sendo um Array
+		self.jTipoFiltro.find('#salvarPerfilFiltro').click(function(e) {
+			// vão ser armazenados desse jeito
+			// {
+			//   'nome do filtro': ['campo1', 'campo2', ...]
+			// }
+			
+			var nomeNovoFiltro = window.prompt('Digite o nome do filtro que você deseja salvar');
+			if(!nomeNovoFiltro) {
+				return ;
+			}
+			// analisa os casos especiais
+			if(nomeNovoFiltro in Filtro.nomesReservados) {
+				alert('Este nome é reservado. Por favor, insira outro nome.');
+				return ;
+			}
+			// pega todos os filtros salvos
+			// por padrão é {}
+			var filtrosSalvos = self.getLocalStorage();
+
+			// aviso de confirmação de substituição
+			if(nomeNovoFiltro in filtrosSalvos) {
+				if(!window.confirm('Já existe um filtro com este nome, deseja sobrescrevê-lo?')) {
+					// não qro sobrescrever
+					return ;
+				}
+			}
+
+			// só falta salvar
+			// obtenho todos os checkbox marcados
+			var todosCheckboxMarcados = self.getFiltrosByPerfil('Marcados');
+			// vou preencher esse Array com todos os nomes dos filtros marcados
+			var nomeCampos = [];
+			todosCheckboxMarcados.each(function(index, elem) {
+				nomeCampos.push($(elem).val());
+			});
+			filtrosSalvos[nomeNovoFiltro] = nomeCampos;
+			self.salvarLocalStorage(filtrosSalvos, nomeNovoFiltro);
+		});
+
+
+
+		/**
+		 * Definindo botão de apagar
+		 */
+		self.jTipoFiltro.find('#apagarPerfilFiltro').click(function(e) {
+			var nomePerfil = self.jPerfil.val();
+			// casos especiais
+			if(nomePerfil in Filtro.nomesReservados) {
+				return ;
+			}
+
+			if(!window.confirm('Deseja realmente apagar o filtro "'+nomePerfil+'"?')) {
+				// não quero apagar
+				return ;
+			}
+
+			var filtrosSalvos = self.getLocalStorage();
+			delete filtrosSalvos[nomePerfil];
+			self.salvarLocalStorage(filtrosSalvos);
+		});
+
+	}); // fim do ready
+
+
+};
 
 
 Filtro.nomesReservados = ['Todos', 'Nenhum', 'Marcados'];
@@ -11,6 +117,7 @@ Filtro.nomesReservados = ['Todos', 'Nenhum', 'Marcados'];
 Filtro.getElem = function (nomeFiltro) {
 	if(nomeFiltro instanceof Object) {
 		// para vários filtros
+		// se nomeFiltro for um array
 		
 		var result = $();
 		$.each(nomeFiltro, function(index, elem) {
@@ -75,6 +182,10 @@ Filtro.update = function (showConcluidoMessage) {
 	console.log('Atulizando os filtros que devem ser mostrados.');
 
 
+	// essa função funciona da seguinte maneira
+	// coloque .filtro-invisivel nas divs que queremos esconder
+	// só de fazer isso, as divs pais tmb são escondidas
+
 	// mostra todo mundo
 	$('.filtro-invisivel').removeClass('filtro-invisivel');
 
@@ -100,9 +211,30 @@ Filtro.update = function (showConcluidoMessage) {
 		tabelaEsconder.addClass('filtro-invisivel');
 	});
 
-
+	// esconde o grupo de pesquisadores
+	var filtrosPesquisadoresEsconder = $('#filtrosPesquisadores .filtro').filter(function(index) {
+		return !$(this).find('input[type=checkbox]').prop('checked');
+	});
+	// vamos converter para string
+	var filtrosPesquisadoresEsconderStr = filtrosPesquisadoresEsconder.map(function(index, elem) {
+		return $(elem).find('span').text();
+	});
+	// vamos testar todos os membros
+	// se o nome deles estiver em filtrosPesquisadoresEsconderStr, vamos escondelo
+	$('.membro').each(function(index, membro) {
+		var nome = $.trim($(membro).find('.nome').text());
+		if($.inArray(nome, filtrosPesquisadoresEsconderStr) != -1) {
+			// já que está no filtro, vamos escondê-lo
+			$(membro).addClass('filtro-invisivel');
+		}
+	});
 	
-	// esconde os pais
+
+
+
+	/////////////////////
+	// esconde os pais //
+	/////////////////////
 
 	// começando pela tebelaAlterados
 	$('.tabelaAlterados').filter(function(index) {
@@ -196,6 +328,8 @@ Filtro.check = function (nomeFiltro, doUpdate) {
 
 /**
  * Inverte o filtro nomeFiltro
+ * se o filtro está checked, ele fica unchecked
+ * e vice-versa
  * se doUpdate for true, ele chama a função Filtro.update()
  * doUpdate por padrão é true
  */
@@ -220,36 +354,29 @@ Filtro.toggle = function (nomeFiltro, doUpdate) {
 
 
 /**
- * nome padrão do JSON que está no localStorage que possui
- * os filtros salvos pelo usuário
- * @type {String}
- */
-Filtro.perfisLocalStorage = 'filtroPerfis';
-
-/**
  * Obtem um json da forma:
  * {
  *   'nome do filtro': ['campo para mostrar 1', 'campo para mostrar 2', '...']
  * }
  */
-Filtro.getLocalStorage = function () {
-	var result = localStorage.getItem(Filtro.perfisLocalStorage) || '{}';
+Filtro.prototype.getLocalStorage = function () {
+	var result = localStorage.getItem(this.perfisLocalStorage) || '{}';
 	return JSON.parse(result);
 }
 
 
 /**
- * Salva um json da msma forma que é obtido em Filtro.getLocalStorage()
+ * Salva um json da msma forma que é obtido em this.getLocalStorage()
  * e atualiza o campo de filtros
  */
-Filtro.salvarLocalStorage = function (dados, novoCampo) {
-	localStorage.setItem(Filtro.perfisLocalStorage, JSON.stringify(dados));
+Filtro.prototype.salvarLocalStorage = function (dados, novoCampo) {
+	localStorage.setItem(this.perfisLocalStorage, JSON.stringify(dados));
 	
-	Filtro.setPerfis(Object.keys(dados));
+	this.setPerfis(Object.keys(dados));
 
 	// atualiza o valor do perfil
 	novoCampo = novoCampo || 'Todos';
-	Filtro.jPerfil.val(novoCampo);
+	this.jPerfil.val(novoCampo);
 }
 
 
@@ -261,21 +388,21 @@ Filtro.salvarLocalStorage = function (dados, novoCampo) {
  * Se nomePerfil for Todos, retorna todos os checkbox
  * se for Nenhum, retorn um $();
  */
-Filtro.getFiltrosByPerfil = function (nomePerfil) {
+Filtro.prototype.getFiltrosByPerfil = function (nomePerfil) {
 	// analisa primeiro os casos especiais
 	if(nomePerfil == 'Todos') {
 		// retorna todos os checkbox de filtros
-		return $('#filtrosComuns input[type="checkbox"]');
+		return this.jTipoFiltro.find('.filtros').find('input[type="checkbox"]');
 	}
 	if(nomePerfil == 'Nenhum') {
 		return $();
 	}
 	if(nomePerfil == 'Marcados') {
-		return Filtro.getFiltrosByPerfil('Todos').filter(':checked');
+		return this.getFiltrosByPerfil('Todos').filter(':checked');
 	}
 
 	// fim dos casos especiais
-	var filtrosSalvos = Filtro.getLocalStorage();
+	var filtrosSalvos = this.getLocalStorage();
 	if(!(nomePerfil in filtrosSalvos)) {
 		// não encontrei esse perfil
 		throw new Error('getFiltrosByPerfil');
@@ -290,9 +417,9 @@ Filtro.getFiltrosByPerfil = function (nomePerfil) {
  * altera o #filtroSelect colocando todos os perfis de filtros
  * presentes no array perfis
  */
-Filtro.setPerfis = function (perfis) {
+Filtro.prototype.setPerfis = function (perfis) {
 	// zera o filtroSelect
-	var filtroSelect = Filtro.jPerfil;
+	var filtroSelect = this.jPerfil;
 	filtroSelect.find('option').remove();
 
 	perfis.unshift('Todos');
@@ -315,8 +442,8 @@ Filtro.setPerfis = function (perfis) {
  * [getElem('colaboradores'), getElem('doutorado_concluido'), getElem('campo3'), '...']
  * repare que são elementos de jquery
  */
-Filtro._carregar = function (filtrosParaMarcar) {
-	var todosPerfis = Filtro.getFiltrosByPerfil('Todos');
+Filtro.prototype._carregar = function (filtrosParaMarcar) {
+	var todosPerfis = this.getFiltrosByPerfil('Todos');
 
 	// marca os filtros que devem ser marcados
 	filtrosParaMarcar.each(function(index, elem) {
@@ -336,103 +463,14 @@ Filtro._carregar = function (filtrosParaMarcar) {
  * carrega um filtro pelo nome
  * que é uma string em localSotrage
  */
-Filtro.carregar = function (nomePerfil) {
-	var filtrosParaMarcar = Filtro.getFiltrosByPerfil(nomePerfil);
+Filtro.prototype.carregar = function (nomePerfil) {
+	var filtrosParaMarcar = this.getFiltrosByPerfil(nomePerfil);
 
 	/**
 	 * chama os filtros para serem marcados
 	 */
-	Filtro._carregar(filtrosParaMarcar);
+	this._carregar(filtrosParaMarcar);
 }
-
-
-/**
- * vou adicionar as funções dos botões de carregar, salvar e apagar
- */
-$(document).ready(function() {
-	// variável com o jquery do perfil de filtros
-	Filtro.jPerfil = $('#filtroSelect');
-
-	/**
-	 * Função de carregar
-	 */
-	$('#carregarPerfilFiltro').click(function(e) {
-		// obtem o nome do perfil em filtroSelect
-		var nomePerfil = Filtro.jPerfil.val();
-		Filtro.carregar(nomePerfil)
-	});
-
-
-
-
-	/**
-	 * Função de salvar Filtro
-	 */
-	// devo garantir que existe um item em localStorage sendo um Array
-	$('#salvarPerfilFiltro').click(function(e) {
-		// vão ser armazenados desse jeito
-		// {
-		//   'nome do filtro': ['campo1', 'campo2', ...]
-		// }
-		
-		var nomeNovoFiltro = window.prompt('Digite o nome do filtro que você deseja salvar');
-		if(!nomeNovoFiltro) {
-			return ;
-		}
-		// analisa os casos especiais
-		if(nomeNovoFiltro in Filtro.nomesReservados) {
-			alert('Este nome é reservado. Por favor, insira outro nome.');
-			return ;
-		}
-		// pega todos os filtros salvos
-		// por padrão é {}
-		var filtrosSalvos = Filtro.getLocalStorage();
-
-		// aviso de confirmação de substituição
-		if(nomeNovoFiltro in filtrosSalvos) {
-			if(!window.confirm('Já existe um filtro com este nome, deseja sobrescrevê-lo?')) {
-				// não qro sobrescrever
-				return ;
-			}
-		}
-
-		// só falta salvar
-		// obtenho todos os checkbox marcados
-		var todosCheckboxMarcados = Filtro.getFiltrosByPerfil('Marcados');
-		// vou preencher esse Array com todos os nomes dos filtros marcados
-		var nomeCampos = [];
-		todosCheckboxMarcados.each(function(index, elem) {
-			nomeCampos.push($(elem).val());
-		});
-		filtrosSalvos[nomeNovoFiltro] = nomeCampos;
-		Filtro.salvarLocalStorage(filtrosSalvos, nomeNovoFiltro);
-	});
-
-
-
-	/**
-	 * Definindo botão de apagar
-	 */
-	$('#apagarPerfilFiltro').click(function(e) {
-		var nomePerfil = Filtro.jPerfil.val();
-		// casos especiais
-		if(nomePerfil in Filtro.nomesReservados) {
-			return ;
-		}
-
-		if(!window.confirm('Deseja realmente apagar o filtro "'+nomePerfil+'"?')) {
-			// não quero apagar
-			return ;
-		}
-
-		var filtrosSalvos = Filtro.getLocalStorage();
-		delete filtrosSalvos[nomePerfil];
-		Filtro.salvarLocalStorage(filtrosSalvos);
-	});
-
-
-
-});
 
 
 

@@ -108,35 +108,37 @@
 
 		<div id="filtros" class="clearfix">
 
+			<div class="tipoFiltro">
+				<h2>Perfis de Filtros:</h2>
+		
+				<div id="perfilDeFiltros" class="menuFiltros">
+					<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
+					<span>Perfil de filtros de campo:</span>
 
-			<h2>Perfis de Filtros:</h2>
-	
-			<div id="perfilDeFiltros" class="menuFiltros">
-				<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
-				<span>Perfil de filtros de campo:</span>
+					<select id="filtroSelect">
+						<option value="Teste">Teste</option>
+					</select>
 
-				<select id="filtroSelect">
-					<option value="Teste">Teste</option>
-				</select>
-
-				<input type="button" id="carregarPerfilFiltro" value="Carregar">
-				<input type="button" id="salvarPerfilFiltro"   value="Salvar">
-				<input type="button" id="apagarPerfilFiltro"   value="Apagar"> 
-			</div>
-
-
-			<h2>Filtros para perfis:</h2>
-
-			<div class="menuFiltros">
-				<input id="aplicarFiltroBtn" type="button" value="Aplicar" onclick="Filtro.update()" disabled="disabled">
-			</div>
-
-			<div id="filtrosComuns" class="clearfix">
-				<div class="filtro">
-					<input type="checkbox" value="exemplo" checked="checked"/>
-					<span>exemplo</span>
+					<input type="button" id="carregarPerfilFiltro" value="Carregar">
+					<input type="button" id="salvarPerfilFiltro"   value="Salvar">
+					<input type="button" id="apagarPerfilFiltro"   value="Apagar"> 
 				</div>
-			</div>
+
+
+				<h2>Filtros para perfis:</h2>
+
+				<div class="menuFiltros">
+					<input id="aplicarFiltroBtn" type="button" value="Aplicar" onclick="Filtro.update()" disabled="disabled">
+				</div>
+
+				<div id="filtrosComuns" class="clearfix filtros">
+					<div class="filtro">
+						<input type="checkbox" value="exemplo" checked="checked"/>
+						<span>exemplo</span>
+					</div>
+				</div>
+
+			</div> <!-- ./Fim do tipo de filtro comum -->
 
 
 			<div id="filtrosAmplos">
@@ -151,27 +153,29 @@
 
 			<div class="clearfix"></div>
 
-			<h2>Perfis de Filtros de pesquisadores:</h2>
+			<div class="tipoFiltro">
+				<h2>Perfis de Filtros de pesquisadores:</h2>
 
-			<div id="perfilDeFiltrosPesquisadores" class="menuFiltros">
-				<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
-				<span>Perfil de filtros de pesquisadores:</span>
+				<div id="perfilDeFiltrosPesquisadores" class="menuFiltros">
+					<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
+					<span>Perfil de filtros de pesquisadores:</span>
 
-				<select id="filtroSelect">
-					<option value="Teste">Teste</option>
-				</select>
+					<select id="filtroPesquisadoresSelect">
+						<option value="Teste">Teste</option>
+					</select>
 
-				<input type="button" id="carregarPerfilFiltro" value="Carregar">
-				<input type="button" id="salvarPerfilFiltro"   value="Salvar">
-				<input type="button" id="apagarPerfilFiltro"   value="Apagar"> 
-			</div>
+					<input type="button" id="carregarPerfilFiltro" value="Carregar">
+					<input type="button" id="salvarPerfilFiltro"   value="Salvar">
+					<input type="button" id="apagarPerfilFiltro"   value="Apagar"> 
+				</div>
 
-			<div id="filtrosPesquisadores" class="clearfix">
-				<!-- <div class="filtro">
-					<input type="checkbox" value="exemplo" checked="checked"/>
-					<span>exemplo</span>
-				</div> -->
-			</div>
+				<div id="filtrosPesquisadores" class="clearfix filtros">
+					<!-- <div class="filtro">
+						<input type="checkbox" value="exemplo" checked="checked"/>
+						<span>exemplo</span>
+					</div> -->
+				</div>
+			</div> <!-- ./Fim do tipo de filtro comum -->
 
 		</div>
 

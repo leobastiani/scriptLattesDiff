@@ -116,7 +116,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 		// nome e idlattes
 		$membro.find('.nome').text(nome);
-		$membro.find('.idLattes').text(i);
+		$membro.find('.idLattes').text(pesquisadorId);
 
 
 
@@ -198,10 +198,18 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 							}
 
 
-							$('<span>').text(scriptLattesDiff.resumirDict(dict)).appendTo($campoAlterado.find('.alteradoValor'))
+							var span = $('<span>').text(scriptLattesDiff.resumirDict(dict)).appendTo($campoAlterado.find('.alteradoValor'))
 								// neste campo, para conseguir adicionar o elemento completo depois
 								// devo salva-lo em algum lugar
 								.data('alteracoes', dict);
+
+							// no caso, se o span for adicionado a um colaborador, qro tentar traduzir esse colaborador
+							if(campo == 'colaboradores') {
+								var idLattes = span.text();
+								if(scriptLattesDiff.idLattes[idLattes] != undefined) {
+									span.text(idLattes+' ('+scriptLattesDiff.idLattes[idLattes].getNome()+')');
+								}
+							}
 
 						});
 
@@ -269,7 +277,8 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		/**
 		 * remove o primeiro elemento
 		 */
-		if($membro.find('.acrescidos .campoAlterado').length == 0) {
+		// aparentemente, entrou em desuso, já posso remover isso
+/*		if($membro.find('.acrescidos .campoAlterado').length == 0) {
 			$membro.find('.acrescidos').remove();
 		}
 		if($membro.find('.removidos .campoAlterado').length == 0) {
@@ -280,7 +289,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		}*/
 
 		$membro.appendTo('#principaisAlteracoesContent');
-	});
+	}); // fim do each(i, pesquisadorId)
 	
 
 	// cria os filtros

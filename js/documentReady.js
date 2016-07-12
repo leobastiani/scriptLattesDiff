@@ -120,7 +120,13 @@ function documentReady() {
 	});
 
 	// define todos os perfis de filtros
-	Filtro.setPerfis(Object.keys(Filtro.getLocalStorage()));
+	var filtrosObj = [
+		new Filtro('filtroPerfis', $('#filtroSelect')),
+		new Filtro('filtroPesquisadoresPerfis', $('#filtroPesquisadoresSelect'))
+	];
+	filtrosObj.forEach(function (elem, index) {
+		elem.setPerfis(Object.keys(elem.getLocalStorage()));
+	});
 	// um update inicial para remover
 	// movidos e alterados que não possuem campos ou datas
 	Filtro.update(false);
@@ -135,7 +141,9 @@ function documentReady() {
 
 		// devo adicionar um elemento ddo tipo jFiltroAmplo
 		var elem = jFiltroAmplo.clone();
-		elem.find('span').text(pesquisador.getNome());
+		var val = pesquisador.getNome();
+		elem.find('span').text(val);
+		elem.find('input').val(pesquisador.getNome());
 		elem.appendTo(filtrosPesquisadores);
 	});
 
