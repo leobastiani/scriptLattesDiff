@@ -72,7 +72,6 @@
 		</div>
 
 
-
 		<form id="escolhaDatas" class="clearfix">
 			<h2>Datas comparativas:</h2>
 
@@ -108,6 +107,10 @@
 
 		<div id="filtros" class="clearfix">
 
+			<div class="menuFiltros divBtnAplicar" onclick="Filtro.update()" style="display: none;">
+				Clique aqui para aplicar as alterações dos filtros.
+			</div>
+
 			<div class="tipoFiltro">
 				<h2>Perfis de Filtros:</h2>
 		
@@ -126,10 +129,6 @@
 
 
 				<h2>Filtros para perfis:</h2>
-
-				<div class="menuFiltros">
-					<input id="aplicarFiltroBtn" type="button" value="Aplicar" onclick="Filtro.update()" disabled="disabled">
-				</div>
 
 				<div id="filtrosComuns" class="clearfix filtros">
 					<div class="filtro">

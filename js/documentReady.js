@@ -60,10 +60,10 @@ function documentReady() {
 	/**
 	 * cria as principais páginas do meu script
 	 */
-	setTimeout(function() {scriptLattesDiff.paginas.principaisAlteracoes(
+	scriptLattesDiff.paginas.principaisAlteracoes(
 		scriptLattesDiff.datasProcessamento[0],   // data inicial
 		scriptLattesDiff.datasProcessamento.end() // data final
-	);}, 1);
+	);
 
 
 
@@ -127,9 +127,6 @@ function documentReady() {
 	filtrosObj.forEach(function (elem, index) {
 		elem.setPerfis(Object.keys(elem.getLocalStorage()));
 	});
-	// um update inicial para remover
-	// movidos e alterados que não possuem campos ou datas
-	Filtro.update(false);
 
 
 	//////////////////////////////////////////
@@ -204,7 +201,13 @@ function documentReady() {
 			}
 
 		});
+
+		// um update inicial para remover
+		// movidos e alterados que não possuem campos ou datas
 	}
+
+	debugger;
+	Filtro.update(false);
 
 
 }

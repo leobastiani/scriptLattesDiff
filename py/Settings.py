@@ -2,9 +2,7 @@
 # coding=utf-8
 
 import sys
-from py.Print import Print
 from pathlib import Path
-from py.misc import *
 
 
 
@@ -32,9 +30,15 @@ class Settings:
     # então o arquivo destino se encaminhará para essa pasta
     criarNovoSnapshot = False
 
+    # quando eu crio um novo snap
+    # posso ter diferentes pesquisadores nele,
+    # por isso, eu posso informar um novo arquivo de lista
+    # com diferentes pesquisadores
+    fileListPath = None
+
     # é a porcentagem para que duas strings
     # sejam consideradas semelhantes
-    porcentagemRatioSimilar = 0.8
+    porcentagemRatioSimilar = 0.7
 
     # as informações do primeiro snap não são necessárias
     # por isso, pode inclui-las no json ou não
@@ -63,9 +67,6 @@ class Settings:
     @staticmethod
     def usage():
         '''imprime o comando help ou os exemplos de como usar'''
-        def printCommand(*args):
-            Print.cyan(*args)
-
         print('Insira os arquivos .config nos parâmetros sem nenhum caracter especial.')
         print('  Por exemplo: \n  ./Data1/*.config ./Data2./*.config\n')
         print('Utilize wildcards para economizar esforços.')
@@ -89,6 +90,9 @@ class Settings:
         print('  Com esse comando o scriptLattesDiff se torna muito mais rápido.\n')
         Print.cyan('-novo-snap, -novo-arquivo, -na:')
         print('  Cria um novo arquivo .config para que o scriptLattes possa interpretá-lo.\n')
+        Print.cyan('-list:')
+        print('  Quando um novo snap for solicitado, este comando informa qual o arquivo de lista deverá ser utlizado.\n')
+        print('  Por exemplo: -list ./Arquivo.list\n')
         Print.cyan('-porcentagem-similar, -ps:')
         print('  Define a nova porcentagem de critério para frases parecidas, sendo que 0 significa que todas as frases serão consideradas semelhantes e 100 significa que apenas frases idênticas são consideradas semelhantes.')
         print('  Por exemplo: -ps 88\n')
@@ -152,11 +156,11 @@ class Settings:
             return args.pop()
 
 
-        def proxArg(args):
+        def proxArg(args, index=0):
             '''obtem o novo argumento, sem removê-lo da pilha'''
-            if len(args) == 0:
+            if len(args) <= index:
                 return ''
-            return args[0]
+            return args[index]
 
 
 
@@ -246,6 +250,10 @@ class Settings:
                 sys.exit(0)
 
 
+            elif isThisCommand(arg, 'debug'):
+                Debug.DEBUG = True
+
+
             elif isThisCommand(arg, 'output-folder', 'o'):
                 novoCaminho = deveSer(novoArg(args), str)
                 print('Novo caminho para a saída:', novoCaminho)
@@ -281,6 +289,13 @@ class Settings:
                     # criarNovoSnapshot como true
                     # qr dizer que ele vai para a pasta padrão de novos snaps
                     Settings.criarNovoSnapshot = True
+
+
+            elif isThisCommand(arg, 'list'):
+                # quando vou dar um novo arquivo, as vezes eu quero informar o arquivo de lista
+                listPath = Path(deveSer(novoArg(args), str, true))
+                Print.warning('Arquivo de lista: '+str(listPath))
+                Settings.fileListPath = Path(listPath)
 
 
             elif isThisCommand(arg, 'porcentagem-similar', 'ps'):
@@ -328,3 +343,7 @@ class Settings:
 
 
 
+
+from py.Print import Print
+from py.Debug import Debug
+from py.misc import *

@@ -1,10 +1,6 @@
 #!python3
 # coding=utf-8
-
-
 import sys
-from py.misc import *
-from py.Json import Json
 
 
 
@@ -63,3 +59,11 @@ class Debug:
                 str(Misc.scriptPath / 'debug'),
                 str(Settings.outputFolder / 'debug')
             )
+
+
+
+
+
+from py.misc import *
+from py.Json import Json
+from py.Settings import Settings

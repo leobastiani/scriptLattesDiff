@@ -476,14 +476,19 @@ Filtro.prototype.carregar = function (nomePerfil) {
 
 
 Filtro.enableAplicar = function (enable) {
-	var btn = $('#aplicarFiltroBtn');
+	var div = $('.divBtnAplicar');
+	if(enable == undefined) {
+		// retorno se ele está ativo
+		return div.is(':visible');
+	}
+
 	if(enable) {
 		// habilitando
-		btn.addClass('botaoChamativo').removeAttr('disabled');
+		div.show();
 	}
 	else {
 		// desabilitando
-		btn.removeClass('botaoChamativo').attr('disabled', 'disabled');
+		div.hide();
 	}
 }
 

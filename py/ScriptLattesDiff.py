@@ -37,11 +37,6 @@ class ScriptLattesDiff:
         self.filesPath = sorted(self.filesPath)
 
 
-        if Settings.criarNovoSnapshot:
-            # preciso criar mais um arquivo de configuração
-            self.criarNovoSnapshot()
-
-
 
     def criarNovoSnapshot(self):
         '''Devo criar um novo Snapshot do scriptLattes
@@ -58,7 +53,7 @@ class ScriptLattesDiff:
         # é o último da lista
         # no nosso exemplo:
         #   D:/Facul/IC/SSC/20150830/get-ssc.config
-        maisRecente = list(self.filesPath)[-1]
+        maisRecente = str(self.configFiles[-1].filePath.absolute())
 
         # agora eu vou pegar o pathPai que nesse caso seria:
         #   D:/Facul/IC/SSC
@@ -121,6 +116,8 @@ class ScriptLattesDiff:
     def analisarXml(self):
         section('Analisando arquivos de configuração')
         self.configFiles = [ConfigFile(x) for x in self.filesPath]
+        # ordeno os configs files de acordo com as datas
+        self.configFiles = sorted(self.configFiles, key=lambda x: x.getDate())
 
 
 
@@ -142,10 +139,10 @@ class ScriptLattesDiff:
 
 
 
-
         # idLattes começa com os valores padroes da instancia mais nova
         maisAntigo = self.configFiles[0]
         maisRecente = self.configFiles[-1]
+        segundoMaisRecente = self.configFiles[-2]
 
 
 
@@ -156,6 +153,10 @@ class ScriptLattesDiff:
         # começa construido os campos que não serão analisados
         # apenas serão copiados do mais novo
         for pesquisador in maisRecente.json:
+
+            if pesquisador not in segundoMaisRecente.json:
+                # é um novo pesquisador, não vou analisá-lo agora
+                continue
 
             if not Settings.pesquisadorNaListaPermitidos(maisRecente, pesquisador):
                 # se o pesquisador não está na lista, passo para o próximo
@@ -172,7 +173,13 @@ class ScriptLattesDiff:
         # fazendo a análise parcial
         if Settings.incluirPrimeiroSnap:
             # primeiro, vamos começar com os valores do json mais antigos
-            for pesquisador in maisAntigo.json:
+            for pesquisador in pesquisadores:
+
+                if pesquisador not in maisAntigo.json:
+                    # este pesquisador está no mais recente
+                    # mas não está no mais antigo
+                    continue
+
                 for campo in ConfigFile.manterDados['novosDados']:
                     pesquisadores[pesquisador][campo] = {}
                     if campo in maisAntigo.json[pesquisador]:
@@ -182,7 +189,12 @@ class ScriptLattesDiff:
             # aqui eu decidi que não quero manter o mais antigo
             # não preciso mesmo manter ele
             # mas devo criar pesquisadores[pesquisador][campo] = {}
-            for pesquisador in maisAntigo.json:
+            for pesquisador in pesquisadores:
+
+                if pesquisador not in segundoMaisRecente.json:
+                    # este pesquisador está no mais recente
+                    # mas não está no mais antigo
+                    continue
 
                 if not Settings.pesquisadorNaListaPermitidos(maisRecente, pesquisador):
                     # se o pesquisador não está na lista, passo para o próximo
@@ -206,11 +218,12 @@ class ScriptLattesDiff:
         # devo comparar o meno para atingir o 100%
         lenPesquisadores = min(len(pesquisadores), Settings.maxPesquisadores)
         for pesquisador in pesquisadores:
+            # exemplo:
+            # pesquisador = 7137178343756327
 
             if not Settings.pesquisadorNaListaPermitidos(configFile, pesquisador):
                 # se o pesquisador não está na lista, passo para o próximo
                 continue
-
 
 
             if pesquisadoresCarregados >= Settings.maxPesquisadores:
@@ -225,29 +238,50 @@ class ScriptLattesDiff:
 
 
 
+            # pula o primeiro configFile q já foi processado
+            i = 1
+            while i < qntConfigFiles:
+                # variaveis importantes
+                # configFile sendo analisado nesse momento
+                configFile = self.configFiles[i]
+                configFileAnterior = self.configFiles[i-1]
+
+                if pesquisador not in configFile.json or pesquisador not in configFileAnterior.json:
+                    # é um novo pesquisador
+                    # nao preciso analisá-lo
+                    i+=1
+                    continue
 
 
-            for campo in ConfigFile.manterDados['novosDados']:
+                for campo in ConfigFile.manterDados['novosDados']:
 
-                # # TODO: remover dps
-                # quando eu for testar o caso do jorge, descomento
-                # if campo != 'livros_publicados':
-                #     continue
+                    # # TODO: remover dps
+                    # quando eu for testar o caso do jorge, descomento
+                    # if campo != 'livros_publicados':
+                    #     continue
 
 
-                # pula o primeiro configFile q já foi processado
-                i = 1
-                while i < qntConfigFiles:
-                    # variaveis importantes
-                    # configFile sendo analisado nesse momento
-                    configFile = self.configFiles[i]
-                    configFileAnterior = self.configFiles[i-1]
 
 
                     # pega os novos dados que apareceram desta configFile em relação a data anterior
                     # ou seja, a diferença do mais novo em relação ao mais antigo
                     try:
                         diferencas = List.differences(configFileAnterior.json[pesquisador][campo], configFile.json[pesquisador][campo])
+                    
+                        # diferencas é:
+                        # {
+                        #   '+': ...,
+                        #   '-': ...,
+                        #   '~': ...
+                        # }
+                        # pesquisadores[pesquisador][campo][configFile.data_processamento] é:
+                        # pesquisadores[98...]['descricao'][19/19/19] que terá ['+', '-', '~', '>']
+                        pesquisadores[pesquisador][campo][configFile.data_processamento] = diferencas
+                        if not diferencas:
+                            # se não houve diferenças para esta data
+                            # removo para n ocupar espaço desnecessário
+                            del pesquisadores[pesquisador][campo][configFile.data_processamento]
+
                     except Exception as e:
                         section('Erro')
                         print('Em List.differences:')
@@ -257,22 +291,7 @@ class ScriptLattesDiff:
                         print('configFile:', configFile.data_processamento)
                         raise e
                         exit(0)
-                    
-                    # diferencas é:
-                    # {
-                    #   '+': ...,
-                    #   '-': ...,
-                    #   '~': ...
-                    # }
-                    # pesquisadores[pesquisador][campo][configFile.data_processamento] é:
-                    # pesquisadores[98...]['descricao'][19/19/19] que terá ['+', '-', '~', '>']
-                    pesquisadores[pesquisador][campo][configFile.data_processamento] = diferencas
-                    if not diferencas:
-                        # se não houve diferenças para esta data
-                        # removo para n ocupar espaço desnecessário
-                        del pesquisadores[pesquisador][campo][configFile.data_processamento]
 
-                    i += 1
 
 
                 # se depois de toda essa análise com as datas
@@ -281,6 +300,7 @@ class ScriptLattesDiff:
                     # aqui ele está vazio
                     del pesquisadores[pesquisador][campo]
 
+                i += 1
 
 
             # agora que analisamos as diferenças, vamos analisar os movidos
@@ -341,27 +361,6 @@ class ScriptLattesDiff:
 
 
 
-    def hasSameIdLattes(self):
-        '''função que diz se todos os arquivos tem os mesmos idLattes'''
-
-
-        chavesPrimeiroEstado = self.configFiles[0].json.keys()
-        chavesDemaisEstados = (configFile.json.keys() for configFile in self.configFiles[1:])
-        for chavesDesseEstado in chavesDemaisEstados:
-            if chavesPrimeiroEstado != chavesDesseEstado:
-                return False
-
-        return True
-
-
-
-
-
-    def __del__(self):
-        '''esta função é chamada assim que o objeto é destruido'''
-        Debug.saveFiles()
-
-
 
 
 
@@ -378,17 +377,15 @@ class ScriptLattesDiff:
         scriptLattesDiff.analisarXml()
 
 
+        if Settings.criarNovoSnapshot:
+            # preciso criar mais um arquivo de configuração
+            scriptLattesDiff.criarNovoSnapshot()
+
+
         # se foi carregado apenas um arquivo, não há como fazer análises temporais com ele
         if len(scriptLattesDiff.configFiles) < 2:
             # Não há arquivos de configuração suficientes para comparar.
             Print.erro('Não há arquivos de configuração suficientes para comparar')
-            sys.exit(0)
-
-
-
-        # teste de pesquisadores no grupo
-        if not scriptLattesDiff.hasSameIdLattes():
-            Print.erro('Os arquivos XMLs não possuem os mesmos pesquisadores.')
             sys.exit(0)
 
 
@@ -399,6 +396,8 @@ class ScriptLattesDiff:
 
         # copia os arquivos para o diretório de saída
         ScriptLattesDiff.copyFilesToOutput()
+        # esta função é chamada assim que o objeto é destruido
+        Debug.saveFiles()
 
 
 

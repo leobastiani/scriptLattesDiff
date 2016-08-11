@@ -3,7 +3,8 @@
 $arquivoRun = '../run.sh';
 
 if (file_exists($arquivoRun)) {
-	shell_exec("bash ../run.sh");
+	$message = shell_exec("bash ../run.sh");
+	print_r($message);
 }
 
 

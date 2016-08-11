@@ -40,6 +40,7 @@ class ConfigFile:
             # aqui ficam tuplas de campos que terão os elementos movidos, ou seja
             # devo analisar essas tuplas
             ('orientacao_doutorado_em_andamento', 'orientacao_doutorado_concluido'),
+            ('orientacao_iniciacao_cientifica_em_andamento', 'orientacao_iniciacao_cientifica_concluido'),
             ('orientacao_mestrado_em_andamento', 'orientacao_mestrado_concluido'),
             ('supervisao_pos_doutorado_em_andamento', 'supervisao_pos_doutorado_concluido'),
             ('orientacao_outros_tipos_em_andamento', 'orientacao_outros_tipos_concluido'),
@@ -64,9 +65,13 @@ class ConfigFile:
         self.loadXml()
         self.data_processamento = self.xml.getroot().attrib['data_processamento']
         # obtem uma instancia de time pela data de processamento
-        self.time = self.strToData(self.data_processamento)
+        self.time = self.getDate()
         self.loadJsonFromXml()
 
+
+
+    def getDate(self):
+        return ConfigFile.strToData(self.data_processamento)
 
 
 
