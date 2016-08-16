@@ -159,54 +159,12 @@ function documentReady() {
 		// devo esconder o botão
 		$('.botaoRun').hide();
 	}
-	else {
-		// vamos definir qual o comando que será executado assim que o botão for chamado
-		$('.botaoRun').click(function(e) {
 
 
-			var msgAguardo = 'Sua requisição foi enviada, por favor, aguarde enquanto a aplicação é executada.<br>'+
-			'O processo demora alguns minutos, por favor aguarde. Enquanto isso, navegue na internet, isso não irá interferir no tempo de espera.<br>'+
-			'Executando';
-			$(document.body).html(msgAguardo);
-			
-			// de tempos em tempos, vamos colocar uns pontinhos nessa msg
-			var i = 1;
-			var maxPontos = 10;
-			var msgInterval = setInterval(function() {
-				var pontosFinais = '.'.repeat(i);
 
-				$(document.body).html(msgAguardo+'<b>'+pontosFinais+'</b>');
-				
-				i = (i+1) % (maxPontos + 1);
-			}, 1000);
-			
-
-			// faço um get no arquivo php/novoArquivo.php
-			if(!devoMostrarSempre) {
-
-				var novoArquivoPhp = '../php/novoArquivo.php';
-				var onSuccess = function(data) {
-					// atualiza a página
-					window.location.reload();
-				};
-				var onFail = function (data) {
-					clearInterval(msgInterval);
-					alert('Desculpe, um erro ocorreu enquanto a aplicação trabalhava');
-					window.location.reload();
-				}
-
-
-				// faz a requisão do novo arquivo para o servidor http
-				$.ajax(novoArquivoPhp).done(onSuccess).fail(onFail);
-			}
-
-		});
-
-		// um update inicial para remover
-		// movidos e alterados que não possuem campos ou datas
-	}
-
-	debugger;
+	// atualizo os filtros
+	// porque eu escondo os campos acrescidos, removidos, ...
+	// que não possuem nenhum elemento
 	Filtro.update(false);
 
 

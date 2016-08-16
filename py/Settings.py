@@ -36,9 +36,13 @@ class Settings:
     # com diferentes pesquisadores
     fileListPath = None
 
+    # este parâmetro obtem o arquivo de lista utlizado para
+    # obter o ultimo arquivo de lista
+    getFileListPath = None
+
     # é a porcentagem para que duas strings
     # sejam consideradas semelhantes
-    porcentagemRatioSimilar = 0.7
+    porcentagemRatioSimilar = 0.72
 
     # as informações do primeiro snap não são necessárias
     # por isso, pode inclui-las no json ou não
@@ -293,9 +297,21 @@ class Settings:
 
             elif isThisCommand(arg, 'list'):
                 # quando vou dar um novo arquivo, as vezes eu quero informar o arquivo de lista
-                listPath = Path(deveSer(novoArg(args), str, true))
+                listPath = Path(deveSer(novoArg(args), str))
                 Print.warning('Arquivo de lista: '+str(listPath))
                 Settings.fileListPath = Path(listPath)
+                if not Settings.fileListPath.exists():
+                    print('O arquivo .list informado não existe:')
+                    print(str(Settings.fileListPath))
+                    sys.exit(0)
+
+
+
+            elif isThisCommand(arg, 'get-list'):
+                # quando vou dar um novo arquivo, as vezes eu quero informar o arquivo de lista
+                Settings.getFileListPath = True
+                Print.warning('Obtendo o diretório do arquivo de lista.')
+
 
 
             elif isThisCommand(arg, 'porcentagem-similar', 'ps'):

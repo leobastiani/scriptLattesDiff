@@ -77,12 +77,23 @@ class ScriptLattesDiff:
             caminhoDest = (pathPai / dataAtual).absolute()
         else:
             caminhoDest = Settings.criarNovoSnapshot
+
+        # se baseName = get-ssc
+        baseName = os.path.splitext(name)[0]
+
+        # copia o arquivo .list
+        maisRecenteListPath = os.path.splitext(maisRecente)[0] + '.list'
+
+        if Settings.getFileListPath:
+            # quero só imprimir o arquivo de lista mais recente
+            print('Arquivo de lista mais recente:')
+            print(maisRecenteListPath)
+            sys.exit(0)
+
         # listDest no nosso exemplo deve ser:
         #   fileDest = D:/Facul/IC/SSC/DATA_ATUAL/get-ssc.config
         #   listDest = D:/Facul/IC/SSC/DATA_ATUAL/get-ssc.list
         fileDest = caminhoDest / name
-        # se baseName = get-ssc
-        baseName = os.path.splitext(name)[0]
         listDest = caminhoDest / (baseName + '.list')
 
         if fileDest.exists() or listDest.exists():
@@ -97,11 +108,15 @@ class ScriptLattesDiff:
 
         # copia o arquivo .config
         shutil.copy(str(maisRecentePath), str(fileDest))
-
-        # copia o arquivo .list
-        maisRecenteListPath = os.path.splitext(maisRecente)[0] + '.list'
-        shutil.copy(str(maisRecenteListPath), str(listDest))
-        print('Arquivo gerado:', fileDest)
+        print('Arquivo .config gerado => de: "%s" => "%s"' % (fileDest, str(maisRecentePath)))
+        if Settings.fileListPath:
+            # copio o arquivo de lista de um novo lugar
+            shutil.copy(str(Settings.fileListPath), str(listDest))
+            print('Arquivo .list gerado => de: "%s" => "%s"' % (listDest, str(Settings.fileListPath)))
+        else:
+            # copio o arquivo de lista do mais recente
+            shutil.copy(str(maisRecenteListPath), str(listDest))
+            print('Arquivo .list gerado => de: "%s" => "%s"' % (listDest, str(maisRecenteListPath)))
 
         # devo adicionar o novo arquivo para a lista de arquivos a serem analisadas
         self.filesPath.append(str(fileDest))
