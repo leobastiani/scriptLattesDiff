@@ -76,30 +76,30 @@ class Print:
         Print.endBack()
 
 
-    def erro(*args):
+    def erro(*args, **kwargs):
         '''Imprime uma msg de erro, assim como o print, só que em vermelho'''
         sys.stdout.write(colorama.Fore.RED)
-        print(*args)
+        print(*args, **kwargs)
         sys.stdout.write(colorama.Fore.RESET)
 
 
-    def success(*args):
+    def success(*args, **kwargs):
         '''Mesmo que print, só que em verde'''
         sys.stdout.write(colorama.Fore.GREEN)
-        print(*args)
+        print(*args, **kwargs)
         sys.stdout.write(colorama.Fore.RESET)
 
 
-    def warning(*args):
+    def warning(*args, **kwargs):
         '''Mesmo que print, só que em amarelo'''
         sys.stdout.write(colorama.Fore.YELLOW)
-        print(*args)
+        print(*args, **kwargs)
         sys.stdout.write(colorama.Fore.RESET)
 
-    def cyan(*args):
+    def cyan(*args, **kwargs):
         '''Mesmo que print, só que em cyan'''
         sys.stdout.write(colorama.Fore.CYAN)
-        print(*args)
+        print(*args, **kwargs)
         sys.stdout.write(colorama.Fore.RESET)
 
 

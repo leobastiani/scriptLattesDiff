@@ -84,6 +84,7 @@ if ($_POST == []) {
 
 		Sua requisição foi enviada.<br/>
 		O processo demora alguns minutos ou horas.<br/>
+		Sinta-se à vontade para navegar na internet, isso não irá interferir no tempo de espera.<br/>
 		Pode desligar este computador e voltar mais tarde, caso desejar.<br/>
 		<img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Carregando...">
 
