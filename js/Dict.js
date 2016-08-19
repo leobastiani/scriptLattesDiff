@@ -27,11 +27,7 @@ Dict.equals = function (x, y, campo) {
 
   if(Dict.soAutoresBug(x) && Dict.soAutoresBug(y)) {
     // tem autores, faço aquele macete
-    var novoX = Dict.clone(x);
-    var novoY = Dict.clone(y);
-    novoX['autores'] = novoX['autores'].replace(' ; ', '. ');
-    novoY['autores'] = novoY['autores'].replace(' ; ', '. ');
-    return Dict._equals(novoX, novoY);
+    return x['autores'].replace(' ; ', '. ') == y['autores'].replace(' ; ', '. ');
   }
 
   return Dict._equals(x, y);

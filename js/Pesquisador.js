@@ -197,7 +197,7 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 
 				// existe a possibilidade de a alteracoesAnterior[campo][sinalAnterior]
 				// ficar vazio
-				if(alteracoesAnterior[campo][sinalAnterior].length == 0 || alteracoesPosterior[campo][sinalPosterior].length == 0) {
+				if(alteracoesAnterior[campo][sinalAnterior].length == 0) {
 					// está vazio
 					break;
 				}
@@ -214,9 +214,11 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 						alteracoesPosterior[campo][sinalPosterior].splice(indexPosterior, 1);
 						// removo um por este exemplo:
 						// estou acessando o 0, removo o 0, o próximo que eu quero acessar é o 0
-						indexPosterior--;
+						indexAnterior--;
 						lenPost--;
 						lenAnt--;
+						// parte para o proximo anterior
+						break;
 					}
 				}
 
@@ -227,16 +229,13 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 						alteracoesPosterior[campo][sinalPosterior].splice(indexPosterior, 1);
 						// removo um por este exemplo:
 						// estou acessando o 0, removo o 0, o próximo que eu quero acessar é o 0
-						indexPosterior--;
+						indexAnterior--;
 						lenPost--;
 						lenAnt--;
-
-						// condição do primeiro while
-						if(!(indexAnterior<lenAnt)) {
-							break;
-						}
-
+						// parte para o proximo anterior
+						break;
 					}
+
 				}
 
 			}
