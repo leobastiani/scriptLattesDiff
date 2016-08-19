@@ -19,9 +19,18 @@ class ScriptLattesDiff:
 
 
         # glob de todos os arquivos em Settings.configFilesGlob
+        todosOsArquivos = sum(  # transforma lista de lista em lista
+                         [glob.glob(x) for x in Settings.configFilesGlob], [])
+
+        if Settings.listGlob:
+            print('Diretório atual: '+os.getcwd())
+            print('Arquivos encontrados:')
+            for arquivo in todosOsArquivos:
+                print('\t'+arquivo)
+            sys.exit(0)
+
         self.filesPath = set(  # para remover duplicatas
-                         sum(  # transforma lista de lista em lista
-                         [glob.glob(x) for x in Settings.configFilesGlob], []))
+                         todosOsArquivos)
 
         if not self.filesPath:
             # a lista está vazia
@@ -145,6 +154,20 @@ class ScriptLattesDiff:
         Compara várias instancias de ConfigFile e retorna um json analisado com a data de cada configFile
         o parametro é uma lista com todos os ConfigFile para analisar
         '''
+
+
+        def elemVazioBug(elem):
+            '''um bug que tudo fica vazio, e o ano é zero'''
+            for campo in elem:
+                if campo == 'ano':
+                    if elem[campo] != '0':
+                        return False
+
+                elif elem[campo] != '':
+                    return False
+            return True
+
+
         section('Função analisar Jsons:')
 
 
@@ -252,10 +275,14 @@ class ScriptLattesDiff:
             pesquisadoresCarregados += 1
 
 
+            if Settings.campos:
+                # vou analisar campos específicos
+                camposAnalise = [x for x in Settings.campos if x in ConfigFile.manterDados['novosDados']]
+            else:
+                camposAnalise = ConfigFile.manterDados['novosDados']
 
             # pula o primeiro configFile q já foi processado
-            i = 1
-            while i < qntConfigFiles:
+            for i in range(1, qntConfigFiles):
                 # variaveis importantes
                 # configFile sendo analisado nesse momento
                 configFile = self.configFiles[i]
@@ -264,18 +291,9 @@ class ScriptLattesDiff:
                 if pesquisador not in configFile.json or pesquisador not in configFileAnterior.json:
                     # é um novo pesquisador
                     # nao preciso analisá-lo
-                    i+=1
                     continue
 
-
-                for campo in ConfigFile.manterDados['novosDados']:
-
-                    # # TODO: remover dps
-                    # quando eu for testar o caso do jorge, descomento
-                    # if campo != 'livros_publicados':
-                    #     continue
-
-
+                for campo in camposAnalise:
 
 
                     # pega os novos dados que apareceram desta configFile em relação a data anterior
@@ -296,6 +314,19 @@ class ScriptLattesDiff:
                             # se não houve diferenças para esta data
                             # removo para n ocupar espaço desnecessário
                             del pesquisadores[pesquisador][campo][configFile.data_processamento]
+                        else:
+                            # testo as diferenças
+                            # para remover o bug de campos vazios
+                            if campo != 'colaboradores':
+                                # esse bug não acontece com os colaboradores
+                                for sinal in ['+', '-']:
+                                    # apenas os sinais de + e -
+                                    for i in range(len(diferencas[sinal])-1, -1, -1):
+                                        elem = diferencas[sinal][i]
+                                        # para os elementos
+                                        if elemVazioBug(elem):
+                                            diferencas[sinal].remove(elem)
+                                    
 
                     except Exception as e:
                         section('Erro')
@@ -307,24 +338,15 @@ class ScriptLattesDiff:
                         raise e
                         exit(0)
 
+                    # fim do try
 
-
-                # se depois de toda essa análise com as datas
-                # o campo não recebeu nenhum alteração, posso exclui-lo
-                if not pesquisadores[pesquisador][campo]:
-                    # aqui ele está vazio
-                    del pesquisadores[pesquisador][campo]
-
-                i += 1
+                # fim do for de configFile
+            # fim do for de pesquisador
 
 
             # agora que analisamos as diferenças, vamos analisar os movidos
             # que é pegar as diferenças e calcular outras diferenças
             for campoRemovido, campoAcrescido in ConfigFile.manterDados['movidos']:
-                # # TODO: remover
-                # quando eu for testar o caso do jorge, descomento
-                # break
-                # vamos analisar este campo em result
 
                 # não vamos ter movidos se tanto os campos não possuirem elementos
                 if campoRemovido not in pesquisadores[pesquisador] or campoAcrescido not in pesquisadores[pesquisador]:
@@ -408,11 +430,26 @@ class ScriptLattesDiff:
         jsonAnalisado = scriptLattesDiff.analisarJsons()
         ScriptLattesDiff.saveJsonAnalisado(jsonAnalisado)
 
+        tentativasSalvar = 0
+        maxTentativas = 10
+        while True:
+            try:
+                # copia os arquivos para o diretório de saída
+                ScriptLattesDiff.copyFilesToOutput()
+                # esta função é chamada assim que o objeto é destruido
+                Debug.saveFiles()
+            except:
+                Print.erro('Erro ao salvar.')
+                tentativasSalvar += 1
+                if tentativasSalvar >= maxTentativas:
+                    break # tentei demais :/
+                # espera 5 segundos
+                time.sleep(5)
+                continue
 
-        # copia os arquivos para o diretório de saída
-        ScriptLattesDiff.copyFilesToOutput()
-        # esta função é chamada assim que o objeto é destruido
-        Debug.saveFiles()
+
+            # não preciso mais tentar inserir
+            break
 
 
 
@@ -540,3 +577,4 @@ from py.Print import Print
 from py.TempoDecorrido import TempoDecorrido
 from datetime import datetime
 import colorama
+import time

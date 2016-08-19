@@ -36,11 +36,9 @@ class Str:
 
 
 
-        # deixa que x seja a menor string
-        if len(x) > len(y): x, y = y, x
-        # y passa a ter o msmo tamanho de x
-        lenX = len(x)
-        y = y[0:lenX]
+        # x e y são cortados até a qntidade máxima de caracteres
+        x = x[0:Settings.maxLetrasSimilares]
+        y = y[0:Settings.maxLetrasSimilares]
 
 
         # calcula o levenshtein
@@ -62,7 +60,6 @@ class Str:
         result = ( sumLen - nltk.metrics.distance.edit_distance(x.lower(), y.lower()) ) / sumLen
 
         # se eu quero depurar, vamos analisar todos os similares
-        if Debug.DEBUG:
-            Debug.addRatio(x, y, result)
+        Debug.addRatio(x, y, result)
 
         return result

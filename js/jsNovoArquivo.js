@@ -18,4 +18,10 @@ $(document).ready(function() {
 
 	// chama o resize uma vez
 	$(window).resize();
+
+	// obtem o arquivo de lista
+	$.post('?', {lista: true}, function(data) {
+		console.log(data);
+		$('#arquivoList').text(data);
+	});
 });

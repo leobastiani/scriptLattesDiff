@@ -1,9 +1,32 @@
+<?php
+include_once "showErrors.php";
+
+if (isset($_POST['lista'])) {
+	include_once "execmd.php";
+	// obtendo o path do arquivo de lista
+	$getListString = execScriptLattesDiff("-na --get-list");
+	$getListLines = explode("\n", $getListString);
+	$getList = end($getListLines);
+	// lendo o arquivo de lista
+	if (!file_exists($getList)) {
+		// o arquivo não existe
+		echo 'Erro, por favor, contate o administrador.';
+		exit();
+	}
+	$readList = file_get_contents($getList);
+
+	echo $readList;
+	exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Formulário de novo arquivo</title>
+	<title>ScriptLattesDiff - Novo snap</title>
 	<!-- <link rel="stylesheet" href=""> -->
 
 	<!-- Jquery é a primeira biblioteca que deve ser carregada -->
@@ -21,18 +44,10 @@ if ($_POST == []) {
 	<!-- caso em que vou mostrar o formulário -->
 	<form method="post" id="formList">
 		<script src="../js/jsNovoArquivo.js"></script>
-		<?php
-			// obtendo o path do arquivo de lista
-			$getListString = execScriptLattesDiff("-na --get-list");
-			$getListLines = explode("\n", $getListString);
-			$getList = end($getListLines);
-			// lendo o arquivo de lista
-			$readList = file_get_contents($getList);
-		?>
 		Arquivo de lista mais recente:<br/>
-		<textarea name="arquivoList"><?php echo $readList; ?></textarea>
+		<textarea name="arquivoList" id="arquivoList">Aguarde</textarea>
 		<br/>
-		<input type="submit" value="Enviar" style="font-size: 1.4em">
+		<input type="submit" value="Enviar" onsubmit="if($('#arquivoList').text() == 'Aguarde') return false;" style="font-size: 1.4em">
 	</form>
 
 
@@ -54,9 +69,15 @@ if ($_POST == []) {
 		ignore_user_abort(true);
 		set_time_limit(0);
 
-		file_put_contents("tmp", $content);
+		// para o comando abaixo funcionar
+		// use chmod 777 . -R
+		// na pasta do ScriptLattesDiff
+		$arquivo = fopen("tmp", "w");
+		fwrite($arquivo, $content);
+		fclose($arquivo);
 		$cmdOutput = execScriptLattesDiff("-na -list tmp -y");
 		unlink("tmp");
+		echo $cmdOutput;
 	}
 	else {
 		?>
@@ -71,6 +92,7 @@ if ($_POST == []) {
 			var listaContent = '<?php echo str_replace("\n", "\\n", $content); ?>';
 			$.post('?', {ajax: true, arquivoList: listaContent }, function(data) {
 				// terminado de carregar
+				console.log(data);
 				window.location.href = "../html/index.htm";
 			});
 		</script>

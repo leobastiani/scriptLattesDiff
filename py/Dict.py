@@ -35,68 +35,87 @@ class Dict:
         retorna um elemento do tipo:
         {'descricao': 0.9} ou {}'''
 
+        def returnSimilar(x, y, campo):
+            '''x e y são strings'''
+            # se eles possuem esse campo, compara se são similares
+            similar = Str.similar(x, y)
+            if not (similar > Settings.porcentagemRatioSimilar):
+                # se não for parecido
+                return {}
 
-        def _similar(x, y):
-            '''função auxiliar e verdadeira'''
-
-
-            # analisa campos importantes, se um deles for parecido, retorna que é similar
-            camposImportantes = ['titulo', 'nome', 'descricao', 'titulo_trabalho']
-            for campo in camposImportantes:
-
-                # se está em X, também está em Y
-                if campo in x:
-                    # se os dois estão vazios, não posso concluir com esse algoritmo
-                    if x[campo] == '' and y[campo] == '':
-                        # não analiso os dois vazios
-                        continue
-
-                    # se eles possuem esse campo, compara se são similares
-                    similar = Str.similar(x[campo], y[campo])
-                    if not (similar > Settings.porcentagemRatioSimilar):
-                        # se não for parecido
-                        return {}
-
-                    result = {campo: similar}
-                    return result
+            result = {campo: similar}
+            return result
 
 
+        # analisa campos importantes, se um deles for parecido, retorna que é similar
+        camposImportantes = ['titulo', 'nome', 'descricao', 'titulo_trabalho']
+        for campo in camposImportantes:
+            # se está em X, também está em Y
+            if campo not in x:
+                continue
 
+            # se os dois estão vazios, não posso concluir com esse algoritmo
+            if x[campo] == '' and y[campo] == '':
+                # não analiso os dois vazios
+                continue
 
-            # dicionário com o resultado de similar
-            similar = {}
-            # aqui vão os campos para não analisarmos
-            # costumava ser 'autores', mas eu resolvi deixar vazio
-            # deve ser do tipo set
-            camposNaoAnalisar = set([])
-            # já testei os camposImportantes e não preciso testar camposNãoAnalisar
-            campos = set(x.keys()) - camposNaoAnalisar - set(camposImportantes)
-            for campo in campos:
+            elif x[campo] == '' or y[campo] == '':
+                # um deles está vazio, mas o outro não
+                if 'autores' in x:
+                    # só faço isso se tiver autores
 
+                    # deixa que o y sempre seja vazio
+                    if x[campo] == '':
+                        x, y = y, x
 
-                # se não similares, então houve um erro
-                similar[campo] = Str.similar(x[campo], y[campo])
-                if not similar[campo] > Settings.porcentagemRatioSimilar:
-                    # se não for similar
-                    return {}
+                    # novo campo que será utilizado para comparação
+                    yCampo = y['autores'][len(x['autores'])+3:len(y['autores'])]
 
+                    if yCampo == '':
+                        # provavelmente, os autores mudaram
+                        # começo a testar de novo
+                        xCampo = x['autores']+x[campo]
+                        yCampo = y['autores']
+                    else:
+                        xCampo = x[campo]
 
+                    camposParaAdicionar = ['natureza', 'nome_evento', 'livro', 'editora', 'paginas', 'ano']
+                    for campoParaAdicionar in camposParaAdicionar:
+                        if campoParaAdicionar in x:
+                            xCampo += x[campoParaAdicionar]
+                    
+                    return returnSimilar(xCampo, yCampo, campo)
 
-            # retorna todos os campos similares, por exemplo:
-            # {
-            #   'descricao': 0.9,
-            #   'titulo': 0.8,
-            # }
-            return similar
-
-
+            # caso em que não 
+            return returnSimilar(x[campo], y[campo], campo)
 
 
 
+        # dicionário com o resultado de similar
+        similar = {}
+        # aqui vão os campos para não analisarmos
+        # costumava ser 'autores', mas eu resolvi deixar vazio
+        # deve ser do tipo set
+        camposNaoAnalisar = set(['ano'])
+        # já testei os camposImportantes e não preciso testar camposNãoAnalisar
+        campos = set(x.keys()) - camposNaoAnalisar - set(camposImportantes)
+        for campo in campos:
 
-        ################
-        # retorna a função de verdade
-        return _similar(x, y)
+
+            # se não similares, então houve um erro
+            similar[campo] = Str.similar(x[campo], y[campo])
+            if not similar[campo] > Settings.porcentagemRatioSimilar:
+                # se não for similar
+                return {}
+
+
+
+        # retorna todos os campos similares, por exemplo:
+        # {
+        #   'descricao': 0.9,
+        #   'titulo': 0.8,
+        # }
+        return similar
 
 
 

@@ -41,9 +41,21 @@ Array.prototype.end = function() {
 /**
  * Deixa o Array só com elementos únicos
  */
-Array.prototype.unique = function () {
-	return $.unique(this);
-}
+Array.prototype.unique =
+// http://stackoverflow.com/a/12551652/6591204
+  function() {
+    var a = [];
+    var l = this.length;
+    for(var i=0; i<l; i++) {
+      for(var j=i+1; j<l; j++) {
+        // If this[i] is found later in the array
+        if (this[i] === this[j])
+          j = ++i;
+      }
+      a.push(this[i]);
+    }
+    return a;
+  };
 
 // se o elemento não for um array, transforma-o em array
 // jQuery são quase um array também

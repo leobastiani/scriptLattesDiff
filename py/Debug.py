@@ -34,6 +34,9 @@ class Debug:
     @staticmethod
     def addRatio(x, y, ratio):
         '''adiciona um novo ratio ao strSimilares'''
+        if not Debug.DEBUG:
+            return ;
+            
         Debug.strSimilares += [(x, y, ratio)]
 
 
@@ -49,7 +52,10 @@ class Debug:
 
         # salva o os similares no arquivo de debug
         similarPath = str(Misc.scriptPath / 'debug' / 'json' / 'similares.json')
-        Json.writeToJs(similarPath, 'Debug[\'similares\']', Debug.strSimilares)
+        Json.writeToJs(similarPath, 'Debug[\'similares\']', {
+            'strSimilares': Debug.strSimilares,
+            'porcentagemRatioSimilar': Settings.porcentagemRatioSimilar
+        })
 
 
 

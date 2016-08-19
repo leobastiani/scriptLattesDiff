@@ -38,4 +38,7 @@ if __name__ == '__main__':
 
 
     Settings.setSettingsByArgs(sys.argv)
-    ScriptLattesDiff.main()
+    try:
+        ScriptLattesDiff.main()
+    except KeyboardInterrupt:
+        pass

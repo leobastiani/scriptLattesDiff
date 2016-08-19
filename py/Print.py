@@ -3,6 +3,7 @@
 
 
 import colorama
+import os
 import sys
 
 class Print:
@@ -100,6 +101,10 @@ class Print:
         sys.stdout.write(colorama.Fore.CYAN)
         print(*args)
         sys.stdout.write(colorama.Fore.RESET)
+
+
+    def clear():
+        os.system("cls")
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@
 function documentReady() {
 
 	console.log('Todos os arquivos foram carregados!');
-	scriptLattesDiff.init()
+	scriptLattesDiff.init();
 	
 	/**
 	 * Começa alterando o título da página e o nome do grupo

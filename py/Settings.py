@@ -2,6 +2,7 @@
 # coding=utf-8
 
 import sys
+import re
 from pathlib import Path
 
 
@@ -42,7 +43,10 @@ class Settings:
 
     # é a porcentagem para que duas strings
     # sejam consideradas semelhantes
-    porcentagemRatioSimilar = 0.72
+    porcentagemRatioSimilar = 0.8
+
+    # quantidade máxima de caracteres que uma string pode possuir
+    maxLetrasSimilares = 200
 
     # as informações do primeiro snap não são necessárias
     # por isso, pode inclui-las no json ou não
@@ -59,9 +63,16 @@ class Settings:
     # deve ser uma lista assim [12334, 144623, 16354123, ...]
     pesquisadoresList = None
 
+    # apenas os campos que vou analisar
+    campos = []
+
     # este argumento não faz necessida da pergunta de Y/N, supondo que a pessoa
     # quis deixar como Y
     suprimirYN = False
+
+    # list glob serve para listar todos os arquivos
+    # encontrados pelo comando glob
+    listGlob = False
 
     # Versão do scriptLattes que gerou aqueles arquivos json
     # deve ser string
@@ -164,7 +175,7 @@ class Settings:
             '''obtem o novo argumento, sem removê-lo da pilha'''
             if len(args) <= index:
                 return ''
-            return args[index]
+            return args[-1-index]
 
 
 
@@ -269,6 +280,14 @@ class Settings:
                 Settings.analisarSimilares = False
 
 
+            elif isThisCommand(arg, 'campos'):
+                camposConcatenados = deveSer(novoArg(args), str)
+                Print.warning('Analisando os campos: '+camposConcatenados)
+                campos = Misc.strToList(camposConcatenados)
+                Settings.campos = campos
+
+
+
 
             elif isThisCommand(arg, 'novo-snap', 'novo-arquivo', 'na'):
                 Print.warning('Novo snapshot a caminho!')
@@ -278,6 +297,9 @@ class Settings:
                 pathDest = proxArg(args)
                 # o and pathDest qr dizer se ele tem algum conteúdo
                 if not isCommand(pathDest) and pathDest:
+                    # agora que eu sei que não é um comando
+                    # vou remover o argumento
+                    novoArg(args)
                     # verifico antes se o diretório existe
                     pathDest = Path(pathDest)
                     if not pathDest.is_dir():
@@ -343,6 +365,17 @@ class Settings:
 
             elif isThisCommand(arg, 'yes', 'y'):
                 Settings.suprimirYN = True
+
+
+
+            elif isThisCommand(arg, 'config', 'c'):
+                # comando para adicionar arquivo config
+                configPath = deveSer(novoArg(args), str)
+                Settings.configFilesGlob.append(configPath)
+
+
+            elif isThisCommand(arg, 'list-glob'):
+                Settings.listGlob = True
 
 
             # insira mais comandos por parametro acima

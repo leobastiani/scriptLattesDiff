@@ -82,7 +82,7 @@ class Misc:
     def strToList(x):
         '''pega uma string x como "asd, 123, dsa" e retorna
         ['asd', '123', 'dsa']'''
-        return re.findall(r'(\w+)', x)
+        return re.split(r'\s*,\s*', x)
 
 
 

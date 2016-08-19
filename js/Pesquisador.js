@@ -120,16 +120,23 @@ Pesquisador.prototype.getAlteracoes = function(iDataIni, iDataFin) {
 			// se campo está em alteracoesAnterior, mas não está em alteracoesPosterior
 			
 			
-			// são as alteracoes do tipo (+1) + (-1) e (-1) + (+1)
-			// removidos antes e acrescido depois
-			// acrescido antes e removido depois
-			Pesquisador.removerRepetidos(result, alteracoes, campo, '-');
-			Pesquisador.removerRepetidos(result, alteracoes, campo, '+');
+			try {
+				// são as alteracoes do tipo (+1) + (-1) e (-1) + (+1)
+				// removidos antes e acrescido depois
+				// acrescido antes e removido depois
+				Pesquisador.removerRepetidos(result, alteracoes, campo, '-');
+				Pesquisador.removerRepetidos(result, alteracoes, campo, '+');
 
 
-			// o que foi removido antes deve continuar no removido
-			// o que foi acrescido antes deve continuar no acrescido
-			Pesquisador.mergeAlteracoes(result, alteracoes, campo);
+				// o que foi removido antes deve continuar no removido
+				// o que foi acrescido antes deve continuar no acrescido
+				Pesquisador.mergeAlteracoes(result, alteracoes, campo);
+			} catch(e) {
+				console.log(self);
+				console.log(campo);
+				console.trace();
+				throw "Pare";
+			}
 		});
 
 
@@ -161,8 +168,8 @@ Pesquisador.camposComparativos = ['colaboradores', 'formacao_academica', 'projet
  * Se sinalAnterior = '+', tudo o que foi acrescido anteriormente, mas foi removido de novo,
  * ou seja, (+1) + (-1), deve ser removido de alteracoesPosterior e alteracoesAnterior
  */
-
 Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior, campo, sinalAnterior) {
+	
 	if(!alteracoesPosterior[campo] || !alteracoesAnterior[campo]) {
 		// um deles está vazio
 		// não há algo que foi removido no anterior e que foi acrescido
@@ -190,7 +197,8 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 
 				// existe a possibilidade de a alteracoesAnterior[campo][sinalAnterior]
 				// ficar vazio
-				if(!alteracoesAnterior[campo][sinalAnterior]) {
+				if(alteracoesAnterior[campo][sinalAnterior].length == 0 || alteracoesPosterior[campo][sinalPosterior].length == 0) {
+					// está vazio
 					break;
 				}
 
@@ -214,7 +222,7 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 
 				else {
 					// usa uma função especial que compara dois elementos
-					if(Dict.equals(elemPost, elemAnt)) {
+					if(Dict.equals(elemPost, elemAnt, campo)) {
 						alteracoesAnterior[campo][sinalAnterior].splice(indexAnterior, 1);
 						alteracoesPosterior[campo][sinalPosterior].splice(indexPosterior, 1);
 						// removo um por este exemplo:
@@ -222,6 +230,12 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 						indexPosterior--;
 						lenPost--;
 						lenAnt--;
+
+						// condição do primeiro while
+						if(!(indexAnterior<lenAnt)) {
+							break;
+						}
+
 					}
 				}
 

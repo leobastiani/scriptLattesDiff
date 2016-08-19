@@ -38,3 +38,4 @@ subl
 # cahce do python
 __pycache__
 **/*/__pycache__
+scriptlattesdiff.pyc

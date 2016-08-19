@@ -364,10 +364,12 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function() {
 	// quando eu clico em Pesquisar, os filtros são resetados
 	// não quero que isso aconteça
 	var devoRecarregarFiltros = $('#filtrosComuns .filtro').length != 0;
+	var filtro = null;
 	var filtrosMarcados = null;
 	if(devoRecarregarFiltros) {
 		// obtenho os filtros marcados
-		filtrosMarcados = Filtro.getFiltrosByPerfil('Marcados').vals();
+		filtro = $('.tipoFiltro:has(#filtrosComuns)').data('filtro');
+		filtrosMarcados = filtro.getFiltrosByPerfil('Marcados').vals();
 	}
 
 
@@ -396,7 +398,7 @@ scriptLattesDiff.paginas.filtroPrincipaisAlterados = function() {
 
 	if(devoRecarregarFiltros) {
 		// estou recarregando a página
-		Filtro._carregar(Filtro.getElem(filtrosMarcados));
+		filtro._carregar(Filtro.getElem(filtrosMarcados));
 	}
 
 
