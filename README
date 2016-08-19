@@ -1,0 +1,65 @@
+Execução do parâmetro --help:
+
+/* ================
+   ScriptLattesDiff
+   ================ */
+Insira os arquivos .config nos parâmetros sem nenhum caracter especial.
+  Por exemplo: 
+  ./Data1/*.config ./Data2./*.config
+
+Utilize wildcards para economizar esforços.
+  Por exemplo:
+  Essa linha de comando seria capaz de varrer essa estrutura com facilidade:
+  ./
+    Datas/
+      Data1/
+        grupo1.config
+
+      Data2/
+        grupo1.config
+
+  Comando: ./Datas/**/*.config
+
+Os comandos começam por "--", "-" ou "/", por exemplo:
+  --help, -help ou /help
+
+Os seguintes comandos estão disponíveis para complementar as funcionalidades do scriptLattesDiff:
+-output-folder, -o:
+  Define o novo caminho para a saída dos arquivos gerados.
+  Por exemplo: -o "PastaDeSaida"
+
+-nao-analisar-similares, -ns:
+  O scriptLattesDiff não analisará frases semelhantes.
+  Com esse comando o scriptLattesDiff se torna muito mais rápido.
+
+-novo-snap, -novo-arquivo, -na:
+  Cria um novo arquivo .config para que o scriptLattes possa interpretá-lo.
+
+-list:
+  Quando um novo snap for solicitado, este comando informa qual o arquivo de lista deverá ser utlizado.
+
+  Por exemplo: -list ./Arquivo.list
+
+-porcentagem-similar, -ps:
+  Define a nova porcentagem de critério para frases parecidas, sendo que 0 significa que todas as frases serão consideradas semelhantes e 100 significa que apenas frases idênticas são consideradas semelhantes.
+  Por exemplo: -ps 88
+
+-incluir-primeiro-snap, -ip:
+  Permite ao scriptLattesDiff inserir os dados do primeiro arquivo XML nos arquivos finais.
+
+-pesquisadores, -p:
+  Limita os pesquisadores que o scriptLattesDiff irá pesquisar.
+  Insira logo em sequência os nomes ou IDs dos pesquisadores.
+  Por exemplo: -p "123, 456, 789, João"
+
+-campos:
+  Limita os campos que o scriptLattesDiff irá pesquisar.
+  Insira logo em sequência os campos que o scriptLattesDiff deverá processar.
+  Por exemplo: -p "colaboradores, organizacao_evento"
+
+-max-pesquisadores, -max:
+  Defina o número máximo de pesquisadores que serão comparados.
+  Por exemplo: -max 5
+
+Site do projeto: http://github.com/leobastiani/scriptLattesDiff
+Vídeo explicativo: https://www.youtube.com/playlist?list=PLsBp8pJj-8BmGcN1iBM4M08tcCtVs14VJ
