@@ -10,7 +10,7 @@ if (isset($_POST['lista'])) {
 	// lendo o arquivo de lista
 	if (!file_exists($getList)) {
 		// o arquivo não existe
-		echo 'Erro, por favor, contate o administrador.';
+		echo $getListString;
 		exit();
 	}
 	$readList = file_get_contents($getList);
