@@ -1,0 +1,1 @@
+py -3 scriptLattesDiff.py ../Snaps/*/*.config %*
