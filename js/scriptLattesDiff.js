@@ -160,12 +160,13 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 					// campo antigo é um dicionário que dado
 					// o novo campo movido, eu digo qual é o campo antigo
 					var campoAntigo = {
-						// concluido desse lado                em andamento desse lado
-						'orientacao_doutorado_concluido':     'orientacao_doutorado_em_andamento',
-						'orientacao_mestrado_concluido':      'orientacao_mestrado_em_andamento',
-						'supervisao_pos_doutorado_concluido': 'supervisao_pos_doutorado_em_andamento',
-						'orientacao_outros_tipos_concluido':  'orientacao_outros_tipos_em_andamento',
-						'artigos_em_periodicos':              'artigos_em_revista',
+						// concluido desse lado                       em andamento desse lado
+						'orientacao_doutorado_concluido':            'orientacao_doutorado_em_andamento',
+						'orientacao_iniciacao_cientifica_concluido': 'orientacao_iniciacao_cientifica_em_andamento',
+						'orientacao_mestrado_concluido':             'orientacao_mestrado_em_andamento',
+						'supervisao_pos_doutorado_concluido':        'supervisao_pos_doutorado_em_andamento',
+						'orientacao_outros_tipos_concluido':         'orientacao_outros_tipos_em_andamento',
+						'artigos_em_periodicos':                     'artigos_em_revista',
 					};
 					campoHtml = 'De: '+campoAntigo[campo]+'\nPara: '+campo;
 				}

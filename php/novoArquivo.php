@@ -42,12 +42,12 @@ if ($_POST == []) {
 
 
 	<!-- caso em que vou mostrar o formulário -->
-	<form method="post" id="formList">
+	<form method="post" id="formList" onsubmit="return validate();">
 		<script src="../js/jsNovoArquivo.js"></script>
 		Arquivo de lista mais recente:<br/>
 		<textarea name="arquivoList" id="arquivoList">Aguarde</textarea>
 		<br/>
-		<input type="submit" value="Enviar" onsubmit="if($('#arquivoList').text() == 'Aguarde') return false;" style="font-size: 1.4em">
+		<input type="submit" value="Enviar" style="font-size: 1.4em">
 	</form>
 
 

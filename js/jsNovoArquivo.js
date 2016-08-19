@@ -25,3 +25,33 @@ $(document).ready(function() {
 		$('#arquivoList').text(data);
 	});
 });
+
+
+
+var validate = function () {
+	var text = $('#arquivoList').val();
+	text = $.trim(text);
+	if(text === '') {
+		return false;
+	}
+	// quebro todas as linhas
+	var linhas = text.split('\n');
+	var reMatch = /^(\d{16})\s*,?\s*(.+?)$/;
+	try {
+		linhas.forEach(function (linha, index) {
+			if(!linha.match(reMatch)) {
+				alert('A lista não está nos padrões do scriptLattes.\nO padrão a ser seguido é:\n{ID_LATTES} Vírgula {Nome}');
+				throw null;
+			}
+
+			linhas[index] = linha.replace(reMatch, '$1 , $2');
+
+		});
+
+	} catch(e) {
+		return false;
+	}
+
+	$('#arquivoList').val(linhas.join('\n')+'\n');
+	return true;
+}
