@@ -64,7 +64,9 @@ Dict.equals = function (x, y, campo) {
 
   if(Dict.soAutoresBug(x) && Dict.soAutoresBug(y)) {
     // tem autores, faço aquele macete
-    return x['autores'].replace(' ; ', '. ') == y['autores'].replace(' ; ', '. ');
+    var novoX = x['autores'].replace(' ; ', '. ').replace('?', ' ');
+    var novoY = y['autores'].replace(' ; ', '. ').replace('?', ' ');
+    return novoX == novoY;
   }
 
   return Dict._equals(x, y);

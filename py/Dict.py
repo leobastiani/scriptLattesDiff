@@ -106,17 +106,10 @@ class Dict:
                         x, y = y, x
 
                     # novo campo que será utilizado para comparação
-                    yCampo = y['autores'][len(x['autores'])+3:len(y['autores'])]
+                    xCampo = x['autores']+x[campo]
+                    yCampo = y['autores']
 
-                    if yCampo == '':
-                        # provavelmente, os autores mudaram
-                        # começo a testar de novo
-                        xCampo = x['autores']+x[campo]
-                        yCampo = y['autores']
-                    else:
-                        xCampo = x[campo]
-
-                    camposParaAdicionar = ['natureza', 'nome_evento', 'livro', 'editora', 'paginas', 'ano']
+                    camposParaAdicionar = ['natureza', 'nome_evento', 'nome_jornal', 'livro', 'editora', 'paginas', 'ano']
                     for campoParaAdicionar in camposParaAdicionar:
                         if campoParaAdicionar in x:
                             xCampo += x[campoParaAdicionar]
