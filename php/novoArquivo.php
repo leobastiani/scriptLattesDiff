@@ -1,8 +1,9 @@
 <?php
 include_once "showErrors.php";
+include_once "execmd.php";
+
 
 if (isset($_POST['lista'])) {
-	include_once "execmd.php";
 	// obtendo o path do arquivo de lista
 	$getListString = execScriptLattesDiff("-na --get-list");
 	$getListLines = explode("\n", $getListString);
@@ -36,7 +37,6 @@ if (isset($_POST['lista'])) {
 <body>
 
 <?php
-include_once "execmd.php";
 if ($_POST == []) {
 ?>
 
@@ -77,7 +77,12 @@ if ($_POST == []) {
 		fclose($arquivo);
 		$cmdOutput = execScriptLattesDiff("-na -list tmp -y");
 		unlink("tmp");
+
+		// salvando
 		echo $cmdOutput;
+		$arquivo = fopen("saida.txt", "w");
+		fwrite($arquivo, $cmdOutput);
+		fclose($arquivo);
 	}
 	else {
 		?>

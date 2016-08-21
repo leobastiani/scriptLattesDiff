@@ -279,30 +279,28 @@ Pesquisador.removerRepetidos = function (alteracoesAnterior, alteracoesPosterior
 		}
 
 
-
-		// se o campo deixou de existir
-		if(alteracoesPosterior[campo][sinalPosterior].length == 0) {
-			if(!alteracoesPosterior[campo][sinalAnterior]) {
-				// remove o campo pois está vazio
-				delete alteracoesPosterior[campo];
-			} else {
-				// preseva o campo alteracoesPosterior[campo][sinalAnterior]
-				delete alteracoesPosterior[campo][sinalPosterior];
+		var sinais = ['+', '-', '>', '~'];
+		[alteracoesPosterior, alteracoesAnterior].forEach(function (alt, index) {
+			if(Object.isEmpty(alt[campo])) {
+				// se o campo tá vazio, remove
+				delete alt[campo];
+				return true;
 			}
-		}
 
+			sinais.forEach(function (sinal, index) {
+				if(Object.isEmpty(alt[campo][sinal])) {
+					// se o sinal tá vazio, remove
+					delete alt[campo][sinal];
+				}
+			});
 
-		// se o campo deixou de existir
-		if(alteracoesAnterior[campo][sinalAnterior].length == 0) {
-			if(!alteracoesAnterior[campo][sinalPosterior]) {
-				// remove o campo pois está vazio
-				delete alteracoesAnterior[campo];
-			} else {
-				// preseva o campo alteracoesAnterior[campo][sinalAnterior]
-				delete alteracoesAnterior[campo][sinalAnterior];
+			// testo de novo pra ver se esvaziou
+			if(Object.isEmpty(alt[campo])) {
+				// se o campo tá vazio, remove
+				delete alt[campo];
+				return true;
 			}
-		}
-
+		});
 
 	}
 
