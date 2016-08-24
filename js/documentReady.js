@@ -61,7 +61,7 @@ function documentReady() {
 		$('#datasProcessamento ul').append($('<li>').text(elem.toStringScriptLattes()));
 	});
 	// e nos calendários do principaisAlteracoes
-	var datasCalendario = [scriptLattesDiff.datasProcessamento[0], scriptLattesDiff.datasProcessamento.end()];
+	var datasCalendario = [scriptLattesDiff.datasProcessamento[scriptLattesDiff.datasProcessamento.length-2], scriptLattesDiff.datasProcessamento.end()];
 	$('#principaisAlteracoes #escolhaDatas input[type="date"]').each(function(index, el) {
 		$(this).val(datasCalendario[index].toValDate());
 	});
@@ -98,8 +98,8 @@ function documentReady() {
 	 * cria as principais páginas do meu script
 	 */
 	scriptLattesDiff.paginas.principaisAlteracoes(
-		scriptLattesDiff.datasProcessamento[0],   // data inicial
-		scriptLattesDiff.datasProcessamento.end() // data final
+		scriptLattesDiff.datasProcessamento[scriptLattesDiff.datasProcessamento.length-2], // data inicial
+		scriptLattesDiff.datasProcessamento.end()                                          // data final
 	);
 
 

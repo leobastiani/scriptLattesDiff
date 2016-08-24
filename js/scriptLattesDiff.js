@@ -102,7 +102,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 	$('#principaisAlteracoes .membro').remove();
 
 	// teste se as datas não estiverem distanciadas
-	if(dataFinal <= dataInicial) {
+	if(dataFinal < dataInicial) {
 		console.log('Tentativa de gerar a principaisAlteracoes com dataFinal antes da inicial:\n'+dataInicial+'\n'+dataFinal);
 		return false;
 	}

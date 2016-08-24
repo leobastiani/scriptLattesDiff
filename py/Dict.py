@@ -80,44 +80,98 @@ class Dict:
                 # se não for parecido
                 return {}
 
-            result = {campo: similar}
-            return result
+            return {campo: similar}
+
+        def soAutoresBug(x):
+            if 'autores' not in x:
+                # se autores não estiver em x
+                return False
+
+            for campo in x:
+                if campo == 'ano':
+                    if x[campo] != '0':
+                        # se o campo for ano, tem q ser zero
+                        return False
+
+                elif campo != 'autores':
+                    if x[campo] != '':
+                        return False
 
 
+            # passei nos teste
+            return True
+
+        # primeiro caso: teste do doi
+        if 'doi' in x:
+            # não pode ser vazio nos dois
+            if x['doi'] != '' and y['doi'] != '':
+                if x['doi'] == y['doi']:
+                    # os doi devem ser iguais
+                    return {'doi': 1}
+                elif not soAutoresBug(x) and not soAutoresBug(y):
+                    # não estou no caso do bug
+                    # já posso saber que eles não são iguais
+                    return {}
+
+
+        # verifico se estou no caso do bug
+        casoBugX = soAutoresBug(x)
+        casoBugY = soAutoresBug(y)
+        casoBug = casoBugX or casoBugY
         # analisa campos importantes, se um deles for parecido, retorna que é similar
         camposImportantes = ['titulo', 'nome', 'descricao', 'titulo_trabalho']
-        for campo in camposImportantes:
-            # se está em X, também está em Y
-            if campo not in x:
-                continue
 
-            # se os dois estão vazios, não posso concluir com esse algoritmo
-            if x[campo] == '' and y[campo] == '':
-                # não analiso os dois vazios
-                continue
+        if casoBug:
+            # estou no caso do bug
+            if casoBugX and casoBugY:
+                # os dois tão bugados
+                return returnSimilar(x['autores'], y['autores'], 'autores')
 
-            elif x[campo] == '' or y[campo] == '':
-                # um deles está vazio, mas o outro não
-                if 'autores' in x:
-                    # só faço isso se tiver autores
 
-                    # deixa que o y sempre seja vazio
-                    if x[campo] == '':
-                        x, y = y, x
+            if casoBugX:
+                # só o X tá bugado
+                # vou inverter os pais
+                novoX, novoY = y, x
+            else:
+                novoX, novoY = x, y
 
-                    # novo campo que será utilizado para comparação
-                    xCampo = x['autores']+x[campo]
-                    yCampo = y['autores']
+            # neste ponto, eu sei que o novoY tá bugado e o novoX não
+            for campo in camposImportantes:
+                # se está em X, também está em Y
+                if campo not in novoX:
+                    continue
+                # novo campo que será utilizado para comparação
+                xCampo = novoX['autores']+novoX[campo]
+                yCampo = novoY['autores']
 
-                    camposParaAdicionar = ['natureza', 'nome_evento', 'nome_jornal', 'livro', 'editora', 'paginas', 'ano']
-                    for campoParaAdicionar in camposParaAdicionar:
-                        if campoParaAdicionar in x:
-                            xCampo += x[campoParaAdicionar]
-                    
-                    return returnSimilar(xCampo, yCampo, campo)
+                camposParaAdicionar = ['natureza', 'nome_evento', 'nome_jornal', 'livro', 'editora', 'paginas', 'ano']
+                for campoParaAdicionar in camposParaAdicionar:
+                    if campoParaAdicionar in novoX:
+                        xCampo += novoX[campoParaAdicionar]
+                
+                return returnSimilar(xCampo, yCampo, campo)
 
-            # caso em que não 
-            return returnSimilar(x[campo], y[campo], campo)
+            print('x:', novoX)
+            print('camposImportantes:', camposImportantes)
+            print('Erro encontrado no scriptLattes, nenhum campo foi capaz de abreviar este elemento.')
+            sys.exit(0)
+
+
+
+        # caso em que não tá bugado
+        else:
+            for campo in camposImportantes:
+                # se está em X, também está em Y
+                if campo not in x:
+                    continue
+
+                # se os dois estão vazios, não posso concluir com esse algoritmo
+                if x[campo] == '' and y[campo] == '':
+                    # não analiso os dois vazios
+                    continue
+
+                # caso em que não 
+                return returnSimilar(x[campo], y[campo], campo)
 
 
 

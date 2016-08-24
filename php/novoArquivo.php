@@ -83,6 +83,12 @@ if ($_POST == []) {
 		$arquivo = fopen("saida.txt", "w");
 		fwrite($arquivo, $cmdOutput);
 		fclose($arquivo);
+
+		// dá o chmod nao sei pq, mas assim funciona
+		if (!isWindows()) {
+			// é linux
+			execmd('chmod 777 ../ -R');
+		}
 	}
 	else {
 		?>

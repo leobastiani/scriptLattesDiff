@@ -467,26 +467,10 @@ class ScriptLattesDiff:
         jsonAnalisado = scriptLattesDiff.analisarJsons()
         ScriptLattesDiff.saveJsonAnalisado(jsonAnalisado)
 
-        tentativasSalvar = 0
-        maxTentativas = 10
-        while True:
-            try:
-                # copia os arquivos para o diretório de saída
-                ScriptLattesDiff.copyFilesToOutput()
-                # esta função é chamada assim que o objeto é destruido
-                Debug.saveFiles()
-            except:
-                Print.erro('Erro ao salvar.')
-                tentativasSalvar += 1
-                if tentativasSalvar >= maxTentativas:
-                    break # tentei demais :/
-                # espera 5 segundos
-                time.sleep(5)
-                continue
-
-
-            # não preciso mais tentar inserir
-            break
+        # copia os arquivos para o diretório de saída
+        ScriptLattesDiff.copyFilesToOutput()
+        # esta função é chamada assim que o objeto é destruido
+        Debug.saveFiles()
 
 
 
