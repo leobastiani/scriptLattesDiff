@@ -108,10 +108,8 @@ class Dict:
                 if x['doi'] == y['doi']:
                     # os doi devem ser iguais
                     return {'doi': 1}
-                elif not soAutoresBug(x) and not soAutoresBug(y):
-                    # não estou no caso do bug
-                    # já posso saber que eles não são iguais
-                    return {}
+
+                # se o doi for diferente, continuo procurando
 
 
         # verifico se estou no caso do bug

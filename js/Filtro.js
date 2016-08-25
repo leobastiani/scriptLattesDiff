@@ -406,14 +406,30 @@ Filtro.prototype.getLocalStorage = function () {
  * Salva um json da msma forma que é obtido em this.getLocalStorage()
  * e atualiza o campo de filtros
  */
-Filtro.prototype.salvarLocalStorage = function (dados, novoCampo) {
-	localStorage.setItem(this.perfisLocalStorage, JSON.stringify(dados));
+Filtro.prototype.salvarLocalStorage = function (dados, novoCampo, salvarRemotamente) {
+	if(typeof salvarRemotamente === 'undefined') {
+		salvarRemotamente = true;
+	}
+
+	var jsonDados = JSON.stringify(dados);
+	localStorage.setItem(this.perfisLocalStorage, jsonDados);
 	
 	this.setPerfis(Object.keys(dados));
 
 	// atualiza o valor do perfil
 	novoCampo = novoCampo || 'Todos';
 	this.jPerfil.val(novoCampo);
+
+	// salva no servidor remotamente
+	if(!scriptLattesDiff.isProtocoloFile() && salvarRemotamente) {
+		// envia via ajax uma requisição
+		var postRequest = {'perfil': this.perfisLocalStorage, 'dados': jsonDados};
+		$.post('../php/salvarPerfilFiltro.php', postRequest, function(data, textStatus, xhr) {
+			console.log('Filtro salvo com sucesso: ', postRequest);
+			console.log(data);
+		});
+	}
+
 }
 
 
@@ -455,6 +471,9 @@ Filtro.prototype.getFiltrosByPerfil = function (nomePerfil) {
  * presentes no array perfis
  */
 Filtro.prototype.setPerfis = function (perfis) {
+	if(typeof perfis === 'undefined') {
+		perfis = Object.keys(this.getLocalStorage());
+	}
 	// zera o filtroSelect
 	var filtroSelect = this.jPerfil;
 	filtroSelect.find('option').remove();

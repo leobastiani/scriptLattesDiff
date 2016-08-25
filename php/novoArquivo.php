@@ -45,6 +45,7 @@ if ($_POST == []) {
 	<!-- caso em que vou mostrar o formulário -->
 	<form method="post" id="formList" onsubmit="return validate();">
 		<script src="../js/jsNovoArquivo.js"></script>
+		Os nomes são ordenados automaticamente.<br/>
 		Arquivo de lista mais recente:<br/>
 		<textarea name="arquivoList" id="arquivoList">Aguarde</textarea>
 		<br/>

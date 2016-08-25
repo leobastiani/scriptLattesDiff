@@ -79,7 +79,7 @@ scriptLattesDiff.paginas = {}
 
 // retorna true se estou no protocolo file:/// ou seja, estou offline
 scriptLattesDiff.isProtocoloFile = function () {
-	return window.location.href.match(/^file:\/\/\//);
+	return window.location.href.match(/^file:\/\/\//) !== null;
 }
 
 
@@ -345,39 +345,61 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 
 
-$('#principaisAlteracoes').on('click', '.alteradoValor span', function(e) {
-	alteracoes = $(this).data('alteracoes');
+$('#principaisAlteracoes').on('click', '.alteradoValor > span', function(e) {
+	var alteracoes = $(this).data('alteracoes');
 	// se alterações é uma string, como no caso de colaboradores
 	// não faz nd
 	if(typeof alteracoes == "string") {
 		return ;
 	}
 
+	// quero expandir, ele não tá expandido
+	if(!$(this).hasClass('expandido')) {
+		// expandido qr dizer q ele está mostrando tudo
+		$(this).toggleClass('expandido');
 
-	// expandido qr dizer q ele está mostrando tudo
-	$(this).toggleClass('expandido');
-
-
-	if($(this).hasClass('expandido')) {
 		// adiciona spans na forma
 		// chave: valor
 		
 		var spans = new Array();
 		for(var chave in alteracoes) {
 			var valor = alteracoes[chave];
-			spans.push(
-				$('<span>').text(chave+': '+valor)
-			);
+			if(chave == 'doi') {
+				// é um doi
+				valor = '<a href="'+valor+'" target="_blank">'+valor+'</a>';
+				spans.push(
+					$('<span>').html(chave+': '+valor)
+				);
+			}
+			else {
+				// não é um doi
+				spans.push(
+					$('<span>').text(chave+': '+valor)
+				);
+			}
+			
 		}
-
 
 		// adiciona os spans no elemento atual
 		$(this).html(spans);
 	}
-	else {
+});
+
+
+$('#principaisAlteracoes').on('dblclick', '.alteradoValor > span', function(e) {
+	var alteracoes = $(this).data('alteracoes');
+	// se alterações é uma string, como no caso de colaboradores
+	// não faz nd
+	if(typeof alteracoes == "string") {
+		return ;
+	}
+
+	// quero contrair, ele já tá expandido
+	if($(this).hasClass('expandido')) {
+		// expandido qr dizer q ele está mostrando tudo
+		$(this).toggleClass('expandido');
 		// quero contrair
 		$(this).text(scriptLattesDiff.resumirDict(alteracoes));
-
 	}
 });
 

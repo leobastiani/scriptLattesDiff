@@ -77,7 +77,6 @@ var validate = function () {
 	try {
 		linhas.forEach(function (linha, index) {
 			if(!linha.match(reMatch)) {
-				alert('A lista não está nos padrões do scriptLattes.\nO padrão a ser seguido é:\n{ID_LATTES} Vírgula {Nome}');
 				throw null;
 			}
 
@@ -86,9 +85,25 @@ var validate = function () {
 		});
 
 	} catch(e) {
+		alert('A lista não está nos padrões do scriptLattes.\nO padrão a ser seguido é:\n{ID_LATTES} Vírgula {Nome}');
 		return false;
 	}
 
-	$('#arquivoList').val(linhas.unique().join('\n')+'\n');
+
+	linhas = linhas.unique().sort(function (a, b) {
+		var nomeA = a.match(reMatch)[2];
+		var nomeB = b.match(reMatch)[2];
+
+		if(nomeA < nomeB) {
+			return -1;
+		} else if(nomeA > nomeB) {
+			return 1;
+		} else {
+			return 0;
+		}
+
+	});
+
+	$('#arquivoList').val(linhas.join('\n')+'\n');
 	return true;
 }

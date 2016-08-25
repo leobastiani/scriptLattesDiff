@@ -162,7 +162,18 @@ function documentReady() {
 		new Filtro('filtroPesquisadoresPerfis', $('#filtroPesquisadoresSelect'))
 	];
 	filtrosObj.forEach(function (elem, index) {
-		elem.setPerfis(Object.keys(elem.getLocalStorage()));
+		elem.setPerfis();
+
+		// tenta carregar os filtros da net
+		if(!scriptLattesDiff.isProtocoloFile()) {
+			// posso carregar
+			$.post('../php/carregarPerfilFiltro.php', {perfil: elem.perfisLocalStorage}, function(data, textStatus, xhr) {
+				data = JSON.parse(data);
+				// agora que eu tenho os dados, vou salvar e recarregar
+				elem.salvarLocalStorage(data, '', false);
+				elem.setPerfis();
+			});
+		}
 	});
 
 
