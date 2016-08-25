@@ -229,10 +229,6 @@ class ScriptLattesDiff:
         # apenas serão copiados do mais novo
         for pesquisador in maisRecente.json:
 
-            if pesquisador not in segundoMaisRecente.json:
-                # é um novo pesquisador, não vou analisá-lo agora
-                continue
-
             if not Settings.pesquisadorNaListaPermitidos(maisRecente, pesquisador):
                 # se o pesquisador não está na lista, passo para o próximo
                 continue

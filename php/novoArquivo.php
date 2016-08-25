@@ -32,6 +32,7 @@ if (isset($_POST['lista'])) {
 
 	<!-- Jquery é a primeira biblioteca que deve ser carregada -->
 	<script src="../vendor/jquery.js"></script>
+	<script src="../js/Array.js"></script>
 
 </head>
 <body>

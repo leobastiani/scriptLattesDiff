@@ -89,6 +89,6 @@ var validate = function () {
 		return false;
 	}
 
-	$('#arquivoList').val(linhas.join('\n')+'\n');
+	$('#arquivoList').val(linhas.unique().join('\n')+'\n');
 	return true;
 }
