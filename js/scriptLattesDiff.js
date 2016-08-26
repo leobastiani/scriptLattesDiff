@@ -345,7 +345,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 
 
-$('#principaisAlteracoes').on('click', '.alteradoValor > span', function(e) {
+$('#principaisAlteracoes').on('click', '.alteradoValor > span, .alteradoGrupo > span', function(e) {
 	var alteracoes = $(this).data('alteracoes');
 	// se alterações é uma string, como no caso de colaboradores
 	// não faz nd
@@ -386,7 +386,7 @@ $('#principaisAlteracoes').on('click', '.alteradoValor > span', function(e) {
 });
 
 
-$('#principaisAlteracoes').on('dblclick', '.alteradoValor > span', function(e) {
+$('#principaisAlteracoes').on('dblclick', '.alteradoValor > span, .alteradoGrupo > span', function(e) {
 	var alteracoes = $(this).data('alteracoes');
 	// se alterações é uma string, como no caso de colaboradores
 	// não faz nd
