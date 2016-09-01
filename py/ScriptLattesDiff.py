@@ -192,6 +192,9 @@ class ScriptLattesDiff:
         o parametro é uma lista com todos os ConfigFile para analisar
         '''
 
+        def acrescentarData(lista, index, data):
+            lista[index] = dict.copy(lista[index])
+            lista[index]['Data'] = data
 
         def elemVazioBug(elem):
             '''um bug que tudo fica vazio, e o ano é zero'''
@@ -199,6 +202,9 @@ class ScriptLattesDiff:
                 if campo == 'ano':
                     if elem[campo] != '0':
                         return False
+
+                elif campo == 'Data':
+                    continue
 
                 elif elem[campo] != '':
                     return False
@@ -354,12 +360,24 @@ class ScriptLattesDiff:
                                 # esse bug não acontece com os colaboradores
                                 for sinal in ['+', '-']:
                                     # apenas os sinais de + e -
+                                    if sinal not in diferencas:
+                                        continue
+
                                     for i in range(len(diferencas[sinal])-1, -1, -1):
                                         elem = diferencas[sinal][i]
                                         # para os elementos
                                         if elemVazioBug(elem):
-                                            diferencas[sinal].remove(elem)
-                                    
+                                            del diferencas[sinal][i]
+                                            continue
+                                        else:
+                                            # aproveito para adicionar a data
+                                            acrescentarData(diferencas[sinal], i, configFile.data_processamento)
+                                
+                                # agora vou adicionar a data para o '~'
+                                if '~' in diferencas:
+                                    for elem in diferencas['~']:
+                                        acrescentarData(elem, 0, configFileAnterior.data_processamento)
+                                        acrescentarData(elem, 1, configFile.data_processamento)
 
                     except Exception as e:
                         section('Erro')
@@ -372,7 +390,7 @@ class ScriptLattesDiff:
                         exit(0)
 
                     # fim do try
-
+                
                 # fim do for de configFile
             # fim do for de pesquisador
 

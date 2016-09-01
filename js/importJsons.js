@@ -105,15 +105,6 @@ function documentReady() {
 
 
 $(document).ready(function() {
-	// se não tá disponível o localStorage
-	try {
-		if(typeof localStorage === 'undefined') {
-			throw null;
-		}
-	} catch(e) {
-		alert('Por favor, utilize um navegador atualizado.');
-		throw null;
-	}
 
 	// carregará todos os arquivos jsons e em seguida chamará a função documentReady
 	/**

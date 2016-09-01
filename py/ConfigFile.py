@@ -82,8 +82,18 @@ class ConfigFile:
             ('supervisao_pos_doutorado_em_andamento', 'supervisao_pos_doutorado_concluido'),
             ('orientacao_outros_tipos_em_andamento', 'orientacao_outros_tipos_concluido'),
             ('artigos_em_revista', 'artigos_em_periodicos')
+            # esse é o versa do de cima
+            # houve apenas um caso em todo o caso de teste
+            # ('artigos_em_periodicos', 'artigos_em_revista')
         ],
     }
+
+    # campos que serão analisados para dizer se os dict são parecidos
+    camposImportantes = set(['titulo', 'nome', 'descricao', 'titulo_trabalho'])
+    # aqui vão os campos para não analisarmos
+    # costumava ser 'autores', mas eu resolvi deixar vazio
+    # deve ser do tipo set
+    camposNaoAnalisar = set(['ano', 'Data', 'ano_inicio', 'ano_conclusao'])
 
 
 

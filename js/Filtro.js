@@ -52,6 +52,9 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 	// definindo o ponteiro no elemento html
 	this.jTipoFiltro.data('filtro', this);
 
+	// nome dos arquivos
+	this.nomeArquivo = this.jTipoFiltro.attr('data-nomeArquivo');
+
 
 	// vamos adicionar funções ao document.ready
 	var self = this;
@@ -137,6 +140,71 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 			delete filtrosSalvos[nomePerfil];
 			self.salvarLocalStorage(filtrosSalvos);
 		});
+
+
+		/**
+		 * Definindo botão de exportar
+		 */
+		self.jTipoFiltro.find('#exportarPerfilFiltro').click(function(e) {
+			function downloadStringAsFile(file_name, content) {
+				var a = document.createElement('a');
+				a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+				a.setAttribute('download', file_name);
+				a.click();
+			}
+
+			var filtrosSalvos = self.getLocalStorage();
+			// agora vou por num arquivo e salvar
+			// se content for vazio, salva o {}
+			var content = JSON.stringify(filtrosSalvos) || '{}';
+			downloadStringAsFile(self.nomeArquivo+".txt", content);
+		});
+
+
+
+		self.jTipoFiltro.find('#importarPerfilFiltro').click(function(e) {
+			scriptLattesDiff.navegadorAtualizado(FileReader);
+
+			// cria um inputFile para ser clicado
+			var inputBtn = $('<input type="file">');
+			
+			inputBtn.on('change', function(e) {
+				// garante que existe o FileReader
+				scriptLattesDiff.navegadorAtualizado(FileReader);
+
+
+				var files = e.target.files;
+				var file = files[0];           
+				var reader = new FileReader();
+				reader.onload = function() {
+					// aqui está o o conteudo que acabei de ler
+					var data = this.result;
+
+					// leio ele como json
+					var jsonData = JSON.parse(data);
+					var filtroAtual = self.getLocalStorage();
+					// mesclo um no outro
+					for(var nomeFiltro in jsonData) {
+						filtroAtual[nomeFiltro] = jsonData[nomeFiltro];
+					}
+
+					// agora eu salvo
+					self.salvarLocalStorage(filtroAtual);
+				}
+
+				reader.readAsText(file);
+			});
+
+
+
+			// por ultimo, clicamos no botao
+			inputBtn.click();
+		});
+
+
+
+
+
 
 	}); // fim do ready
 
@@ -411,7 +479,17 @@ Filtro.prototype.salvarLocalStorage = function (dados, novoCampo, salvarRemotame
 		salvarRemotamente = true;
 	}
 
-	var jsonDados = JSON.stringify(dados);
+
+	// deve ser uma string
+	var jsonDados;
+	if(typeof dados === 'string') {
+		jsonDados = dados;
+	}
+	else {
+		jsonDados = JSON.stringify(dados);
+	}
+
+
 	localStorage.setItem(this.perfisLocalStorage, jsonDados);
 	
 	this.setPerfis(Object.keys(dados));

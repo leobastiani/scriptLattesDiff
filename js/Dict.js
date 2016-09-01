@@ -96,6 +96,11 @@ Dict.soAutoresBug = function (x) {
       }
     }
 
+    else if(campo == 'Data') {
+      // campo Data criado por mim
+      continue;
+    }
+
     else if(campo != 'autores') {
       if(x[campo] != '') {
         return false;
@@ -127,7 +132,7 @@ Dict._equals = function(x, y) {
 	
   // testa campo por campo
   for(var campo in x) {
-    if(campo in ['ano', 'autores']) {
+    if(campo in ['ano', 'autores', 'Data']) {
       // não testa o ano e autores
       continue;
     }

@@ -60,8 +60,28 @@ class Dict:
         '''retorna True se X e Y forem iguais,
         retorna True se X e Y forem parecidos de acordo com as necessidades do scriptLattesDiff'''
 
+        if isinstance(x, dict):
+            
+            for campo in ConfigFile.camposImportantes:
+                if campo in x:
+                    if x[campo] and y[campo]:
+                        return x[campo] == y[campo]
 
-        return x == y
+
+            
+
+            for campo in x:
+                if campo in ConfigFile.camposNaoAnalisar:
+                    continue
+
+                if x[campo] != y[campo]:
+                    return False
+
+            return True
+
+        else:
+            # caso de ser uma string, principalmente
+            return x == y
 
 
 
@@ -117,7 +137,6 @@ class Dict:
         casoBugY = soAutoresBug(y)
         casoBug = casoBugX or casoBugY
         # analisa campos importantes, se um deles for parecido, retorna que é similar
-        camposImportantes = ['titulo', 'nome', 'descricao', 'titulo_trabalho']
 
         if casoBug:
             # estou no caso do bug
@@ -134,7 +153,7 @@ class Dict:
                 novoX, novoY = x, y
 
             # neste ponto, eu sei que o novoY tá bugado e o novoX não
-            for campo in camposImportantes:
+            for campo in ConfigFile.camposImportantes:
                 # se está em X, também está em Y
                 if campo not in novoX:
                     continue
@@ -150,7 +169,7 @@ class Dict:
                 return returnSimilar(xCampo, yCampo, campo)
 
             print('x:', novoX)
-            print('camposImportantes:', camposImportantes)
+            print('ConfigFile.camposImportantes:', ConfigFile.camposImportantes)
             print('Erro encontrado no scriptLattes, nenhum campo foi capaz de abreviar este elemento.')
             sys.exit(0)
 
@@ -158,7 +177,7 @@ class Dict:
 
         # caso em que não tá bugado
         else:
-            for campo in camposImportantes:
+            for campo in ConfigFile.camposImportantes:
                 # se está em X, também está em Y
                 if campo not in x:
                     continue
@@ -172,15 +191,11 @@ class Dict:
                 return returnSimilar(x[campo], y[campo], campo)
 
 
-
         # dicionário com o resultado de similar
         similar = {}
-        # aqui vão os campos para não analisarmos
-        # costumava ser 'autores', mas eu resolvi deixar vazio
-        # deve ser do tipo set
-        camposNaoAnalisar = set(['ano'])
         # já testei os camposImportantes e não preciso testar camposNãoAnalisar
-        campos = set(x.keys()) - camposNaoAnalisar - set(camposImportantes)
+        campos = set(x.keys()) - ConfigFile.camposNaoAnalisar - ConfigFile.camposImportantes
+
         for campo in campos:
 
 
@@ -207,7 +222,7 @@ class Dict:
         '''nesta função, ao invés de mostrar o json, mostra-se a parte mais interessante, que o título ou o nome'''
 
 
-        maisImportantes = ['titulo', 'nome']
+        maisImportantes = ['titulo', 'nome', 'descricao', 'titulo_trabalho']
         for i in maisImportantes:
             if i in x:
                 return x[i]
@@ -266,3 +281,4 @@ class Dict:
 from py.Str import Str
 from py.misc import *
 from py.Settings import Settings
+from py.ConfigFile import ConfigFile

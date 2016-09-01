@@ -204,6 +204,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 						'supervisao_pos_doutorado_concluido':        'supervisao_pos_doutorado_em_andamento',
 						'orientacao_outros_tipos_concluido':         'orientacao_outros_tipos_em_andamento',
 						'artigos_em_periodicos':                     'artigos_em_revista',
+						'artigos_em_revista':                        'artigos_em_periodicos',
 					};
 					campoHtml = 'De: '+campoAntigo[campo]+'\nPara: '+campo;
 				}
@@ -610,5 +611,19 @@ scriptLattesDiff.paginas.getClassBySinal = function (sinal) {
 	else {
 		// erro, sinal não encontrado
 		throw new Error('Sinal "'+sinal+'" não encontrado em scriptLattesDiff.paginas.getClassBySinal');
+	}
+}
+
+
+
+
+scriptLattesDiff.navegadorAtualizado = function (funcionalidade) {
+	try {
+		if(typeof funcionalidade === 'undefined') {
+			throw null;
+		}
+	} catch(e) {
+		alert('Por favor, utilize um navegador atualizado.');
+		throw null;
 	}
 }

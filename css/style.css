@@ -177,6 +177,7 @@ position: absolute;}
 
 .alteradoChave {
     width: 30%;
+    word-wrap: break-word;
 }
 
 .alteradoGrupo > span {

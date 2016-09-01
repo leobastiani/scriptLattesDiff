@@ -42,6 +42,9 @@
  */
 function documentReady() {
 
+	// se não tá disponível o localStorage
+	scriptLattesDiff.navegadorAtualizado(localStorage);
+
 	console.log('Todos os arquivos foram carregados!');
 	scriptLattesDiff.init();
 	
@@ -214,6 +217,5 @@ function documentReady() {
 	// porque eu escondo os campos acrescidos, removidos, ...
 	// que não possuem nenhum elemento
 	Filtro.update(false);
-
 
 }

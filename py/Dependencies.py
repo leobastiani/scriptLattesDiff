@@ -55,7 +55,7 @@ try:
 
 
 
-except:
+except ImportError:
     def getPyCmd():
         '''retorna py -3 se for windows e python3 se for linux'''
         if os.name == 'nt':
@@ -107,3 +107,7 @@ except:
     print()
     print('Por favor, rode o scriptLattesDiff novamente.')
     exit()
+
+
+except KeyboardInterrupt:
+    sys.exit(0)
