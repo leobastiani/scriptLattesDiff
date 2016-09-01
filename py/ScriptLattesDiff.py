@@ -339,6 +339,8 @@ class ScriptLattesDiff:
                     # ou seja, a diferença do mais novo em relação ao mais antigo
                     try:
                         diferencas = List.differences(configFileAnterior.json[pesquisador][campo], configFile.json[pesquisador][campo])
+                        # nao estou interessado nos movidos
+                        del diferencas['>']
                     
                         # diferencas é:
                         # {
@@ -420,8 +422,20 @@ class ScriptLattesDiff:
                         # tento a próxima data
                         continue
 
+                    # passa reto se um deles for vazio
+                    if not pesquisadores[pesquisador][campoRemovido][dataIgual]['-']:
+                        continue
+
+                    if not pesquisadores[pesquisador][campoAcrescido][dataIgual]['+']:
+                        continue
+
                     # agora precisamos remover os similares
-                    pesquisadores[pesquisador][campoAcrescido][dataIgual]['>'] = List.removeSimilares(pesquisadores[pesquisador][campoRemovido][dataIgual]['-'], pesquisadores[pesquisador][campoAcrescido][dataIgual]['+'])
+                    diferencas = List.differences(pesquisadores[pesquisador][campoRemovido][dataIgual]['-'], pesquisadores[pesquisador][campoAcrescido][dataIgual]['+'])
+                    # vou trabalhar nos movidos pra ficar igual a diferenças
+                    for i in range(len(diferencas['>'])):
+                        diferencas['>'][i] = [diferencas['>'][i], diferencas['>'][i], {'titulo': 1}]
+                    # agora que eu simulei, vou concatenar uma na outra
+                    pesquisadores[pesquisador][campoAcrescido][dataIgual]['>'] = diferencas['>'] + diferencas['~']
 
 
         # fim de analisar os pesquisadores

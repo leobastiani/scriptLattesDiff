@@ -81,6 +81,10 @@ class List:
 
             # ~ pode não estar habilitado nas configurações
             # por isso, não está aqui
+
+
+            # os movidos, que são os que estão nos dois
+            '>': [],
         }
 
 
@@ -89,6 +93,12 @@ class List:
         for child in x:
             if not List.has(y, child):
                 result['-'].append(child)
+            else:
+                # preciso fazer isso uma vez só
+                # porque se 1 está em -
+                # 1 tmb está em +
+                # ai eu adiciono duas vezes, se eu chamar isso duas vezes
+                result['>'].append(child)
 
 
         for child in y:
