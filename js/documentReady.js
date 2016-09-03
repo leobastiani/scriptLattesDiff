@@ -178,7 +178,13 @@ function documentReady() {
 		if(!scriptLattesDiff.isProtocoloFile()) {
 			// posso carregar
 			$.post('../php/carregarPerfilFiltro.php', {perfil: elem.perfisLocalStorage}, function(data, textStatus, xhr) {
-				data = JSON.parse(data);
+				try {
+					data = JSON.parse(data);
+				}
+				catch(e) {
+					console.log('É preciso digitar a senha para ler os filtros.');
+					return ;
+				}
 				// agora que eu tenho os dados, vou salvar e recarregar
 				elem.salvarLocalStorage(data, '', false);
 				elem.setPerfis();
