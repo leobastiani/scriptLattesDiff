@@ -1,5 +1,6 @@
 <?php
-include_once "password.php"
+include_once "showErrors.php";
+include_once "password.php";
 session_start();
 
 if (isset($_POST['senha'])) {

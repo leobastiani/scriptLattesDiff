@@ -1,4 +1,5 @@
 <?php
+include_once "showErrors.php";
 include_once "checkPassword.php";
 
 chdir("..");
