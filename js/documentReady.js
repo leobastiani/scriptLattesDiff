@@ -86,7 +86,7 @@ function documentReady() {
 				return ;
 			}
 			// selecionei uma data
-			var devoMudar = $(this).parent('div').find('input');
+			var devoMudar = $(this).parents('.data-grupo').find('input[type=date]');
 			devoMudar.val($(this).val());
 
 			// volta para o estado inicial
