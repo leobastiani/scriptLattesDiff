@@ -1,5 +1,7 @@
 <?php
 include_once "showErrors.php";
+include_once "checkPassword.php";
+
 
 // pasta que estão os perfis de filtros
 $pasta = '../cookies';

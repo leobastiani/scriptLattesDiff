@@ -1,4 +1,6 @@
 <?php
+include_once "checkPassword.php";
+
 chdir("..");
 
 function isWindows() {

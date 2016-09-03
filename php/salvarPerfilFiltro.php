@@ -1,5 +1,7 @@
 <?php
 include_once "showErrors.php";
+include_once "checkPassword.php";
+
 
 if (!isset($_POST['perfil']) or !isset($_POST['dados'])) {
 	// não há oq ser feito

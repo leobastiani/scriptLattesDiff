@@ -1,5 +1,6 @@
 <?php
 include_once "showErrors.php";
+include_once "checkPassword.php";
 include_once "execmd.php";
 
 
