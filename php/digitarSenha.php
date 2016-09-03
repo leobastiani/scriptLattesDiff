@@ -20,9 +20,12 @@ if (isset($_POST['senha'])) {
 
 $(document).ready(function() {
 	var senha = window.prompt('Digite a senha', '');
-	$.post('?', {senha: senha}, function(data, textStatus, xhr) {
-		window.location.replace('index.php');
-	});
+	
+	if(senha) {
+		$.post('?', {senha: senha}, function(data, textStatus, xhr) {
+			window.location.replace('index.php');
+		});
+	}
 });
 
 </script>
