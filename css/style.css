@@ -1,241 +1,65 @@
-/**
- * Deixe que o chorme faca todo o trabalho
- */
-
-
-
-
-.dialogoCarregando {
-    margin-left: 2%;
-    margin-right: 2%;
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    font-size: 0.9em;
-    text-align: justify;
-}
-
-.campoAlterado > div {
-    float: left;
-}
-
-.alteradoValor {
-    margin-bottom: 20px;
-    width: 70%;
-}
-
-.removidos .alteradoValor {
-    color: red;
-}
-
-.acrescidos .alteradoValor {
-    color: green;
-}
-
-header {
-    clear: both;
-    background: #D4E5F5;
-    color: #000000;
-    margin: 0 auto;
-    text-align: center;
-    padding: 10px 10px 10px 10px;
-}
-
-#datasProcessamento {
-    background: #F4FAFF;
-    padding: 10px;
-}
-
-
-/* ====================================================
-   TRATANDO A SECAO DE MEMBROS
-   ==================================================== */
-.pagina {
-    width: 80%;
-    margin-left: 10%;
-}
-.membro {
-    width: 100%;
-    margin-bottom: 40px;
-}
-
-.nomeLattes {
-    overflow: hidden; /* Isso esta aqui porque float left nao tem height */
-    background-color: #EEE;
-    padding: 0 10px;
-}
-
-.nomeLattes > h3 {
-    float: left;
-    width: 50%;
-    margin: 10px 0;
-}
-
-.acrescidos > span {
-    color: green;
-}
-
-.removidos > span {
-    color: red;
-}
-
-.tabelaAlterados > span {
-    display: block;
-    font-weight: bold;
-}
-
-.clearfix:after {
-  content:"";
-  display:table;
-  clear:both;
-}
-
-#filtros {
-    margin-bottom: 10px;
+@media print {
+body {-webkit-print-color-adjust: exact !important;}
+a[href]:after {
+    content: none !important;
+  }
 }
 
 .filtro {
-    display: block;      float: left;
-    margin: 10px;
+    margin: 5px 10px 5px 0;
 }
 
-#filtros > h3 {
-    margin: 0;
-}
 
-.listraCinza {
-    background-color: #F7F7F7;
-}
-
-.alteradoValor span {
-    display: block;
+.alteracao-elemento {
     margin-bottom: 55px;
-    cursor: pointer;
 }
 
-#escolhaDatas div {
-    text-align: center;
-    width: 33.333%;
-    float: left;
+footer.well {
+    margin-bottom: 0;
 }
 
-#escolhaDatas label {
-    display: block;
-    margin-bottom: 9px;
+.acrescidos div, .acrescidos p {
+    color: green !important;
+}
+.removidos div, .removidos p {
+    color: red !important;
+}
+.movidos div, .movidos p {
+    color: orange !important;
+}
+.alterados div, .alterados p {
+    color: blue !important;
 }
 
-.mostraElementoCompleto {
-position: absolute;}
-
-.alteradoValor span:hover {
+.alteracao-title {
     font-weight: bold;
 }
 
-.alteradoValor .expandido {
-    font-weight: bold;
-}
-
-.expandido span {
-    margin-bottom: 5px;
-}
-
-.fundoPreto {
-    position: fixed;
-    left: 0;
-    top: 0;
-    background: #000;
-    width: 100%;
-    height: 100%;
-}
-
-.dialogoCarregando {
-    position: fixed;
-    background: #FFF;
-    margin: auto;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    width: 500px;
-    height: 300px;
-    text-align: center;
-}
-
-.displayBlock {
-    display: block;
-}
-
-.carregandoValor {
-    font-size: 34px;
-}
-
-.negrito {
-    font-weight: bold;
-}
-
-.filtroPrincipal {
-    margin-top: 20px;
-}
-
-.alteradoChave {
-    width: 30%;
+div.nome-campo {
+    color: black !important;
     word-wrap: break-word;
 }
 
-.alteradoGrupo > span {
-    width: 48.5%;
-    padding: 0px 0.5%;
-    display: inline-table;
+
+.alteracao-campo.even {
+    background: #F7F7F7;
 }
 
-.alterados > span {
-    color: blue;
+
+.alteracao-elemento:not(.expandido):hover {
+    font-weight: bold;
 }
 
-.menuFiltros > * {
-    margin: 0 40px;
+.alteracao-elemento:hover {
+    cursor: pointer;
 }
 
-.menuFiltros {
+.alteracao-elemento.expandido {
+    font-weight: bold;
+}
+#btnAplicarFiltros {
     background: #EEE;
     line-height: 35px;
-}
-
-.tituloListaAlteracoes {
-    float: left;
-    width: 50%;
-}
-
-.botaoRun {
-    float: left;
-    width: 50%;
-    margin: 10px 0;
-    height: 27px;
-    line-height: 27px;
-    text-align: center;
-}
-
-.alterados .alteradoValor {
-    color: blue;
-}
-
-
-.movidos > span {
-    color: orange;
-}
-
-.movidos .alteradoValor {
-    color: orange;
-}
-
-.botaoChamativo {
-    box-shadow: 0px 0px 15px red;
-}
-
-
-.filtro-invisivel {
-    display: none;
-}
-
-.divBtnAplicar {
     position: fixed;
     bottom: 0;
     width: 80%;
@@ -245,4 +69,16 @@ position: absolute;}
     font-size: x-large;
     font-weight: bold;
     cursor: pointer;
+    border-radius: 10px;
+    z-index: 999;
+}
+
+
+.alteracao-elemento p {
+    margin: 0;
+}
+
+
+.filtro-invisivel {
+    display: none;
 }

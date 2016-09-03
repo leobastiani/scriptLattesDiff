@@ -40,14 +40,7 @@ var Carregando = {
 	total: 1,
 	carregados: 0,
 
-	// jQuery que contém o elemento com a porcentagem
-	jPorcentagemText: null,
-
-	jFundoPreto: null,
-
-	jDialogo: null,
-
-	jContent: null,
+	modal: null,
 };
 
 
@@ -56,35 +49,17 @@ var Carregando = {
  * Função inicial para começar a tela de carregando
  * Chame ela e depois start
  */
-Carregando.init = function (msg) {
-	this.jFundoPreto = $('<div>').addClass('fundoPreto');
-	this.jFundoPreto.appendTo(document.body);
-
-	// já temos o fundo preto
-	this.jDialogo = $('<div>').addClass('dialogoCarregando');
-	this.jDialogo.appendTo(this.jFundoPreto);
-
-	this.jContent = $('<div>').css({
-		float: 'left',
-		padding: '17px',
-	});
-	this.jContent.appendTo(this.jDialogo);
-
-	var carregandoText = $('<h1>').text(msg).addClass('displayBlock');
-	carregandoText.appendTo(this.jContent);
-
-	var pctText = this.jPorcentagemText = $('<div>').addClass('carregandoValor');
-	pctText.appendTo(this.jContent);
-	// agora é só ir definindo os valores de pctText
-	pctText.text('0%');
+Carregando.init = function () {
+	Carregando.modal = $('#loadingModal');
+	Carregando.modal.modal();
 }
 
 
 
 
 Carregando.reset = function () {
-	this.total = 1;
-	this.carregados = 0;
+	Carregando.total = 1;
+	Carregando.carregados = 0;
 }
 
 
@@ -94,12 +69,8 @@ Carregando.reset = function () {
  * para chegar no 100%
  */
 Carregando.start = function (totalSteps) {
-	this.reset();
-	this.total = totalSteps;
-
-	// ainda preciso ajeitar o tamanho da caixa de this.jDialogo
-	this.jDialogo.outerWidth(this.jContent.outerWidth());
-	this.jDialogo.outerHeight(this.jContent.outerHeight());
+	Carregando.reset();
+	Carregando.total = totalSteps;
 
 	// só começar a contagem agora!
 }
@@ -113,14 +84,14 @@ Carregando.start = function (totalSteps) {
 Carregando.step = function () {
 	// conforme dou uma step
 	// aumenta um carregado
-	this.carregados++;
+	Carregando.carregados++;
 
-	if(this.carregados <= this.total) {
+	if(Carregando.carregados <= Carregando.total) {
 		// se estou contando ainda
-		var pct = this.carregados / this.total * 100;
+		var pct = Carregando.carregados / Carregando.total * 100;
 		var pctRounded = (Math.round(pct * 100) / 100);
 		var pctStr = pctRounded + '%';
-		this.jPorcentagemText.text(pctStr);
+		Carregando.modal.find('.text').text(pctStr);
 	}
 
 }
@@ -128,5 +99,5 @@ Carregando.step = function () {
 
 
 Carregando.finish = function () {
-	this.jFundoPreto.remove();
+	Carregando.modal.modal('hide');
 }

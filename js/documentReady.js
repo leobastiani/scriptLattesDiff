@@ -61,15 +61,17 @@ function documentReady() {
 	 */
 	scriptLattesDiff.datasProcessamento.forEach(function (elem, index) {
 		// adiciona um elemento na lista do elemento datasProcessamento
-		$('#datasProcessamento ul').append($('<li>').text(elem.toStringScriptLattes()));
+		$('#listaDatasDisponíveis').append($('<li>').text(elem.toStringScriptLattes()));
 	});
 	// e nos calendários do principaisAlteracoes
+	// faz a dobradinha antes
+	$('.data-comparativa-grupo').after($('.data-comparativa-grupo').clone());
 	var datasCalendario = [scriptLattesDiff.datasProcessamento[scriptLattesDiff.datasProcessamento.length-2], scriptLattesDiff.datasProcessamento.end()];
-	$('#principaisAlteracoes #escolhaDatas input[type="date"]').each(function(index, el) {
+	$('.data-comparativa-grupo input.data').each(function(index, el) {
 		$(this).val(datasCalendario[index].toValDate());
 	});
 	// agora coloca no combobox embaixo das datas de pesquisa
-	$('#datasComboIni, #datasComboFim').each(function(index, elem) {
+	$('.data-comparativa-grupo select.data').each(function(index, elem) {
 		$.each(scriptLattesDiff.datasProcessamento, function(index, data) {
 			var dataVal = data.toValDate();
 			var option = $('<option>').text(dataVal).val(dataVal);
@@ -101,17 +103,17 @@ function documentReady() {
 	 * cria as principais páginas do meu script
 	 */
 	scriptLattesDiff.paginas.principaisAlteracoes(
-		scriptLattesDiff.datasProcessamento[scriptLattesDiff.datasProcessamento.length-2], // data inicial
-		scriptLattesDiff.datasProcessamento.end()                                          // data final
+		datasCalendario[0], // data inicial
+		datasCalendario[1]  // data final
 	);
 
 
 
 
 
-	$('#escolhaDatas').submit(function(e) {
+	$('#btnCompararCurriculos').click(function(e) {
 		// obtendo os valores das datas
-		var jDatas = $('#escolhaDatas input[type="date"]');
+		var jDatas = $('.data-comparativa-grupo input.data');
 		var dataInicial = scriptLattesDiff.dataProx(jDatas.eq(0).getDate());
 		var dataFinal   = scriptLattesDiff.dataProx(jDatas.eq(1).getDate());
 
@@ -133,9 +135,6 @@ function documentReady() {
 
 		// após o ajuste de periodos
 		scriptLattesDiff.paginas.principaisAlteracoes(dataInicial, dataFinal);
-
-		// para não recarregar a página
-		return false;
 	});
 
 
@@ -154,15 +153,23 @@ function documentReady() {
 	// adicionando os filtros amplos, cada um para cada sinal
 	$.each(nomeFiltrosAmplo, function(sinal, nomeFiltro) {
 		var newFiltroAmplo = jFiltroAmplo.clone();
-		newFiltroAmplo.find('span').text(nomeFiltro);
-		newFiltroAmplo.find('input').attr('data-sinal', sinal);
-		newFiltroAmplo.appendTo('#filtrosAmplos');
+		newFiltroAmplo.find('.text').text(nomeFiltro);
+		newFiltroAmplo.find('input[type=checkbox]').attr('data-sinal', sinal);
+		newFiltroAmplo.appendTo('#filtrosAmplos .filtro-grupo');
 	});
+
+	// vamos fazer a dobradinha do filtro
+	var filtroPesquisador = $('.filtro-panel').clone();
+	$('.filtro-panel').after(filtroPesquisador);
+	filtroPesquisador.attr('data-nomeArquivo', 'scriptLattesDiff - Filtro de pesquisadores');
+	filtroPesquisador.find('.panel-heading h2').text('Filtro de pesquisadores:');
+	filtroPesquisador.find('.panel-body').attr('id', 'filtroDePesquisadores');
+	filtroPesquisador.find('label[for=perfilSelect]').text('Perfil do filtro de pesquisadores:')
 
 	// define todos os perfis de filtros
 	var filtrosObj = [
-		new Filtro('filtroPerfis', $('#filtroSelect')),
-		new Filtro('filtroPesquisadoresPerfis', $('#filtroPesquisadoresSelect'))
+		new Filtro('filtroPerfis', $('.perfil-select:eq(0)')),
+		new Filtro('filtroPesquisadoresPerfis', $('.perfil-select:eq(1)'))
 	];
 	filtrosObj.forEach(function (elem, index) {
 		elem.setPerfis();
@@ -183,16 +190,19 @@ function documentReady() {
 	//////////////////////////////////////////
 	// adicionando filtros de pesquisadores //
 	//////////////////////////////////////////
-	var filtrosPesquisadores = $('#filtrosPesquisadores');
+	var filtroPesquisadoresGroup = $('.filtro-grupo:eq(1)');
+	// vamos zerá-lo
+	filtroPesquisadoresGroup.html('');
+	// adiona todos os pesquisadores
 	$.each(scriptLattesDiff.allIdLattes, function(index, pesquisadorId) {
 		var pesquisador = scriptLattesDiff.idLattes[pesquisadorId];
 
 		// devo adicionar um elemento ddo tipo jFiltroAmplo
 		var elem = jFiltroAmplo.clone();
 		var val = pesquisador.getNome();
-		elem.find('span').text(val);
-		elem.find('input').val(pesquisador.getNome());
-		elem.appendTo(filtrosPesquisadores);
+		elem.find('.text').text(val);
+		elem.find('input[type=checkbox]').val(pesquisador.getNome());
+		elem.appendTo(filtroPesquisadoresGroup);
 	});
 
 
@@ -217,5 +227,7 @@ function documentReady() {
 	// porque eu escondo os campos acrescidos, removidos, ...
 	// que não possuem nenhum elemento
 	Filtro.update(false);
+
+
 
 }

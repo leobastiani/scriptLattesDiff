@@ -41,14 +41,6 @@
 
 
 
-
-
-
-
-
-
-
-
 /**
  * text com quebra de linha
  * @param  {String} txt com \n

@@ -47,7 +47,7 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 	this.jPerfil = jPerfil;
 
 	// div que engloba todos os elementos do filtro
-	this.jTipoFiltro = jPerfil.parents('.tipoFiltro');
+	this.jTipoFiltro = jPerfil.parents('.filtro-panel');
 
 	// definindo o ponteiro no elemento html
 	this.jTipoFiltro.data('filtro', this);
@@ -67,7 +67,7 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 		/**
 		 * Função de carregar
 		 */
-		self.jTipoFiltro.find('#carregarPerfilFiltro').click(function(e) {
+		self.jTipoFiltro.find('.carregar-perfil-filtro').click(function(e) {
 			// obtem o nome do perfil em filtroSelect
 			var nomePerfil = self.jPerfil.val();
 			self.carregar(nomePerfil);
@@ -80,13 +80,13 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 		 * Função de salvar Filtro
 		 */
 		// devo garantir que existe um item em localStorage sendo um Array
-		self.jTipoFiltro.find('#salvarPerfilFiltro').click(function(e) {
+		self.jTipoFiltro.find('.salvar-perfil-filtro').click(function(e) {
 			// vão ser armazenados desse jeito
 			// {
 			//   'nome do filtro': ['campo1', 'campo2', ...]
 			// }
 			
-			var nomeNovoFiltro = window.prompt('Digite o nome do filtro que você deseja salvar');
+			var nomeNovoFiltro = window.prompt('Digite o nome do filtro que você deseja salvar', '');
 			if(!nomeNovoFiltro) {
 				return ;
 			}
@@ -124,7 +124,7 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 		/**
 		 * Definindo botão de apagar
 		 */
-		self.jTipoFiltro.find('#apagarPerfilFiltro').click(function(e) {
+		self.jTipoFiltro.find('.apagar-perfil-filtro').click(function(e) {
 			var nomePerfil = self.jPerfil.val();
 			// casos especiais
 			if(nomePerfil in Filtro.nomesReservados) {
@@ -145,7 +145,7 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 		/**
 		 * Definindo botão de exportar
 		 */
-		self.jTipoFiltro.find('#exportarPerfilFiltro').click(function(e) {
+		self.jTipoFiltro.find('.exportar-perfil-filtro').click(function(e) {
 			function downloadStringAsFile(file_name, content) {
 				var a = document.createElement('a');
 				a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
@@ -162,7 +162,7 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 
 
 
-		self.jTipoFiltro.find('#importarPerfilFiltro').click(function(e) {
+		self.jTipoFiltro.find('.importar-perfil-filtro').click(function(e) {
 			scriptLattesDiff.navegadorAtualizado(FileReader);
 
 			// cria um inputFile para ser clicado
@@ -233,7 +233,7 @@ Filtro.getElem = function (nomeFiltro) {
 	}
 
 	// para um único filtro
-	return $('.filtro > input[value="'+nomeFiltro+'"]');
+	return $('.filtro input[value="'+nomeFiltro+'"]');
 }
 
 
@@ -256,7 +256,7 @@ Filtro.onchange = function(e) {
 
 /**
  * Retorna o sinal do tipo +, -, ~, >
- * com base num elemento .tabelaAlterados
+ * com base num elemento .alteracao-campo-grupo
  */
 Filtro.getSinalTabelaAlterados = function (elem) {
 	var tabelaClasse = {
@@ -295,13 +295,13 @@ Filtro.update = function (showConcluidoMessage) {
 	$('.filtro-invisivel').removeClass('filtro-invisivel');
 
 	// esconde os campos
-	var filtrosComunsEsconder = $('#filtrosComuns .filtro').filter(function(index) {
+	var filtrosComunsEsconder = $('#filtroDeCampos .filtro').filter(function(index) {
 		return !$(this).find('input[type=checkbox]').prop('checked');
 	});
 
 	filtrosComunsEsconder.each(function(index, filtro) {
 		// esconde o pai do campo correspondente
-		$('*[data-campo="'+$.trim($(filtro).text())+'"]').parent().addClass('filtro-invisivel');
+		$('.alteracao-campo:has(.nome-campo[data-campo="'+$(filtro).find('input[type=checkbox]').val()+'"])').addClass('filtro-invisivel');
 	});
 
 
@@ -312,22 +312,22 @@ Filtro.update = function (showConcluidoMessage) {
 	});
 
 	filtrosAmplosEsconder.each(function(index, filtro) {
-		var tabelaEsconder = $('.tabelaAlterados').filter(scriptLattesDiff.paginas.getClassBySinal($(filtro).find('input').attr('data-sinal')));
+		var tabelaEsconder = $('.alteracao-campo-grupo').filter(scriptLattesDiff.paginas.getClassBySinal($(filtro).find('input').attr('data-sinal')));
 		tabelaEsconder.addClass('filtro-invisivel');
 	});
 
 	// esconde o grupo de pesquisadores
-	var filtrosPesquisadoresEsconder = $('#filtrosPesquisadores .filtro').filter(function(index) {
+	var filtrosPesquisadoresEsconder = $('#filtroDePesquisadores .filtro').filter(function(index) {
 		return !$(this).find('input[type=checkbox]').prop('checked');
 	});
 	// vamos converter para string
-	var filtrosPesquisadoresEsconderStr = filtrosPesquisadoresEsconder.map(function(index, elem) {
-		return $(elem).find('span').text();
+	var filtrosPesquisadoresEsconderStr = filtrosPesquisadoresEsconder.map(function(index, filtro) {
+		return $(filtro).find('input[type=checkbox]').val();
 	});
 	// vamos testar todos os membros
 	// se o nome deles estiver em filtrosPesquisadoresEsconderStr, vamos escondelo
 	$('.membro').each(function(index, membro) {
-		var nome = $.trim($(membro).find('.nome').text());
+		var nome = $(membro).find('.nome').text();
 		if($.inArray(nome, filtrosPesquisadoresEsconderStr) != -1) {
 			// já que está no filtro, vamos escondê-lo
 			$(membro).addClass('filtro-invisivel');
@@ -342,9 +342,9 @@ Filtro.update = function (showConcluidoMessage) {
 	/////////////////////
 
 	// começando pela tebelaAlterados
-	$('.tabelaAlterados').filter(function(index) {
+	$('.alteracao-campo-grupo').filter(function(index) {
 		// essa tabela alterados deve ter todos os camposAlterados invisiveis
-		var camposAlteradosVisiveis = $(this).find('.campoAlterado:not(.filtro-invisivel)');
+		var camposAlteradosVisiveis = $(this).find('.alteracao-campo:not(.filtro-invisivel)');
 		// se eu quero esconder
 		// não pode ter nenhum visivel
 		return camposAlteradosVisiveis.length == 0;
@@ -353,7 +353,7 @@ Filtro.update = function (showConcluidoMessage) {
 	// esconde membro
 	$('.membro').filter(function(index) {
 		// esse membro não pode ter nenhum tabelaAlterados visivel
-		var tabelaAlteradosVisivel = $(this).find('.tabelaAlterados:not(.filtro-invisivel)');
+		var tabelaAlteradosVisivel = $(this).find('.alteracao-campo-grupo:not(.filtro-invisivel)');
 		// se eu quero esconder
 		// não pode ter nenhum visivel
 		return tabelaAlteradosVisivel.length == 0;
@@ -363,9 +363,9 @@ Filtro.update = function (showConcluidoMessage) {
 
 	// adicionando listras cinzas
 	// remove de todos
-	$('.listraCinza').removeClass('listraCinza');
+	$('.alteracao-campo.even').removeClass('even');
 	// adiciona apenas nos pares
-	$('.campoAlterado:visible').filter(':even').addClass('listraCinza');
+	$('.alteracao-campo:visible:even').addClass('even');
 
 
 	// vamos desabilitar o botão aplicar
@@ -523,7 +523,7 @@ Filtro.prototype.getFiltrosByPerfil = function (nomePerfil) {
 	// analisa primeiro os casos especiais
 	if(nomePerfil == 'Todos') {
 		// retorna todos os checkbox de filtros
-		return this.jTipoFiltro.find('.filtros').find('input[type="checkbox"]');
+		return this.jTipoFiltro.find('.filtro-grupo').find('input[type="checkbox"]');
 	}
 	if(nomePerfil == 'Nenhum') {
 		return $();
@@ -610,7 +610,7 @@ Filtro.prototype.carregar = function (nomePerfil) {
 
 
 Filtro.enableAplicar = function (enable) {
-	var div = $('.divBtnAplicar');
+	var div = $('#btnAplicarFiltros');
 	if(enable == undefined) {
 		// retorno se ele está ativo
 		return div.is(':visible');

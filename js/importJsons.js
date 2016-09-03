@@ -181,7 +181,6 @@ $(document).ready(function() {
 
 	loadJs('../json/scriptLattesDiff.js', onLoadAllIdLattes);
 
-	// primeiros passos para a tela de carregando
-	Carregando.init('Baixando...');
 
+	Carregando.init();
 });

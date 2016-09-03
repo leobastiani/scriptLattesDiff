@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
 
@@ -13,9 +13,6 @@
 	<meta http-equiv="expires" content="0" />
 	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
 	<meta http-equiv="pragma" content="no-cache" />
-
-	<link rel="stylesheet" href="../css/style.css">
-
 
 
 	<!-- Jquery é a primeira biblioteca que deve ser carregada -->
@@ -32,6 +29,7 @@
 	<script src="../js/Dict.js"></script>
 	<script src="../js/Filtro.js"></script>
 	<script src="../js/Carregando.js"></script>
+	<script src="../js/plugins.js"></script>
 	
 
 
@@ -46,271 +44,261 @@
 	<script src="../js/documentReady.js"></script>
 
 
+	<!-- Bootstrap -->
+	<link href="../vendor/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/style.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+
 </head>
 <body>
+	<!-- classes para teste do tamanho da tela -->
+	<span class="visible-xs"></span><span class="visible-sm"></span><span class="visible-md"></span><span class="visible-lg"></span>
+
+	<!-- Modal -->
+	<div class="modal fade" id="loadingModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Carregando</h4>
+				</div>
+				<div class="modal-body">
+					<h2 class="text-center text">0%</h2>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- Fim do modal -->
 
 
-	<!-- Campo de navegação no topo da tela -->
-	<header>
-		<h1 id="nomeDoGrupo">nomeDoGrupo</h1>
+	<div id="btnAplicarFiltros" onclick="Filtro.update()" class="center-horizontal" style="display: none;">
+		Clique aqui para aplicar as alterações dos filtros.
+	</div>
+	
+	<div class="container">
 
-		<!-- Uma mensagem qualquer
-		Preferi colocar o tempo que o scriptLattesDiff está rodando -->
-		<nav>
-			scriptLattesDiff está comparando de <span class="negrito">01/01/1990</span> até <span class="negrito">01/01/2000</span>.
-		</nav>
-
-	</header>
+		<div class="jumbotron">
+			<div class="text-center">
+				<h1 id="nomeDoGrupo">scriptLattesDiff</h1>
+				<p>scriptLattesDiff está comparando de <strong class="data-inicial">01/01/1990</strong> até <strong class="data-final">01/01/2000</strong>.</p>
+				<p class="visible-print-block" id="nomeImpressao">Título identificador da impressão</p>
+			</div>
+		</div>
+	</div>
 
 
 
 	
 
 	<!-- pagina com as principais alterações -->
-	<section id="principaisAlteracoes" class="pagina">
+	<div id="principaisAlteracoes" class="container">
 
+		<div class="panel panel-info hidden-print">
+			<div class="panel-heading"><h3>Datas comparativas:</h3></div>
 
-		<div class="clearfix">
-			<div class="tituloListaAlteracoes">
-				<h1 style="margin: 10px 0;">Lista com principais alterações</h1>
-			</div>
-			<div class="botaoRun">
-				<a href="../php/novoArquivo.php"><button>Executar scriptLattesDiff para a data de hoje</button></a>
+			<div class="panel-body">
+				
+				<div class="row text-center">
+					<div class="col-sm-4 data-comparativa-grupo">
+						<div class="panel panel-default">
+							<div class="panel-heading">Data inicial:</div>
+							<div class="panel-body">
+								<div class="form-group"><input type="date" class="data" class="form-control"></div>
+								<div class="form-group">
+									<select class="form-control data"><option value=""></option></select>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				
+					
+					<div class="col-sm-4 col-sm-center">
+						<button type="button" class="btn btn-primary btn-lg" id="btnCompararCurriculos">Comparar currículos</button>
+					</div>
+				</div> <!-- Fim do row -->
+
 			</div>
 		</div>
 
 
-		<form id="escolhaDatas" class="clearfix">
-			<h2>Datas comparativas:</h2>
+		<div class="panel panel-info hidden-print">
+			<div class="panel-heading"><h3>Opções de manutenção:</h3></div>
+			
+			<div class="panel-body">
+				
+				<div class="hide-file-protocol">
+					<p>
+						Para acrescentar ou remover pesquisadores, basta alterar a lista de pesquisadores que será exibida na criação de uma snapshot.
+						<a href="../php/novoArquivo.php">
+							<button type="button" style="display:block;" class="btn btn-primary">Executar scriptLattesDiff para a data de hoje</button>
+						</a>
+					</p>
+				</div>
 
 
-			<div>
-				<label>Data inicial:</label>
-				<input type="date"><br/>
-				<select id="datasComboIni">
-					<option value=""></option>
-				</select>
+				<div>
+					<p>
+						Um arquivo PDF pode ser gerado mudando as configurações da impressora.
+						<button type="button" style="display:block;" class="btn btn-primary" onclick="var desc = window.prompt('Digite uma descrição da página.', document.title); if(desc == document.title) {desc = ''}; $('#nomeImpressao').text(desc); $('#btnExpandir').click(); window.print();">Imprimir ou exportar PDF</button>
+					</p>
+				</div>
 
 			</div>
-
-			<div>
-				<label>Data final:</label>
-				<input type="date"><br/>
-				<select id="datasComboFim">
-					<option value=""></option>
-				</select>
-			</div>
-
-
-			<div style="line-height: 50px;">
-				<input type="submit" value="Pesquisar">
-			</div>
-
-		</form>
+		</div>
 
 
 
 
+		<div id="filtros">
 
-
-		<div id="filtros" class="clearfix">
-
-			<div class="menuFiltros divBtnAplicar" onclick="Filtro.update()" style="display: none;">
+			<div class="menu-filtro divBtnAplicar" onclick="Filtro.update()" style="display: none;">
 				Clique aqui para aplicar as alterações dos filtros.
 			</div>
 
-			<div class="tipoFiltro" data-nomeArquivo="scriptLattesDiff - Filtro de campos">
-				<h2>Perfis de Filtros:</h2>
+			<div class="panel panel-info hidden-print filtro-panel" data-nomeArquivo="scriptLattesDiff - Filtro de campos">
+				<div class="panel-heading"><h3>Filtro de campos:</h3></div>
 		
-				<div id="perfilDeFiltros" class="menuFiltros">
+				<div id="filtroDeCampos" class="panel-body">
 					<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
-					<span>Perfil de filtros de campo:</span>
-
-					<select id="filtroSelect">
-						<option value="Teste">Teste</option>
-					</select>
-
-					<input type="button" id="carregarPerfilFiltro" value="Carregar">
-					<input type="button" id="salvarPerfilFiltro"   value="Salvar">
-					<input type="button" id="apagarPerfilFiltro"   value="Apagar">
-					<input type="button" id="importarPerfilFiltro" value="Importar">
-					<input type="button" id="exportarPerfilFiltro" value="Exportar">
-				</div>
-
-
-				<h2>Filtros para perfis:</h2>
-
-				<div id="filtrosComuns" class="clearfix filtros">
-					<div class="filtro">
-						<input type="checkbox" value="exemplo" checked="checked"/>
-						<span>exemplo</span>
+					<div class="form-group">
+						<label for="perfil-select">Perfil do filtro de campos:</label>
+						<select class="form-control perfil-select">
+							<option value="Teste">Teste</option>
+						</select>
 					</div>
-				</div>
+
+					<div class="clearfix">
+						<div class="form-group btn-toolbar pull-left">
+							<button class="btn btn-primary carregar-perfil-filtro">Carregar</button>
+							<button class="btn btn-primary salvar-perfil-filtro">Salvar</button>
+							<button class="btn btn-primary apagar-perfil-filtro">Apagar</button>
+						</div>
+						<div class="form-group btn-toolbar pull-right">
+							<button class="btn btn-primary importar-perfil-filtro">Importar</button>
+							<button class="btn btn-primary exportar-perfil-filtro">Exportar</button>
+						</div>
+					</div>
+
+					<div class="form-inline filtro-grupo">
+						<div class="input-group filtro">
+							<span class="input-group-addon">
+								<input type="checkbox" value="exemplo" checked="checked">
+							</span>
+							<span class="form-control-static form-control text">exemplo</span>
+						</div><!-- /input-group -->
+					</div> <!-- /form-inline -->
+				</div> <!-- ./panel-body -->
 
 			</div> <!-- ./Fim do tipo de filtro comum -->
 
 
-			<div id="filtrosAmplos">
-				<h2>Opções de saída:</h2>
-				<div class="filtro">
-					<input type="checkbox" value="exemplo" checked="checked"/>
-					<span>Exibir acrescidos</span>
-				</div>
 
-				<!-- Insira mais filtros aqui -->
-			</div>
 
-			<div class="clearfix"></div>
 
-			<div class="tipoFiltro" data-nomeArquivo="scriptLattesDiff - Filtro de pesquisadores">
-				<h2>Perfis de Filtros de pesquisadores:</h2>
+			<div class="panel panel-info hidden-print" id="filtrosAmplos">
+				<div class="panel-heading"><h3>Opções de saída:</h3></div>
+			
+				<div class="panel-body">
+					<div class="form-inline filtro-grupo" id="filtrosAmplos">
+						<div class="input-group filtro">
+							<span class="input-group-addon">
+								<input type="checkbox" value="exemplo" checked="checked">
+							</span>
+							<span class="form-control-static form-control text">Exibir acrescidos</span>
+						</div><!-- /input-group -->
 
-				<div id="perfilDeFiltrosPesquisadores" class="menuFiltros">
-					<!-- Aqui vai o sistema para criar uma nova classe de filtros -->
-					<span>Perfil de filtros de pesquisadores:</span>
+					</div> <!-- /form-inline -->
 
-					<select id="filtroPesquisadoresSelect">
-						<option value="Teste">Teste</option>
-					</select>
+					<div class="form-group btn-toolbar pull-left">
+						<button id="btnExpandir" class="btn btn-primary" onclick="$('.alteracao-elemento:not(.expandido)').click();">Expandir todos os elementos</button>
+						<button id="btnContrair" class="btn btn-primary" onclick="$('.alteracao-elemento.expandido').dblclick();">Contrair todos os elementos</button>
+					</div>
 
-					<input type="button" id="carregarPerfilFiltro" value="Carregar">
-					<input type="button" id="salvarPerfilFiltro"   value="Salvar">
-					<input type="button" id="apagarPerfilFiltro"   value="Apagar">
-					<input type="button" id="importarPerfilFiltro" value="Importar">
-					<input type="button" id="exportarPerfilFiltro" value="Exportar">
-				</div>
 
-				<div id="filtrosPesquisadores" class="clearfix filtros">
-					<!-- <div class="filtro">
-						<input type="checkbox" value="exemplo" checked="checked"/>
-						<span>exemplo</span>
-					</div> -->
-				</div>
+				</div> <!-- ./panel-body -->
+
 			</div> <!-- ./Fim do tipo de filtro comum -->
 
+		</div> <!-- ./#filtros -->
+
+
+		<hr>
+
+		<div id="principaisAlteracoesContent">
+			
+			<div class="membro panel panel-default">
+				<div class="panel-heading clearfix">
+					<h3 class="pull-left nome">Nome</h3>
+					<h3 class="pull-right idLattes">idLattes</h3>
+				</div> <!-- /panel-heading -->
+	
+				<div class="panel-body">
+					<div class="alteracao-campo-grupo alteracao-simples acrescidos">
+						<p class="alteracao-title">Acrescidos desde então</p>
+
+						<div class="alteracao-campo row">
+							<div class="col-xs-3 nome-campo">
+								colaboradores
+							</div> <!-- ./colaboradores -->
+
+							<div class="col-xs-9 alteracao-elemento-grupo">
+								<div class="alteracao-elemento">Valor 1</div>
+							</div> <!-- ./Valor -->
+						</div> <!-- ./alteracao-campo -->
+					</div> <!-- ./alteracao-campo-grupo -->
+
+					<div class="alteracao-campo-grupo alteracao-duplo alterados">
+						<p class="alteracao-title">Alterados desde então</p>
+
+						<div class="alteracao-campo row">
+							<div class="col-xs-3 nome-campo">
+								colaboradores
+							</div> <!-- ./colaboradores -->
+
+							<div class="col-xs-9 alteracao-elemento-grupo">
+								<div class="row alteracao-elemento-duplo">
+									<div class="alteracao-elemento col-xs-6">Valor 1</div>
+									<div class="alteracao-elemento col-xs-6">Valor 2</div>
+								</div> <!-- /alteracao-elemento-duplo -->
+							</div> <!-- ./Valor -->
+						</div> <!-- ./alteracao-campo -->
+						
+					</div> <!-- ./alteracao-campo-grupo -->
+				</div> <!-- ./panel-body -->
+
+
+			</div> <!-- ./membro -->
+
+		</div> <!-- ./principaisAlteracoesContent -->
+
+	</div> <!-- ./#principaisAlteracoes .container -->
+
+
+	<footer class="well">
+		<div class="container">
+			<p>Datas que podem ser processadas pelo scriptLattesDiff e em <b>negrito</b>, as que estão sendo comparadas.</p>
+			<p>
+				<ul id="listaDatasDisponíveis">
+					<!-- <li>Data1</li> -->
+					<!-- Lista com todos as datas de processamento do scriptLattes -->
+				</ul>
+			</p>
+			<p>Atualizações disponíveis em <a href="https://github.com/leobastiani/scriptLattesDiff">https://github.com/leobastiani/scriptLattesDiff</a></p>
 		</div>
-
-
-		<div id="principaisAlteracoesContent" class="clearfix">
-
-			<!-- Um exemplo de um membro -->
-			<div class="membro">
-				<div class="nomeLattes">
-
-					<h3 class="nome">Nome</h3>
-
-					<h3 class="idLattes" style="text-align: right;">Lattes</h3>
-
-				</div>
-
-
-				<!-- alterações vão aqui -->
-				<div class="acrescidos tabelaAlterados">
-					<span>Acrescidos desde então</span>
-
-
-					<!-- A tabela dos alterados tem
-					uma chave com o que foi alterado
-					e suas alterações -->
-					<div class="campoAlterado clearfix">
-						<div class="alteradoChave">exemplo</div>
-						<div class="alteradoValor">
-							<span>Valor 1</span>
-							<span>Valor 2</span>
-						</div>
-					</div>
-
-				</div>
-
-
-				<div class="removidos tabelaAlterados">
-					<span>Removido desde então</span>
-
-
-					<!-- A tabela dos alterados tem
-					uma chave com o que foi alterado
-					e suas alterações -->
-					<div class="campoAlterado clearfix">
-						<div class="alteradoChave">exemplo</div>
-						<div class="alteradoValor">
-							<span>Valor 1</span>
-							<span>Valor 2</span>
-						</div>
-					</div>
-
-				</div>
-
-
-
-				<div class="movidos tabelaAlterados">
-					<span>Movidos desde então</span>
-
-
-					<!-- A tabela dos alterados tem
-					uma chave com o que foi alterado
-					e suas alterações -->
-					<div class="campoAlterado clearfix">
-						<div class="alteradoChave">exemplo</div>
-						<div class="alteradoValor">
-							<span>Valor 1</span>
-							<span>Valor 2</span>
-						</div>
-					</div>
-
-				</div>
-
-
-
-
-				<div class="alterados tabelaAlterados">
-					<!-- Aqui vão os elementos de '~' -->
-					<span>Alterados desde então (antigo, recente):</span>
-
-
-					<!-- A tabela dos alterados tem
-					uma chave com o que foi alterado
-					e suas alterações -->
-					<div class="campoAlterado clearfix">
-						<div class="alteradoChave">exemplo</div>
-						<div class="alteradoValor">
-							<div class="alteradoGrupo">
-								<!-- Aqui vão os dois valores alterados
-								que tem um Por no meio -->
-								<span>Valor 1</span>
-								<span>Valor 2</span>
-							</div>
-							<div class="alteradoGrupo">
-								<!-- Aqui vão os dois valores alterados
-								que tem um Por no meio -->
-								<span>Valor 1</span>
-								<span>Valor 2</span>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-
-
-			</div>
-
-
-
-		</div>
-
-
-	</section>
-
-
-
-	<footer id="datasProcessamento">
-		Datas de processamento do scriptLattes<br/>
-		Em <b>negrito</b>, os que estão sendo comparados.
-		<ul>
-		<!-- Lista com todos as datas de processamento do scriptLattes -->
-		</ul>
 	</footer>
 
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../vendor/bootstrap.min.js"></script>
 </body>
 
 
