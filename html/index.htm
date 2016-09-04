@@ -146,14 +146,6 @@
 				</div>
 
 
-				<div>
-					<p>
-						Um arquivo PDF pode ser gerado mudando as configurações da impressora.
-						<button type="button" style="display:block;" class="btn btn-primary" onclick="var desc = window.prompt('Digite uma descrição da página.', document.title); if(desc == document.title) {desc = ''}; $('#nomeImpressao').text(desc); $('#btnExpandir').click(); window.print();">Imprimir ou exportar PDF</button>
-					</p>
-				</div>
-
-
 
 				<div class="hide-file-protocol">
 					<p>
@@ -164,6 +156,14 @@
 						</div>
 					</p>
 				</div> <!-- ./Apagar snap -->
+
+
+				<div>
+					<p>
+						Um arquivo PDF pode ser gerado mudando as configurações da impressora.
+						<button type="button" style="display:block;" class="btn btn-primary" onclick="var desc = window.prompt('Digite uma descrição da página.', document.title); if(desc == document.title) {desc = ''}; $('#nomeImpressao').text(desc); $('#btnExpandir').click(); window.print();">Imprimir ou exportar PDF</button>
+					</p>
+				</div> <!-- /Imprimir -->
 
 			</div> <!-- /panel-body -->
 		</div>
