@@ -112,7 +112,7 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">Data inicial:</div>
 							<div class="panel-body data-grupo">
-								<div class="form-group"><input type="date" class="data" class="form-control"></div>
+								<div class="form-group"><input type="date" class="data form-control"></div>
 								<div class="form-group">
 									<select class="form-control data"><option value=""></option></select>
 								</div>
@@ -136,7 +136,7 @@
 			
 			<div class="panel-body">
 				
-				<div class="hide-file-protocol">
+				<div class="form-group hide-file-protocol">
 					<p>
 						Para acrescentar ou remover pesquisadores, basta alterar a lista de pesquisadores que será exibida na criação de uma snapshot.
 						<a href="../php/novoArquivo.php">
@@ -147,9 +147,10 @@
 
 
 
-				<div class="hide-file-protocol">
+				<div class="form-group hide-file-protocol">
 					<p>
-						Apague os snapshots que não serão mais necessários.
+						Apague os snapshots que não serão mais necessários.<br/>
+						Apagar um snap diminui o tempo de processamento do scriptLattesDiff.
 						<div class="form-inline">
 							<select class="form-control" id="snapsList"></select>
 							<button class="btn btn-primary" id="btnRemoveSnap">Apagar</button>
@@ -158,7 +159,7 @@
 				</div> <!-- ./Apagar snap -->
 
 
-				<div>
+				<div class="form-group">
 					<p>
 						Um arquivo PDF pode ser gerado mudando as configurações da impressora.
 						<button type="button" style="display:block;" class="btn btn-primary" onclick="var desc = window.prompt('Digite uma descrição da página.', document.title); if(desc == document.title) {desc = ''}; $('#nomeImpressao').text(desc); $('#btnExpandir').click(); window.print();">Imprimir ou exportar PDF</button>
@@ -232,8 +233,8 @@
 					</div> <!-- /form-inline -->
 
 					<div class="form-group btn-toolbar pull-left">
-						<button id="btnExpandir" class="btn btn-primary" onclick="$('.alteracao-elemento:not(.expandido)').click();">Expandir todos os elementos</button>
-						<button id="btnContrair" class="btn btn-primary" onclick="$('.alteracao-elemento.expandido').dblclick();">Contrair todos os elementos</button>
+						<button id="btnExpandir" class="btn btn-primary" onclick="$('.alteracao-elemento:visible:not(.expandido)').click();">Expandir todos os elementos</button>
+						<button id="btnContrair" class="btn btn-primary" onclick="$('.alteracao-elemento.expandido:visible').dblclick();">Contrair todos os elementos</button>
 					</div>
 
 

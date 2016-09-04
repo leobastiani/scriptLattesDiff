@@ -98,6 +98,12 @@ function documentReady() {
 	// preenche o select de apagar snap
 	if(!scriptLattesDiff.isProtocoloFile()) {
 		$.get('../php/removeSnap.php?getSnaps', function(data) {
+			// se preciso digitar a senha
+			if(data.index('</script>') != -1) {
+				// contém </script>
+				return ;
+			}
+
 			var snaps = data.split('\n');
 			// remove o ultimo que é em branco
 			snaps.pop();
@@ -236,6 +242,12 @@ function documentReady() {
 		elem.find('.text').text(val);
 		elem.find('input[type=checkbox]').val(pesquisador.getNome());
 		elem.appendTo(filtroPesquisadoresGroup);
+	});
+
+
+	// ao clicar no texto do filtro, seleciona o checkbox
+	$('.filtro-grupo').on('click', '.text', function(e) {
+		$(this).parent().find('input[type=checkbox]').click();
 	});
 
 

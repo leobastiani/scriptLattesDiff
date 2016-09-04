@@ -82,3 +82,8 @@ div.nome-campo {
 .filtro-invisivel {
     display: none;
 }
+
+
+.filtro .text {
+    cursor: pointer;
+}

@@ -109,7 +109,7 @@ if ($_POST == []) {
 			$.post('?', {ajax: true, arquivoList: listaContent }, function(data) {
 				// terminado de carregar
 				console.log(data);
-				window.location.href = "../html/index.htm";
+				window.location.href = "../";
 			});
 		</script>
 
