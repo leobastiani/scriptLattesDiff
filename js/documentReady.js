@@ -101,6 +101,8 @@ function documentReady() {
 			var snaps = data.split('\n');
 			// remove o ultimo que é em branco
 			snaps.pop();
+			// ordena
+			snaps.sort();
 
 			snaps.forEach(function (snap, index) {
 				$('#snapsList').append($('<option>').text(snap).val(snap));
