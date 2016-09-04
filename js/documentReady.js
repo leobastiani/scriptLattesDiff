@@ -65,7 +65,9 @@ function documentReady() {
 	});
 	// e nos calendários do principaisAlteracoes
 	// faz a dobradinha antes
-	$('.data-comparativa-grupo').after($('.data-comparativa-grupo').clone());
+	var $dataFinal = $('.data-comparativa-grupo').clone();
+	$dataFinal.find('.text').text('Data final');
+	$('.data-comparativa-grupo').after($dataFinal);
 	var datasCalendario = [scriptLattesDiff.datasProcessamento[scriptLattesDiff.datasProcessamento.length-2], scriptLattesDiff.datasProcessamento.end()];
 	$('.data-comparativa-grupo input.data').each(function(index, el) {
 		$(this).val(datasCalendario[index].toValDate());
