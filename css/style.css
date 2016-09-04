@@ -37,7 +37,6 @@ footer.well {
 
 div.nome-campo {
     color: black !important;
-    word-wrap: break-word;
 }
 
 
@@ -86,4 +85,13 @@ div.nome-campo {
 
 .filtro .text {
     cursor: pointer;
+}
+
+.membro .panel-heading a {
+    color: black;
+    text-decoration: none;
+}
+
+.membro {
+    word-wrap: break-word;
 }

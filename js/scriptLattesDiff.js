@@ -166,8 +166,9 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 
 
 		// nome e idlattes
-		$membro.find('.nome').text(nome);
-		$membro.find('.idLattes').text(pesquisadorId);
+		var link = 'http://lattes.cnpq.br/'+pesquisadorId;
+		$membro.find('.nome').text(nome).attr('href', link);
+		$membro.find('.idLattes').text(pesquisadorId).attr('href', link);
 
 
 

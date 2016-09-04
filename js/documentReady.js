@@ -253,6 +253,33 @@ function documentReady() {
 	});
 
 
+	// importar txt de filtro
+	$('#btnImportarTxt').click(function(e) {
+		var modal = $(this).parents('.modal');
+		var listTxt = modal.find('textarea').val().split('\n');
+		var filtro = modal.data('filtro');
+
+		// tiro todos
+		filtro.carregar('Nenhum', false);
+
+		var todosFiltros = filtro.$.find('.filtro');
+		var filtrosMarcar = todosFiltros.filter(function(index, elem) {
+			var nome = $(elem).find('input[type=checkbox]').val();
+			return $.inArray(nome, listTxt) !== -1;
+		});
+
+		var inputs = $();
+		filtrosMarcar.each(function(index, elem) {
+			inputs = inputs.add($(elem).find('input'));
+		});
+
+		// fecho o modal
+		modal.modal('hide');
+
+		filtro._carregar(inputs, true);
+	});
+
+
 
 	//----------------------------------------------------
 	// Trabalhando com o botão Run

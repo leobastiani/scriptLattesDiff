@@ -48,6 +48,7 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 
 	// div que engloba todos os elementos do filtro
 	this.jTipoFiltro = jPerfil.parents('.filtro-panel');
+	this.$ = this.jTipoFiltro;
 
 	// definindo o ponteiro no elemento html
 	this.jTipoFiltro.data('filtro', this);
@@ -208,6 +209,30 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 
 
 
+
+		self.jTipoFiltro.find('.importar-txt-filtro').click(function(e) {
+			var listInput = self.getFiltrosByPerfil('Marcados');
+			var listText = $.map(listInput, function(item, index) {
+				return $(item).parents('.filtro').find('.text').text();
+			});
+
+			var val = listText.join('\n');
+			var modal = $('#importTxtModal');
+
+			var textarea = modal.find('textarea');
+			textarea.val(val);
+
+			// definindo o tamanho do textarea
+			var alturaPct = 0.5;
+			textarea.css('height', $(window).height() * alturaPct);
+
+			// defino o filtro em data para ler do botão de importar
+			modal.data('filtro', self);
+
+			modal.modal('show');
+		});
+
+		// fim dos botões
 
 
 
@@ -581,7 +606,7 @@ Filtro.prototype.setPerfis = function (perfis) {
  * [getElem('colaboradores'), getElem('doutorado_concluido'), getElem('campo3'), '...']
  * repare que são elementos de jquery
  */
-Filtro.prototype._carregar = function (filtrosParaMarcar) {
+Filtro.prototype._carregar = function (filtrosParaMarcar, showConcluidoMessage) {
 	var todosPerfis = this.getFiltrosByPerfil('Todos');
 
 	// marca os filtros que devem ser marcados
@@ -594,7 +619,7 @@ Filtro.prototype._carregar = function (filtrosParaMarcar) {
 	});
 
 	// atualiza a página com um update
-	Filtro.update();
+	Filtro.update(showConcluidoMessage);
 }
 
 
@@ -602,13 +627,13 @@ Filtro.prototype._carregar = function (filtrosParaMarcar) {
  * carrega um filtro pelo nome
  * que é uma string em localSotrage
  */
-Filtro.prototype.carregar = function (nomePerfil) {
+Filtro.prototype.carregar = function (nomePerfil, showConcluidoMessage) {
 	var filtrosParaMarcar = this.getFiltrosByPerfil(nomePerfil);
 
 	/**
 	 * chama os filtros para serem marcados
 	 */
-	this._carregar(filtrosParaMarcar);
+	this._carregar(filtrosParaMarcar, showConcluidoMessage);
 }
 
 
