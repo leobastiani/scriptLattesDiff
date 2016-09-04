@@ -99,7 +99,7 @@ function documentReady() {
 	if(!scriptLattesDiff.isProtocoloFile()) {
 		$.get('../php/removeSnap.php?getSnaps', function(data) {
 			// se preciso digitar a senha
-			if(data.index('</script>') != -1) {
+			if(data.indexOf('</script>') != -1) {
 				// contém </script>
 				return ;
 			}
