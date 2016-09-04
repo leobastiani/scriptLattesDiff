@@ -191,7 +191,7 @@ function documentReady() {
 	filtroPesquisador.attr('data-nomeArquivo', 'scriptLattesDiff - Filtro de pesquisadores');
 	filtroPesquisador.find('.panel-heading .text').text('Filtro de pesquisadores:');
 	filtroPesquisador.find('.panel-body').attr('id', 'filtroDePesquisadores');
-	filtroPesquisador.find('label[for=perfilSelect]').text('Perfil do filtro de pesquisadores:')
+	filtroPesquisador.find('label[for=perfil-select]').text('Perfil do filtro de pesquisadores:')
 
 	// define todos os perfis de filtros
 	var filtrosObj = [
