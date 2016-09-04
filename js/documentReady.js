@@ -189,7 +189,7 @@ function documentReady() {
 	var filtroPesquisador = $('.filtro-panel').clone();
 	$('.filtro-panel').after(filtroPesquisador);
 	filtroPesquisador.attr('data-nomeArquivo', 'scriptLattesDiff - Filtro de pesquisadores');
-	filtroPesquisador.find('.panel-heading h2').text('Filtro de pesquisadores:');
+	filtroPesquisador.find('.panel-heading .text').text('Filtro de pesquisadores:');
 	filtroPesquisador.find('.panel-body').attr('id', 'filtroDePesquisadores');
 	filtroPesquisador.find('label[for=perfilSelect]').text('Perfil do filtro de pesquisadores:')
 
