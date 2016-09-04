@@ -181,15 +181,20 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 					var data = this.result;
 
 					// leio ele como json
-					var jsonData = JSON.parse(data);
-					var filtroAtual = self.getLocalStorage();
-					// mesclo um no outro
-					for(var nomeFiltro in jsonData) {
-						filtroAtual[nomeFiltro] = jsonData[nomeFiltro];
-					}
+					try {
+						var jsonData = JSON.parse(data);
+						var filtroAtual = self.getLocalStorage();
+						// mesclo um no outro
+						for(var nomeFiltro in jsonData) {
+							filtroAtual[nomeFiltro] = jsonData[nomeFiltro];
+						}
 
-					// agora eu salvo
-					self.salvarLocalStorage(filtroAtual);
+						// agora eu salvo
+						self.salvarLocalStorage(filtroAtual);
+					}
+					catch(e) {
+						console.log('Não foi possível ler o arquivo.');
+					}
 				}
 
 				reader.readAsText(file);

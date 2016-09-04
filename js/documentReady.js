@@ -95,6 +95,31 @@ function documentReady() {
 	});
 
 
+	// preenche o select de apagar snap
+	if(!scriptLattesDiff.isProtocoloFile()) {
+		$.get('../php/removeSnap.php?getSnaps', function(data) {
+			var snaps = data.split('\n');
+			// remove o ultimo que é em branco
+			snaps.pop();
+
+			snaps.forEach(function (snap, index) {
+				$('#snapsList').append($('<option>').text(snap).val(snap));
+			});
+		});
+
+		// adiciona o comando ao botão
+		$('#btnRemoveSnap').click(function(e) {
+			var snap = $('#snapsList').val();
+			if(window.confirm('Deseja realmente apagar o snap "'+snap+'"?')) {
+				$.post('../php/removeSnap.php', {removeSnap: snap}, function(data, textStatus, xhr) {
+					alert('Concluido');
+					console.log(data);
+				});
+			}
+		});
+	}
+
+
 
 
 
