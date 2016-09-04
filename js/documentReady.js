@@ -256,7 +256,7 @@ function documentReady() {
 	// importar txt de filtro
 	$('#btnImportarTxt').click(function(e) {
 		var modal = $(this).parents('.modal');
-		var listTxt = modal.find('textarea').val().split('\n');
+		var listTxt = modal.find('textarea').val().toLowerCase().split('\n');
 		var filtro = modal.data('filtro');
 
 		// tiro todos
@@ -264,7 +264,7 @@ function documentReady() {
 
 		var todosFiltros = filtro.$.find('.filtro');
 		var filtrosMarcar = todosFiltros.filter(function(index, elem) {
-			var nome = $(elem).find('input[type=checkbox]').val();
+			var nome = $(elem).find('input[type=checkbox]').val().toLowerCase();
 			return $.inArray(nome, listTxt) !== -1;
 		});
 
