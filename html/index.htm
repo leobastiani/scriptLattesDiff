@@ -169,7 +169,8 @@
 				<div class="form-group hide-file-protocol">
 					<p>
 						Apague os snapshots que não serão mais necessários.<br/>
-						Apagar um snap diminui o tempo de processamento do scriptLattesDiff.
+						Apagar um snap diminui o tempo de processamento do scriptLattesDiff.<br/>
+						As diferenças serão percebidas na próxima execução do scriptLattesDiff, ao clicar no botão "Executar scriptLattesDiff para a data de hoje".
 						<div class="form-inline">
 							<select class="form-control" id="snapsList"></select>
 							<button class="btn btn-primary" id="btnRemoveSnap">Apagar</button>
@@ -291,7 +292,15 @@
 					</div> <!-- ./alteracao-campo-grupo -->
 
 					<div class="alteracao-campo-grupo alteracao-duplo alterados">
-						<p class="alteracao-title">Alterados desde então</p>
+						<div class="row">
+							<div class="col-xs-3"><p class="alteracao-title">Alterados desde então</p></div>
+							<div class="col-xs-9">
+								<div class="row">
+									<div class="col-xs-6 text-center"><strong>Antigo</strong></div>
+									<div class="col-xs-6 text-center"><strong>Recente</strong></div>
+								</div>
+							</div>
+						</div>
 
 						<div class="alteracao-campo row">
 							<div class="col-xs-3 nome-campo">

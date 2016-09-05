@@ -322,7 +322,7 @@ scriptLattesDiff.paginas.principaisAlteracoes = function (dataInicial, dataFinal
 		}
 
 		// apaga os valores 1
-		$membro.find('.alteracao-campo:nth-of-type(1)').remove();
+		$membro.find('.alteracao-campo-grupo').find('.alteracao-campo:first').remove();
 
 		// vou remover os campos que estão vazios
 		$membro.find('.alteracao-campo-grupo:not(:has(.alteracao-campo))').remove();

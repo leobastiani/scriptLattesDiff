@@ -36,7 +36,7 @@
  * 
  */
 $(document).ready(function() {
-	$(window).resize(function(e) {
+	$(window).on('load resize', function(e) {
 		// na vertical
 		var formListHeight = $('#formList').outerHeight();
 		var diffHeight = formListHeight - $('#formList > textarea').outerHeight();
@@ -48,13 +48,10 @@ $(document).ready(function() {
 		// na horizontal
 		$('#formList > textarea').outerWidth(
 			// no final, subtrai pela margem em cima e em baixo
-			$(window).width()-$('#formList').offset().left*2
+			$(window).width()-$('#formList').offset().left*2-20
 		);
 	});
 
-
-	// chama o resize uma vez
-	$(window).resize();
 
 	// obtem o arquivo de lista
 	$.post('?', {lista: true}, function(data) {
