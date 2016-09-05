@@ -167,7 +167,7 @@ var Filtro = function(perfisLocalStorage, jPerfil) {
 			scriptLattesDiff.navegadorAtualizado(FileReader);
 
 			// cria um inputFile para ser clicado
-			var inputBtn = $('<input type="file">');
+			var inputBtn = $('<input type="file" accept=".txt">');
 			
 			inputBtn.on('change', function(e) {
 				// garante que existe o FileReader

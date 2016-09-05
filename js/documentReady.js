@@ -264,7 +264,7 @@ function documentReady() {
 
 		var todosFiltros = filtro.$.find('.filtro');
 		var filtrosMarcar = todosFiltros.filter(function(index, elem) {
-			var nome = $(elem).find('input[type=checkbox]').val().toLowerCase();
+			var nome = $(elem).find('.text').text().toLowerCase();
 			return $.inArray(nome, listTxt) !== -1;
 		});
 
