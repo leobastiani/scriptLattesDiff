@@ -15,27 +15,25 @@
     You should have received a copy of the GNU Lesser General Public License
     along with .  If not, see <http://www.gnu.org/licenses/>.
 
-Execução do parâmetro --help:
-
 /* ================
    ScriptLattesDiff
    ================ */
-Insira os arquivos .config nos parâmetros sem nenhum caracter especial.
+Insira os arquivos .config.
   Por exemplo: 
   ./Data1/*.config ./Data2./*.config
 
 Utilize wildcards para economizar esforços.
   Por exemplo:
   Essa linha de comando seria capaz de varrer essa estrutura com facilidade:
+  Comando: ./Datas/*/*.config
+  Estrutura:
+
   ./
     Datas/
       Data1/
         grupo1.config
-
       Data2/
         grupo1.config
-
-  Comando: ./Datas/**/*.config
 
 Os comandos começam por "--", "-" ou "/", por exemplo:
   --help, -help ou /help
@@ -54,7 +52,6 @@ Os seguintes comandos estão disponíveis para complementar as funcionalidades d
 
 -list:
   Quando um novo snap for solicitado, este comando informa qual o arquivo de lista deverá ser utlizado.
-
   Por exemplo: -list ./Arquivo.list
 
 -porcentagem-similar, -ps:
@@ -78,13 +75,6 @@ Os seguintes comandos estão disponíveis para complementar as funcionalidades d
   Defina o número máximo de pesquisadores que serão comparados.
   Por exemplo: -max 5
 
+Configure os arquivos run.sh, run.bat e php/config.php.
 Site do projeto: http://github.com/leobastiani/scriptLattesDiff
 Vídeo explicativo: https://www.youtube.com/playlist?list=PLsBp8pJj-8BmGcN1iBM4M08tcCtVs14VJ
-
-
-
-FURTHER INFORMATION
-
-For authors see AUTHORS.
-For copyright issues, see COPYING.
-For usage manual, refer to the NAP-SOL website.
