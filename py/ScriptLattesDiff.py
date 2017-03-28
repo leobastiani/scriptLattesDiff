@@ -177,10 +177,27 @@ class ScriptLattesDiff:
     def analisarXml(self):
         section('Analisando arquivos de configuração')
         self.configFiles = [ConfigFile(x) for x in self.filesPath]
+
+        # ordena para filtrar
+        self.ordernarConfigFiles()
+
+        # pega apenas que quero pelo Settings.onlySnaps
+        if Settings.onlySnaps != []:
+            self.configFiles = [self.configFiles[x] for x in Settings.onlySnaps]
+            # agr eu tenho q reordenar
+            self.ordernarConfigFiles()
+
+
+        # obtem o json
+        for cF in self.configFiles:
+            cF.loadJsonFromXml()
+
+
+
+
+    def ordernarConfigFiles(self):
         # ordeno os configs files de acordo com as datas
         self.configFiles = sorted(self.configFiles, key=lambda x: x.getDate())
-
-
 
 
 

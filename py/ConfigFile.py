@@ -109,11 +109,11 @@ class ConfigFile:
         section('Novo arquivo de configuração carregado:', self.filePath)
         with open(filePath, 'r') as fp:
             self.carregarParametros(fp)
+
         self.loadXml()
         self.data_processamento = self.xml.getroot().attrib['data_processamento']
         # obtem uma instancia de time pela data de processamento
         self.time = self.getDate()
-        self.loadJsonFromXml()
 
 
 
@@ -210,6 +210,9 @@ class ConfigFile:
         if '&amp;' not in fileContent:
             # esse arquivo precisa trocar & por &amp;
             fileContent = fileContent.replace('&', '&amp;')
+            # bug provisório
+            fileContent = fileContent.replace('< ', '&lt; ')
+
             # agora é só salvar no arquivo
             with open(str(xmlFilePath), 'w', encoding='utf-8') as file:
                 file.write(fileContent)
@@ -313,7 +316,7 @@ class ConfigFile:
             # nem vale a pena imprimir
             # self.printPesquisador(i)
         
-        Print.back('Completado')
+        Print.back('XML Data %s => Completado' % self.data_processamento)
         Print.endBack()
         return self.json
 

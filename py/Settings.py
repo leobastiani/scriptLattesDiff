@@ -100,6 +100,11 @@ class Settings:
     # deve ser uma lista assim [12334, 144623, 16354123, ...]
     pesquisadoresList = None
 
+    # coloque o número dos snaps que eu quero analisar
+    # por exemplo
+    # -2 e -1, são os snaps mais recentes
+    onlySnaps = []
+
     # apenas os campos que vou analisar
     campos = []
 
@@ -330,6 +335,20 @@ class Settings:
                 Print.warning('Analisando os campos: '+camposConcatenados)
                 campos = Misc.strToList(camposConcatenados)
                 Settings.campos = campos
+
+
+
+            elif isThisCommand(arg, 'snaps', 's'):
+                camposConcatenados = deveSer(novoArg(args), str)
+                Print.warning('Analisando os Snaps: '+camposConcatenados)
+                onlySnaps = Misc.strToList(camposConcatenados)
+
+                try:
+                    onlySnaps = [int(s) for s in onlySnaps]
+                except:
+                    sys.exit(0)
+
+                Settings.onlySnaps = onlySnaps
 
 
 
