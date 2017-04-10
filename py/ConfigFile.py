@@ -208,6 +208,8 @@ class ConfigFile:
             fileContent = file.read()
         
         if '&amp;' not in fileContent:
+            # há um espaço estranho, vou trocá-lo
+            fileContent = fileContent.replace(chr(160), ' ');
             # esse arquivo precisa trocar & por &amp;
             fileContent = fileContent.replace('&', '&amp;')
             # bug provisório
