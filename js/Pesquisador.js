@@ -59,7 +59,7 @@ Pesquisador.prototype.getJson = function() {
  * @return {String} nome da pessoa
  */
 Pesquisador.prototype.getNome = function() {
-	var result = this.json['identificacao']['nome_completo'];
+	var result = this.json['identificacao']['nome_inicial'];
 	if(result == "[Nome-nao-identificado]") {
 		// as vezes isso acontece, ai eu pego de outro campo
 		return this.json['identificacao']['nome_inicial'];
